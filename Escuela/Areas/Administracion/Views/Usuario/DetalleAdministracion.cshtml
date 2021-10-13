@@ -1,0 +1,34 @@
+@model ApplicationUser
+@{
+    ViewData["Title"] = "Detalle Administración";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Primer Apellido</th>
+            <th scope="col">Segundo Apellido</th>
+            <th scope="col">Nombres</th>
+            <th scope="col">Estado</th>
+            <th scope="col">Deshabilitado</th>
+            <th scope="col">Rol</th>
+        </tr>
+    </thead>
+    <tbody>
+            <tr>
+                <td>@Model.PrimerApellido</td>
+                <td>@Model.SegundoApellido</td>
+                <td>@Model.Nombres</td>
+                <td>@Model.Estado</td>
+                <td>@Model.Deshabilitado</td>
+                <td>@ViewBag.roles</td>
+            </tr>
+    </tbody>
+</table>
+
+<div>
+    <a class="btn btn-warning" asp-action="EditarAdministracion" asp-route-id="@Model.Id">Editar</a>
+    <a class="btn btn-primary" asp-action="Inicio">Volver Atrás</a>
+</div>

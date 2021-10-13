@@ -1,0 +1,69 @@
+@model ApplicationUser
+@{
+    ViewData["Title"] = "Detalle Estudiante";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Primer Apellido</th>
+            <th scope="col">Segundo Apellido</th>
+            <th scope="col">Nombres</th>
+            <th scope="col">Estado</th>
+            <th scope="col">Deshabilitado</th>
+            <th scope="col">Rol</th>
+            <th scope="col">Curso</th>
+            <th scope="col">Número de Orden</th>
+            <th scope="col">ID o RNE</th>
+        </tr>
+    </thead>
+    <tbody>
+            <tr>
+                <td>@Model.PrimerApellido</td>
+                <td>@Model.SegundoApellido</td>
+                <td>@Model.Nombres</td>
+                <td>@Model.Estado</td>
+                <td>@Model.Deshabilitado</td>
+                <td>@ViewBag.roles</td>
+                <td>@(Model.DetalleEstudiante.Curso.Nombre + " " + Model.DetalleEstudiante.Curso.Seccion)</td>
+                <td>@Model.DetalleEstudiante.NumerodeOrden</td>
+                <td>@Model.DetalleEstudiante.IdoRNE</td>
+            </tr>
+    </tbody>
+</table>
+
+<h2>Detalles Padre</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Primer Apellido Madre</th>
+            <th scope="col">Segundo Apellido Madre</th>
+            <th scope="col">Nombres Madre</th>
+            <th scope="col">Teléfono Madre</th>
+            <th scope="col">Primer Apellido Padre</th>
+            <th scope="col">Segundo Apellido Padre</th>
+            <th scope="col">Nombres Padre</th>
+            <th scope="col">Teléfono Padre</th>
+        </tr>
+    </thead>
+    <tbody>
+            <tr>
+                <td>@Model.DetalleEstudiante.Padres.PrimerApellidoMadre</td>
+                <td>@Model.DetalleEstudiante.Padres.SegundoApellidoMadre</td>
+                <td>@Model.DetalleEstudiante.Padres.NombresMadre</td>
+                <td>@Model.DetalleEstudiante.Padres.TelefonoMadre</td>
+                <td>@Model.DetalleEstudiante.Padres.PrimerApellidoPadre</td>
+                <td>@Model.DetalleEstudiante.Padres.SegundoApellidoPadre</td>
+                <td>@Model.DetalleEstudiante.Padres.NombresPadre</td>
+                <td>@Model.DetalleEstudiante.Padres.TelefonoPadre</td>
+            </tr>
+    </tbody>
+</table>
+
+<div>
+    <a class="btn btn-warning" asp-action="EditarEstudiante" asp-route-id="@Model.Id">Editar</a>
+    <a class="btn btn-primary" asp-action="Inicio">Volver Atrás</a>
+</div>

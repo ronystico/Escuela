@@ -1,0 +1,25 @@
+@model IEnumerable<Asignatura>
+@{
+    ViewData["Title"] = "Lista de Asignaturas";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<a class="btn btn-primary mb-3" asp-action="Agregar">Agregar</a>
+
+<table class="table table-striped">
+    <tr>
+        <th>Nombre</th>
+        <th>Acciones</th>
+    </tr>
+    @foreach (var curso in Model.ToList())
+    {
+        <tr>
+            <td>@curso.Nombre</td>
+            <td>
+                <a class="link-primary" asp-action="Editar" asp-route-id="@curso.IdAsignatura">Editar</a>
+                <a class="link-primary" asp-action="Eliminar" asp-route-id="@curso.IdAsignatura">Eliminar</a>
+            </td>
+        </tr>
+    }
+</table>

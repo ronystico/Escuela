@@ -1,0 +1,53 @@
+@model AgregarEstudianteViewModel
+
+@{
+    ViewData["Title"] = "Agregar Estudiante";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p class="mb-3">La información principal ha sido añadida. Falta la siguiente información adicional</p>
+
+<form method="POST" asp-action="AgregarEstudiante">
+    <input asp-for="DetalleEstudiante.ApplicationUser.Id" value="@ViewBag.user.Id" hidden />
+    <input asp-for="DetalleEstudiante.ApplicationUser.PrimerApellido" value="@ViewBag.user.PrimerApellido" hidden />
+    <input asp-for="DetalleEstudiante.ApplicationUser.SegundoApellido" value="@ViewBag.user.SegundoApellido" hidden />
+    <input asp-for="DetalleEstudiante.ApplicationUser.Nombres" value="@ViewBag.user.Nombres" hidden />
+    <input asp-for="DetalleEstudiante.ApplicationUser.Estado" value="@ViewBag.user.Estado" hidden />
+    <div class="form-group">
+        <label asp-for="DetalleEstudiante.Padres"></label>
+        <input type="text" asp-for="DetalleEstudiante.IdPadres" class="form-control" value="@ViewBag.padres.IdPadres" hidden >
+        <input type="text" asp-for="DetalleEstudiante.Padres" class="form-control" disabled value="@(
+        ViewBag.padres.NombresMadre + " " + ViewBag.padres.PrimerApellidoMadre + ", " + 
+        ViewBag.padres.NombresPadre + " " + ViewBag.padres.PrimerApellidoPadre)" >
+        <a asp-action="BuscarPadres" class="btn btn-primary" asp-route-id="@ViewBag.id">Buscar</a>
+        <span asp-validation-for="DetalleEstudiante.IdPadres" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Curso.Nombre">Curso</label>
+        <div class="form-check">
+            @foreach (var curso in ViewBag.cursos)
+        {
+            <input type="radio" asp-for="DetalleEstudiante.IdCurso" value="@curso.IdCurso" class="form-check-input">
+            <label class="form-check-label">@(curso.Nombre + " " + curso.Seccion)</label><br/> 
+        }
+        </div>
+        <span asp-validation-for="DetalleEstudiante.IdCurso" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="DetalleEstudiante.NumerodeOrden"></label>
+        <input asp-for="DetalleEstudiante.NumerodeOrden" class="form-control" >
+        <span asp-validation-for="DetalleEstudiante.NumerodeOrden" class="text-danger"></span>
+    </div>
+    
+    <div class="form-group">
+        <label asp-for="DetalleEstudiante.IdoRNE"></label>
+        <input asp-for="DetalleEstudiante.IdoRNE" class="form-control" />
+        <span asp-validation-for="DetalleEstudiante.IdoRNE" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Agregar Detalles</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

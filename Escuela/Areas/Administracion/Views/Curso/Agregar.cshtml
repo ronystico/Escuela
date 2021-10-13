@@ -1,0 +1,28 @@
+@model Curso
+@{
+    ViewData["Title"] = "Agregar Curso";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form method="POST" asp-action="Agregar">
+    <div class="form-group">
+        <label asp-for="Nombre"></label>
+        <input asp-for="Nombre" />
+        <span asp-validation-for="Nombre"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Seccion"></label>
+        <input asp-for="Seccion" />
+        <span asp-validation-for="Seccion"></span>
+    </div>
+    <input type="submit" class="btn btn-primary" value="Agregar" />
+    <a asp-action="Inicio" class="btn btn-primary">Volver atrás</a>
+</form>
+
+
+@section Scripts {
+@{
+    <partial name="_ValidationScriptsPartial" />
+}
+}

@@ -1,0 +1,47 @@
+@model IEnumerable<UsuarioViewModel>
+@{
+    ViewData["Title"] = "Lista de Usuarios";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<a class="btn btn-primary mb-3" asp-action="Agregar">Agregar</a>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Primer Apellido</th>
+        <th scope="col">Segundo Apellido</th>
+        <th scope="col">Nombres</th>
+        <th scope="col">Nombre de Usuario</th>
+        <th scope="col">Rol</th>
+        <th scope="col">Estado</th>
+        <th scope="col">Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+        @{
+            int i = 1;
+        }
+    @foreach (var usuario in Model.ToList())
+    {
+        <tr>
+            <th scope="row">@i</th>
+            <td>@usuario.PrimerApellido</td>
+            <td>@usuario.SegundoApellido</td>
+            <td>@usuario.Nombres</td>
+            <td>@usuario.UserName</td>
+            <td>@usuario.IdentityRole.Name</td>
+            <td>@usuario.Estado</td>
+            <td>
+                <a asp-action="Detalles" asp-route-id="@usuario.Id" asp-route-rol="@usuario.IdentityRole.Name">Más Detalles</a><br>
+                <a asp-action="Editar" asp-route-id="@usuario.Id">Editar</a><br>
+                <a asp-action="Deshabilitar" asp-route-id="@usuario.Id">Deshabilitar Usuario</a><br>
+                <a asp-action="ReestablecerClave" asp-route-id="@usuario.Id">Reestablecer Clave</a>
+            </td>
+        </tr>
+            i++;
+    }
+    </tbody>
+</table>

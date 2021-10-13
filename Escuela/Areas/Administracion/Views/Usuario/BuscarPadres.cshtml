@@ -1,0 +1,42 @@
+@model IEnumerable<Padres>
+@{
+    ViewData["Title"] = "Buscar Padres";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<a class="btn btn-primary mb-3" asp-action="AgregarPadres" asp-route-id="@ViewBag.id">Agregar</a>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Primer Apellido Madre</th>
+            <th scope="col">Segundo Apellido Madre</th>
+            <th scope="col">Nombres Madre</th>
+            <th scope="col">Tel�fono Madre</th>
+            <th scope="col">Primer Apellido Padre</th>
+            <th scope="col">Segundo Apellido Padre</th>
+            <th scope="col">Nombres Padre</th>
+            <th scope="col">Tel�fono Padre</th>
+            <th scope="col">Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var padres in Model.ToList())
+        {
+            <tr>
+                <td>@padres.PrimerApellidoMadre</td>
+                <td>@padres.SegundoApellidoMadre</td>
+                <td>@padres.NombresMadre</td>
+                <td>@padres.TelefonoMadre</td>
+                <td>@padres.PrimerApellidoPadre</td>
+                <td>@padres.SegundoApellidoPadre</td>
+                <td>@padres.NombresPadre</td>
+                <td>@padres.TelefonoPadre</td>
+                <td>
+                    <a asp-action="AgregarEstudiante" asp-route-id="@ViewBag.id" asp-route-id2="@padres.IdPadres">Seleccionar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

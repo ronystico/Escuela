@@ -1,0 +1,25 @@
+@model Asignatura
+@{
+    ViewData["Title"] = "Eliminar Asignatura";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<span class="text-warning">¿Desea eliminar la siguiente asignatura?</span>
+
+<form method="POST" asp-action="Eliminar">
+    <input asp-for="IdAsignatura" hidden />
+
+    <div class="form-group"
+    <label asp-for="Nombre"></label>
+    <input asp-for="Nombre" disabled />
+    </div>
+    <input type="submit" class="btn btn-danger" asp-route-id="@Model.IdAsignatura" value="Eliminar"></input>
+</form>
+<a asp-action="Inicio" class="btn btn-primary">Volver atrás</a>
+
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial"></partial>
+    }
+}

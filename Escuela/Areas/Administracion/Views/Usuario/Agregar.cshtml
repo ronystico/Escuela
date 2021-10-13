@@ -1,0 +1,85 @@
+@model UsuarioViewModel
+@{ ViewData["Title"] = "Agregar Usuario"; }
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Agregar" method="post">
+            <hr />
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <div class="form-group">
+                    <label asp-for="Nombres"></label>
+                    <input asp-for="Nombres" class="form-control" onchange="ponerUsuario()" />
+                    <span asp-validation-for="Nombres" class="text-danger"></span>
+                </div>
+                <label asp-for="PrimerApellido"></label>
+                <input asp-for="PrimerApellido" class="form-control" onchange="ponerUsuario()" />
+                <span asp-validation-for="PrimerApellido" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SegundoApellido"></label>
+                <input asp-for="SegundoApellido" class="form-control" onchange="ponerUsuario()" />
+                <span asp-validation-for="SegundoApellido" class="text-danger"></span>
+            </div>
+
+            @* Rol *@
+            <div class="form-group">
+                <label for="Rol">Rol</label>
+                <select asp-for="IdentityRole.Name" asp-items="@ViewBag.roles" class="form-control"></select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="UserName"></label>
+                <input asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password"></label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConfirmPassword"></label>
+                <input asp-for="ConfirmPassword" class="form-control" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+            <div>
+                <input asp-for="Estado" value="Inscrito" hidden>
+                <input asp-for="Deshabilitado" value="0" hidden>
+            </div>
+            <button type="submit" class="btn btn-primary">Agregar</button>
+        </form>
+    </div>
+    <div class="col-md-6 col-md-offset-2">
+        <section>
+            <h4>Su anuncio aquí.</h4>
+            <p>Su anuncio aquí. 200 diarios para cubrir gastos de mantenimiento</p>
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+<script>
+
+    function ponerUsuario() {
+        let texto = document.getElementById("UserName").value = document.getElementById("Nombres").value.toLowerCase()
+            + document.getElementById("PrimerApellido").value.toLowerCase() +
+            document.getElementById("SegundoApellido").value.toLowerCase();
+
+        function eliminarDiacriticos(texto) {
+            return texto.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+        }
+
+        let aleatorio = Math.floor(Math.random() * 99);
+        document.getElementById("UserName").value = eliminarDiacriticos(texto) + aleatorio;
+    }
+    
+</script>
+     
+}
+@section css {
+
+}

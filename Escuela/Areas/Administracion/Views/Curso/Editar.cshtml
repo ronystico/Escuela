@@ -1,0 +1,39 @@
+@model CursoAsignaturaViewModel
+@{
+    ViewData["Title"] = "Editar Curso";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form method="POST" asp-action="Editar">
+    <input asp-for="Curso.IdCurso" hidden />
+
+    <div class="form-group">
+    <label asp-for="Curso.Nombre"></label>
+    <input asp-for="Curso.Nombre" />
+    <span asp-validation-for="Curso.Nombre"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Curso.Seccion"></label>
+        <input asp-for="Curso.Seccion" />
+        <span asp-validation-for="Curso.Seccion"></span>
+    </div>
+    <div class="form-group">
+        <label for="Asignaturas">Asignaturas</label><br />
+        @foreach (var asignatura in ViewBag.asignaturas)
+        {
+            <input type="checkbox" name="AsignaturasSeleccionadas" value="@asignatura.Value"
+                   checked="@asignatura.Selected" class="form-check-input" />
+            <label class="form-check-label">@asignatura.Text</label> <br />
+                    }
+    </div>
+    <button type="submit" class="btn btn-warning">Editar</button>
+    <a asp-action="Inicio" class="btn btn-primary">Volver atrás</a>
+</form>
+
+
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}
