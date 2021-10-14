@@ -20,6 +20,7 @@ namespace Escuela.Data
         public DbSet<Padres> Padres { get; set; }
         public DbSet<Asignatura> Asignatura { get; set; }
         public DbSet<DetalleCursosAsignatura> DetalleCursosAsignatura { get; set; }
+        public DbSet<DetalleProfesorCursosAsignatura> DetalleProfesorCursosAsignatura { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

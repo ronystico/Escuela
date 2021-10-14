@@ -100,5 +100,18 @@ namespace Escuela.Services
             }
             return asignaturascurso;
         }
+
+        public List<SelectListItem> ObtenerDetalleCursosAsignaturas()
+        {
+            var buscarCursosAsignaturas = _data.DetalleCursosAsignatura.Include(a => a.Asignatura)
+                .Include(a => a.Curso).ToList();
+            List<SelectListItem> CursosAsignaturas = new List<SelectListItem>();
+            foreach (var cursoAsignatura in buscarCursosAsignaturas)
+            {
+                CursosAsignaturas.Add(new SelectListItem { Value = cursoAsignatura.IdDetalleCursosAsignatura.ToString(),
+                    Text = cursoAsignatura.Curso.Nombre + " " + cursoAsignatura.Curso.Seccion + " - " + cursoAsignatura.Asignatura.Nombre });
+            }
+            return CursosAsignaturas;
+        }
     }
 }

@@ -36,8 +36,7 @@
             <td>@usuario.Estado</td>
             <td>
                 <a asp-action="Detalles" asp-route-id="@usuario.Id" asp-route-rol="@usuario.IdentityRole.Name">Más Detalles</a><br>
-                <a asp-action="Editar" asp-route-id="@usuario.Id">Editar</a><br>
-                <a asp-action="Deshabilitar" asp-route-id="@usuario.Id">Deshabilitar Usuario</a><br>
+                <a asp-action="Editar" asp-route-id="@usuario.Id" asp-route-rol="@usuario.IdentityRole.Name">Editar</a><br>
                 <a asp-action="ReestablecerClave" asp-route-id="@usuario.Id">Reestablecer Clave</a>
             </td>
         </tr>

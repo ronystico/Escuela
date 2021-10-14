@@ -1,0 +1,57 @@
+@model ApplicationUser
+@{
+    ViewData["Title"] = "Detalle Profesor";
+}
+
+<h1 class="mb-3">@ViewData["Title"]</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Primer Apellido</th>
+            <th scope="col">Segundo Apellido</th>
+            <th scope="col">Nombres</th>
+            <th scope="col">Estado</th>
+            <th scope="col">Deshabilitado</th>
+            <th scope="col">Rol</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@Model.PrimerApellido</td>
+            <td>@Model.SegundoApellido</td>
+            <td>@Model.Nombres</td>
+            <td>@Model.Estado</td>
+            <td>@Model.Deshabilitado</td>
+            <td>@ViewBag.roles</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2 class="mb-3">Cursos/Asignaturas en los que puede asignar notas</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Curso</th>
+            <th scope="col">Sección</th>
+            <th scope="col">Asignatura</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var cursoasignatura in Model.DetalleProfesorCursosAsignatura)
+        {
+            <tr>
+                <td>@cursoasignatura.DetalleCursosAsignatura.Curso.Nombre</td>
+                <td>@cursoasignatura.DetalleCursosAsignatura.Curso.Seccion</td>
+                <td>@cursoasignatura.DetalleCursosAsignatura.Asignatura.Nombre</td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+
+<div>
+    <a class="btn btn-warning" asp-action="EditarProfesor" asp-route-id="@Model.Id">Editar</a>
+    <a class="btn btn-primary" asp-action="Inicio">Volver Atrás</a>
+</div>
