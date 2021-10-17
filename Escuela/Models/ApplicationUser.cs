@@ -37,13 +37,6 @@ namespace Escuela.Models
         [StringLength(10)]
         public string Estado { get; set; }
 
-        // deshabilitado: 0 = no / 1 = si
-        [Column("deshabilitado")]
-        [Required(ErrorMessage = "Falta el campo: Deshabilitado")]
-        [DisplayName("Deshabilitado")]
-        [Range(0,1)]
-        public int Deshabilitado { get; set; }
-
         public virtual DetalleEstudiante DetalleEstudiante { get; set; }
 
         public virtual ICollection<DetalleProfesorCursosAsignatura> DetalleProfesorCursosAsignatura { get; set; }

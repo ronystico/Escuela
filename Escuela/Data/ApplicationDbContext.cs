@@ -78,8 +78,7 @@ namespace Escuela.Data
                     PrimerApellido = "Dominicano",
                     SegundoApellido = "Soy",
                     Nombres = "Klk Compay",
-                    Estado = "Inscrito",
-                    Deshabilitado = 0
+                    Estado = "Inscrito"
                 }
             );
 

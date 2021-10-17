@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\Administracion\Views\Padres\" />
     <Folder Include="Areas\Estudiante\Controllers\" />
     <Folder Include="Areas\Estudiante\Views\" />
     <Folder Include="Areas\Profesor\Controller\" />

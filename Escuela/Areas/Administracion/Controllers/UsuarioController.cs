@@ -28,11 +28,13 @@ namespace Escuela.Areas.Administracion.Controllers
             _data = data;
             _userManager = userManager;
         }
+
         public IActionResult Inicio()
         {
             ObtenerUsuario usuarios = new ObtenerUsuario(_data);
             return View(usuarios.ObtenerTodosLosUsuariosConRol());
         }
+
         public IActionResult Agregar()
         {
             ObtenerDatos roles = new ObtenerDatos(_data);
@@ -40,6 +42,10 @@ namespace Escuela.Areas.Administracion.Controllers
 
             return View();
         }
+
+        // TODO: Poner que se vea la clave en agregar
+
+        // TODO: CRUD Padres
 
         [HttpPost]
         public async Task<IActionResult> Agregar(UsuarioViewModel usuario)
@@ -52,8 +58,7 @@ namespace Escuela.Areas.Administracion.Controllers
                     PrimerApellido = usuario.PrimerApellido,
                     SegundoApellido = usuario.SegundoApellido,
                     Nombres = usuario.Nombres,
-                    Estado = "Inscrito",
-                    Deshabilitado = 0
+                    Estado = "Inscrito"
                 };
                 var result = await _userManager.CreateAsync(user, usuario.Password);
                 if (result.Succeeded)
@@ -261,14 +266,58 @@ namespace Escuela.Areas.Administracion.Controllers
         }
 
         // TODO: Editar
-        public IActionResult Editar()
+        public IActionResult Editar(string id, string rol)
         {
-            return View();
+            if (id != null && rol != null)
+            {
+                return rol switch
+                {
+                    "Estudiante" =>
+                        RedirectToAction("EditarEstudiante", "Usuario",
+                        new { area = "Administracion", id = id }),
+                    "Administracion" =>
+                       RedirectToAction("EditarAdministracion", "Usuario",
+                       new { area = "Administracion", id = id }),
+                    "Profesor" =>
+                       RedirectToAction("EditarProfesor", "Usuario",
+                       new { area = "Administracion", id = id }),
+                    _ =>
+                    View()
+                };
+            }
+                return View();
+        }
+
+        public async Task<IActionResult> EditarAdministracion(string id)
+        {
+            var administrador = await _data.Users.Where(s => s.Id == id).FirstOrDefaultAsync();
+            return View(administrador);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditarAdministracion(ApplicationUser user)
+        {
+            if (ModelState.IsValid && (user.Estado.Equals("Inscrito") || user.Estado.Equals("Retirado")))
+            {
+                var usuario = await _userManager.FindByIdAsync(user.Id);
+
+                usuario.Nombres = user.Nombres;
+                usuario.PrimerApellido = user.PrimerApellido;
+                usuario.SegundoApellido = user.SegundoApellido;
+                usuario.UserName = user.UserName;
+                usuario.Estado = user.Estado;
+
+                await _userManager.UpdateAsync(usuario);
+
+                return RedirectToAction("Inicio", "Usuario", new { area = "Administracion" });
+            }
+            return View(user);
         }
 
         // TODO: Reestablecer Clave
-        public IActionResult ReestablecerClave()
+        public async Task<IActionResult> ReestablecerClave(string id)
         {
+            
             return View();
         }
 
