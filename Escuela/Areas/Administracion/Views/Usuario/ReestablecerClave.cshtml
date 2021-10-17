@@ -1,0 +1,39 @@
+@model UsuarioViewModel
+@{
+    ViewData["Title"] = "Reestablecer Clave";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form method="post" asp-action="ReestablecerClave" class="form">
+    <input asp-for="Id" value="@Model.Id" hidden />
+    <input asp-for="Estado" value="@Model.Estado" hidden />
+    <input asp-for="Nombres" value="@Model.Nombres" hidden />
+    <input asp-for="PrimerApellido" value="@Model.PrimerApellido" hidden />
+    <input asp-for="SegundoApellido" value="@Model.SegundoApellido" hidden />
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="UserName"></label>
+        <input asp-for="UserName" class="form-control" value="@Model.UserName" readonly />
+        <span asp-validation-for="UserName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Password"></label>
+        <input asp-for="Password" class="form-control" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ConfirmPassword"></label>
+        <input asp-for="ConfirmPassword" class="form-control" />
+        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+    </div>
+    <div>
+        <button type="submit" class="btn btn-warning">Reestablecer</button>
+        <a asp-action="Inicio" class="btn btn-primary">Volver atrás</a>
+    </div>
+
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

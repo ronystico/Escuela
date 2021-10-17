@@ -59,6 +59,7 @@ namespace Escuela
             services.Configure<IdentityOptions>(options => {
                 options.Password.RequireNonAlphanumeric = false;
                 options.User.RequireUniqueEmail = false;
+                options.Password.RequireUppercase = false;
             });
 
             services.AddControllers(config =>

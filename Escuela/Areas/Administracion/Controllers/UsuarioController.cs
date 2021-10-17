@@ -314,11 +314,52 @@ namespace Escuela.Areas.Administracion.Controllers
             return View(user);
         }
 
-        // TODO: Reestablecer Clave
+        
         public async Task<IActionResult> ReestablecerClave(string id)
         {
-            
-            return View();
+            var usuario = await _userManager.FindByIdAsync(id);
+            var usuarioObtenido = new UsuarioViewModel()
+            {
+                Id = usuario.Id,
+                UserName = usuario.UserName,
+                Estado = usuario.Estado,
+                Nombres = usuario.Nombres,
+                PrimerApellido = usuario.PrimerApellido,
+                SegundoApellido = usuario.SegundoApellido
+            };
+            return View(usuarioObtenido);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ReestablecerClave(UsuarioViewModel user)
+        {
+            if (ModelState.IsValid)
+            {
+                var usuario = await _userManager.FindByIdAsync(user.Id);
+                var token = await _userManager.GeneratePasswordResetTokenAsync(usuario);
+                var resultado = await _userManager.ResetPasswordAsync(usuario, token, user.Password);
+                if (resultado.Succeeded)
+                {
+                    return RedirectToAction("Inicio", "Usuario", new { area = "Administracion" });
+                }
+                else
+                {
+                    foreach(var error in resultado.Errors)
+                    {
+                        if (error.Code.Equals("PasswordRequiresDigit"))
+                        {
+                            ModelState.AddModelError(string.Empty, "La contraseña debe tener al menos un número");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, error.Description);
+                        }
+                        
+                    }
+                }
+                
+            }
+            return View(user);
         }
 
     }
