@@ -1,0 +1,121 @@
+@model ApplicationUser
+@{ ViewData["Title"] = "Editar Estudiante"; }
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditarEstudiante" method="post">
+            <hr />
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="DetalleEstudiante.Padres"></label>
+
+                <input type="text" asp-for="DetalleEstudiante.Padres.IdPadres" class="form-control" value="DetalleEstudiante.Padres.IdPadres" hidden>
+
+                <input type="text" asp-for="DetalleEstudiante.Padres" class="form-control" disabled value="@(
+        Model.DetalleEstudiante.Padres.NombresMadre + " " + Model.DetalleEstudiante.Padres.PrimerApellidoMadre + ", " +
+        Model.DetalleEstudiante.Padres.NombresPadre + " " + Model.DetalleEstudiante.Padres.PrimerApellidoPadre)">
+
+                <a asp-action="BuscarPadres" class="btn btn-primary" asp-route-id="@Model.Id" asp-route-referencia="EditarEstudiante">Buscar</a>
+
+                <span asp-validation-for="DetalleEstudiante.IdPadres" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <div class="form-group">
+                    <label asp-for="Nombres"></label>
+                    <input asp-for="Nombres" class="form-control" onchange="ponerUsuario()" />
+                    <span asp-validation-for="Nombres" class="text-danger"></span>
+                </div>
+                <label asp-for="PrimerApellido"></label>
+                <input asp-for="PrimerApellido" class="form-control" onchange="ponerUsuario()" />
+                <span asp-validation-for="PrimerApellido" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SegundoApellido"></label>
+                <input asp-for="SegundoApellido" class="form-control" onchange="ponerUsuario()" />
+                <span asp-validation-for="SegundoApellido" class="text-danger"></span>
+            </div>
+
+            @* Rol *@
+            <div class="form-group">
+                <label for="Rol">Rol</label>
+                <select id="rol" name="rol" class="form-control" disabled>
+                    <option value="Administracion">Estudiante</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="Nombre de Usuario">Nombre de Usuario</label>
+                <input asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Estado"></label>
+                <select asp-for="Estado" class="form-control">
+                    <option value="Inscrito">Inscrito</option>
+                    <option value="Retirado">Retirado</option>
+                </select>
+                <span asp-validation-for="Estado" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="Curso">Curso</label>
+                <div class="form-check">
+                    @foreach (var curso in ViewBag.cursos)
+                    {
+                        <input type="radio" asp-for="DetalleEstudiante.IdCurso" value="@curso.Value" checked="@curso.Selected" class="form-check-input">
+                        <label class="form-check-label">@(curso.Text)</label><br />}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DetalleEstudiante.NumerodeOrden"></label>
+                <input asp-for="DetalleEstudiante.NumerodeOrden" class="form-control" />
+                <span asp-validation-for="DetalleEstudiante.NumerodeOrden" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DetalleEstudiante.IdoRNE"></label>
+                <input asp-for="DetalleEstudiante.IdoRNE" class="form-control" />
+                <span asp-validation-for="DetalleEstudiante.IdoRNE" class="text-danger"></span>
+            </div>
+
+            <input asp-for="Id" value="@Model.Id" hidden />
+            <button type="submit" class="btn btn-warning">Editar Estudiante</button>
+            <a class="btn btn-primary" asp-action="DetalleEstudiante" asp-route-id="@Model.Id">Volver Atrás</a>
+        </form>
+    </div>
+    @*<div class="col-md-6 col-md-offset-2">
+            <section>
+                <h4>Su anuncio aquí.</h4>
+                <p>Su anuncio aquí. 200 diarios para cubrir gastos de mantenimiento</p>
+            </section>
+        </div>*@
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+
+        function ponerUsuario() {
+            let texto = document.getElementById("UserName").value = document.getElementById("Nombres").value.toLowerCase()
+                + document.getElementById("PrimerApellido").value.toLowerCase() +
+                document.getElementById("SegundoApellido").value.toLowerCase();
+
+            function eliminarDiacriticos(texto) {
+                return texto.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+            }
+
+            let aleatorio = Math.floor(Math.random() * 99);
+            document.getElementById("UserName").value = eliminarDiacriticos(texto) + aleatorio;
+        }
+
+    </script>
+
+}
+@section css {
+
+}

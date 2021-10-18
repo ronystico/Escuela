@@ -181,34 +181,48 @@ namespace Escuela.Areas.Administracion.Controllers
             }
             return View(profesor);
         }
-        // TODO: Probar si funciona, y en agregar poner enlace que inserte los datos automático en el nuevo estudiante
-        public IActionResult AgregarPadres(string id)
+        
+        public IActionResult AgregarPadres(string id, string referencia)
         {
             ViewBag.id = id;
+            ViewBag.referencia = referencia;
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> AgregarPadres(string id, Padres padres)
+        public async Task<IActionResult> AgregarPadres(string id, Padres padres, string referencia)
         {
             if (ModelState.IsValid)
             {
                 var result = await _data.Padres.AddAsync(padres);
                 _data.SaveChanges();
-                return RedirectToAction("BuscarPadres", "Usuario", new { area = "Administracion", id = id });
+                if (referencia.Equals("EditarEstudiante"))
+                {
+                    return RedirectToAction("EditarEstudiante", "Usuario", new { area = "Administracion", id = id, id2 = result.Entity.IdPadres });
+                }
+                else
+                {
+                    return RedirectToAction("AgregarEstudiante", "Usuario", new { area = "Administracion", id = id, id2 = result.Entity.IdPadres });
+                }
             }
             return View(padres);
         }
 
-        public IActionResult BuscarPadres(string id, string id2)
+        public IActionResult BuscarPadres(string id, string id2, string referencia)
         {
             ViewBag.id = id;
             ViewBag.id2 = id2;
+            if (referencia != null)
+            {
+                ViewBag.referencia = referencia;
+            }
+            else
+            {
+                ViewBag.referencia = string.Empty;
+            }
             var padres = _data.Padres.ToList();
             return View(padres);
         }
-
-        // TODO: Agregar Editar
 
         public IActionResult Detalles(string id, string rol)
         {
@@ -251,6 +265,7 @@ namespace Escuela.Areas.Administracion.Controllers
         {
             var roles = await _userManager.GetRolesAsync(await _userManager.FindByIdAsync(id));
             ViewBag.roles = roles[0];
+
             var estudiante = await _data.Users.Where(s => s.Id == id).Include(s => s.DetalleEstudiante)
                 .ThenInclude(s => s.Curso).Include(s => s.DetalleEstudiante).ThenInclude(s => s.Padres)
                 .FirstOrDefaultAsync();
@@ -265,7 +280,6 @@ namespace Escuela.Areas.Administracion.Controllers
             return View(administrador);
         }
 
-        // TODO: Editar
         public IActionResult Editar(string id, string rol)
         {
             if (id != null && rol != null)
@@ -312,6 +326,39 @@ namespace Escuela.Areas.Administracion.Controllers
                 return RedirectToAction("Inicio", "Usuario", new { area = "Administracion" });
             }
             return View(user);
+        }
+
+        public async Task<IActionResult> EditarEstudiante(string id, int? id2)
+        {
+            var estudiante = await _userManager.FindByIdAsync(id);
+
+            if (id2 != null)
+            {
+                await _data.Entry(estudiante).Reference(s => s.DetalleEstudiante).LoadAsync();
+                if(estudiante.DetalleEstudiante == null)
+                {
+                    return RedirectToAction("AgregarEstudiante", "Usuario", new { area = "Administracion", id = id });
+                }
+                var padres = await _data.Padres.FindAsync(id2);
+                if (padres != null)
+                {
+                    estudiante.DetalleEstudiante.IdPadres = id2;
+                    estudiante.DetalleEstudiante.Padres = padres;
+                }
+            }
+            else
+            {
+                await _data.Entry(estudiante).Reference(s => s.DetalleEstudiante).LoadAsync();
+                await _data.Entry(estudiante.DetalleEstudiante).Reference(s => s.Padres).LoadAsync();
+                if (estudiante.DetalleEstudiante == null)
+                {
+                    return RedirectToAction("AgregarEstudiante", "Usuario", new { area = "Administracion", id = id });
+                }
+            }
+
+            ObtenerDatos cursos = new ObtenerDatos(_data);
+            ViewBag.cursos = cursos.ObtenerCursosEstudiante(id);
+            return View(estudiante);
         }
 
         

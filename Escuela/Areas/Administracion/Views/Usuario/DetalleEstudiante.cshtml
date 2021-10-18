@@ -11,24 +11,26 @@
             <th scope="col">Primer Apellido</th>
             <th scope="col">Segundo Apellido</th>
             <th scope="col">Nombres</th>
-            <th scope="col">Estado</th>
             <th scope="col">Rol</th>
+            <th scope="col">Usuario</th>
+            <th scope="col">Estado</th>
             <th scope="col">Curso</th>
             <th scope="col">Número de Orden</th>
             <th scope="col">ID o RNE</th>
         </tr>
     </thead>
     <tbody>
-            <tr>
-                <td>@Model.PrimerApellido</td>
-                <td>@Model.SegundoApellido</td>
-                <td>@Model.Nombres</td>
-                <td>@Model.Estado</td>
-                <td>@ViewBag.roles</td>
-                <td>@(Model.DetalleEstudiante.Curso.Nombre + " " + Model.DetalleEstudiante.Curso.Seccion)</td>
-                <td>@Model.DetalleEstudiante.NumerodeOrden</td>
-                <td>@Model.DetalleEstudiante.IdoRNE</td>
-            </tr>
+        <tr>
+            <td>@Model.PrimerApellido</td>
+            <td>@Model.SegundoApellido</td>
+            <td>@Model.Nombres</td>
+            <td>@ViewBag.roles</td>
+            <td>@Model.UserName</td>
+            <td>@Model.Estado</td>
+            <td>@(Model.DetalleEstudiante.Curso.Nombre + " " + Model.DetalleEstudiante.Curso.Seccion)</td>
+            <td>@Model.DetalleEstudiante.NumerodeOrden</td>
+            <td>@Model.DetalleEstudiante.IdoRNE</td>
+        </tr>
     </tbody>
 </table>
 

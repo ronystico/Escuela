@@ -40,6 +40,34 @@ namespace Escuela.Services
             return _data.Curso.ToList();
         }
 
+        public List<SelectListItem> ObtenerCursosEstudiante(string id)
+        {
+            var estudiante = _data.DetalleEstudiante.Where(s => s.UserId == id).FirstOrDefault();
+            var cursos = _data.Curso.ToList();
+            var cursosSelectListItem = new List<SelectListItem>();
+            foreach(var curso in cursos)
+            {
+                if (curso.IdCurso.ToString().Equals(estudiante.UserId))
+                {
+                    cursosSelectListItem.Add(new SelectListItem
+                    {
+                        Value = curso.IdCurso.ToString(),
+                        Text = curso.Nombre + " " + curso.Seccion,
+                        Selected = true
+                    });
+                }
+                else
+                {
+                    cursosSelectListItem.Add(new SelectListItem
+                    {
+                        Value = curso.IdCurso.ToString(),
+                        Text = curso.Nombre + " " + curso.Seccion,
+                    });
+                }
+            }
+            return cursosSelectListItem;
+        }
+
         public List<CursoAsignaturaViewModel> ObtenerCursoconAsignaturas()
         {
             return (from curso in _data.Curso.ToList()

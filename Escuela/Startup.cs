@@ -103,7 +103,7 @@ namespace Escuela
                 endpoints.MapAreaControllerRoute(
                     name: "Administracion",
                     areaName: "Administracion",
-                    pattern: "{controller=Usuario}/{action=Inicio}/{id?}/{rol?}/{id2?}"
+                    pattern: "{controller=Usuario}/{action=Inicio}/{id?}/{id2?}/{referencia?}/{rol?}"
                 );
             });
         }
