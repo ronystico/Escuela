@@ -7,7 +7,7 @@
     <input asp-for="UserId" value="@ViewBag.id" hidden />
 
     <div class="form-group">
-        <label for="Asignaturas">Asignaturas/Materias donde el nuevo profesor podrá asignar notas</label><br />
+        <label for="Asignaturas" class="requerido">Asignaturas/Materias donde el nuevo profesor podrá asignar notas</label><br />
         @foreach (var cursoasignatura in ViewBag.cursosasignaturas)
         {
 <input type="checkbox" name="IdDetalleCursosAsignatura" value="@cursoasignatura.Value"

@@ -45,7 +45,6 @@ namespace Escuela.Areas.Administracion.Controllers
 
         // TODO: CRUD Padres
         // TODO: Editar Profesor
-        // TODO: Marcar campos obligatorios y no obligatorios
 
         [HttpPost]
         public async Task<IActionResult> Agregar(UsuarioViewModel usuario)

@@ -26,7 +26,7 @@
     </div>
 
     <div class="form-group">
-        <label asp-for="Curso.Nombre">Curso</label>
+        <label asp-for="Curso.Nombre" class="requerido">Curso</label>
         <div class="form-check">
             @foreach (var curso in ViewBag.cursos)
         {
@@ -38,7 +38,7 @@
     </div>
 
     <div class="form-group">
-        <label asp-for="DetalleEstudiante.NumerodeOrden"></label>
+        <label asp-for="DetalleEstudiante.NumerodeOrden" class="requerido"></label>
         <input asp-for="DetalleEstudiante.NumerodeOrden" class="form-control" >
         <span asp-validation-for="DetalleEstudiante.NumerodeOrden" class="text-danger"></span>
     </div>

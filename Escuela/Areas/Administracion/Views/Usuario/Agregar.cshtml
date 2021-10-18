@@ -10,28 +10,28 @@
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
                 <div class="form-group">
-                    <label asp-for="Nombres"></label>
+                    <label asp-for="Nombres" class="requerido"></label>
                     <input asp-for="Nombres" class="form-control" onchange="ponerUsuario();" />
                     <span asp-validation-for="Nombres" class="text-danger"></span>
                 </div>
-                <label asp-for="PrimerApellido"></label>
+                <label asp-for="PrimerApellido" class="requerido"></label>
                 <input asp-for="PrimerApellido" class="form-control" onchange="ponerUsuario();" />
                 <span asp-validation-for="PrimerApellido" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="SegundoApellido"></label>
+                <label asp-for="SegundoApellido" class="requerido"></label>
                 <input asp-for="SegundoApellido" class="form-control" onchange="ponerUsuario();" />
                 <span asp-validation-for="SegundoApellido" class="text-danger"></span>
             </div>
 
             @* Rol *@
             <div class="form-group">
-                <label for="Rol">Rol</label>
+                <label for="Rol" class="requerido">Rol</label>
                 <select asp-for="IdentityRole.Name" asp-items="@ViewBag.roles" class="form-control"></select>
             </div>
 
             <div class="form-group">
-                <label asp-for="UserName"></label>
+                <label asp-for="UserName" class="requerido"></label>
                 <div class="input-group">
                     <input asp-for="UserName" class="form-control" />
                     <button type="button" class="btn btn-primary" onclick="usuarioComoClave();">Usar como Clave</button>
@@ -40,7 +40,7 @@
                 <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Password"></label>
+                <label asp-for="Password" class="requerido"></label>
                 <div class="input-group">
                     <input asp-for="Password" class="form-control" />
                     <button type="button" class="btn btn-outline-primary">
@@ -51,7 +51,7 @@
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ConfirmPassword"></label>
+                <label asp-for="ConfirmPassword" class="requerido"></label>
                 <input asp-for="ConfirmPassword" class="form-control" />
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
@@ -106,5 +106,6 @@
 </script>
 }
 @section css {
-    <link href="/css/all.css" rel="stylesheet">
+    <link href="~/css/all.css" rel="stylesheet" />
+<link href="~/css/site.css" rel="stylesheet" />
 }
