@@ -12,7 +12,7 @@
             <div class="form-group">
                 <label asp-for="DetalleEstudiante.Padres"></label>
 
-                <input type="text" asp-for="DetalleEstudiante.Padres.IdPadres" class="form-control" value="DetalleEstudiante.Padres.IdPadres" hidden>
+                <input type="text" asp-for="DetalleEstudiante.Padres.IdPadres" class="form-control" value="@Model.DetalleEstudiante.Padres.IdPadres" hidden>
 
                 <input type="text" asp-for="DetalleEstudiante.Padres" class="form-control" disabled value="@(
         Model.DetalleEstudiante.Padres.NombresMadre + " " + Model.DetalleEstudiante.Padres.PrimerApellidoMadre + ", " +

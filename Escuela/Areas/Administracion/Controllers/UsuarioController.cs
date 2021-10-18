@@ -43,9 +43,9 @@ namespace Escuela.Areas.Administracion.Controllers
             return View();
         }
 
-        // TODO: Poner que se vea la clave en agregar
-
         // TODO: CRUD Padres
+        // TODO: Editar Profesor
+        // TODO: Marcar campos obligatorios y no obligatorios
 
         [HttpPost]
         public async Task<IActionResult> Agregar(UsuarioViewModel usuario)
@@ -119,11 +119,11 @@ namespace Escuela.Areas.Administracion.Controllers
             {
                 Padres padrevacio = new Padres()
                 {
-                    IdPadres = 0,
-                    NombresMadre = " ",
-                    PrimerApellidoMadre = " ",
-                    NombresPadre = " ",
-                    PrimerApellidoPadre = " "
+                    //IdPadres = 0,
+                    //NombresMadre = " ",
+                    //PrimerApellidoMadre = " ",
+                    //NombresPadre = " ",
+                    //PrimerApellidoPadre = " "
                 };
                 ViewBag.padres = padrevacio;
             }
@@ -135,14 +135,28 @@ namespace Escuela.Areas.Administracion.Controllers
         {
             if (ModelState.IsValid)
             {
-                DetalleEstudiante detalles = new DetalleEstudiante()
+                DetalleEstudiante detalles = new DetalleEstudiante();
+                if (estudiante.DetalleEstudiante.IdPadres == 0)
                 {
-                    UserId = estudiante.DetalleEstudiante.ApplicationUser.Id,
-                    IdCurso = estudiante.DetalleEstudiante.IdCurso,
-                    NumerodeOrden = estudiante.DetalleEstudiante.NumerodeOrden,
-                    IdPadres = estudiante.DetalleEstudiante.IdPadres,
-                    IdoRNE = estudiante.DetalleEstudiante.IdoRNE
-                };
+                    detalles = new DetalleEstudiante()
+                    {
+                        UserId = estudiante.DetalleEstudiante.ApplicationUser.Id,
+                        IdCurso = estudiante.DetalleEstudiante.IdCurso,
+                        NumerodeOrden = estudiante.DetalleEstudiante.NumerodeOrden,
+                        IdoRNE = estudiante.DetalleEstudiante.IdoRNE
+                    };
+                }
+                else
+                {
+                    detalles = new DetalleEstudiante()
+                    {
+                        UserId = estudiante.DetalleEstudiante.ApplicationUser.Id,
+                        IdCurso = estudiante.DetalleEstudiante.IdCurso,
+                        NumerodeOrden = estudiante.DetalleEstudiante.NumerodeOrden,
+                        IdPadres = estudiante.DetalleEstudiante.IdPadres,
+                        IdoRNE = estudiante.DetalleEstudiante.IdoRNE
+                    };
+                }
                 var resultado = await _data.DetalleEstudiante.AddAsync(detalles);
                 await _data.SaveChangesAsync();
                 return RedirectToAction("Inicio", "Usuario", new { area = "Administracion" });
@@ -269,6 +283,17 @@ namespace Escuela.Areas.Administracion.Controllers
             var estudiante = await _data.Users.Where(s => s.Id == id).Include(s => s.DetalleEstudiante)
                 .ThenInclude(s => s.Curso).Include(s => s.DetalleEstudiante).ThenInclude(s => s.Padres)
                 .FirstOrDefaultAsync();
+            if (estudiante.DetalleEstudiante == null)
+            {
+                return RedirectToAction("AgregarEstudiante", "Usuario", new { area = "Administracion", id = id });
+            }
+            if (estudiante.DetalleEstudiante.Padres == null)
+            {
+                estudiante.DetalleEstudiante.Padres = new Padres
+                {
+
+                };
+            }
             return View(estudiante);
         }
 
@@ -354,6 +379,10 @@ namespace Escuela.Areas.Administracion.Controllers
                 {
                     return RedirectToAction("AgregarEstudiante", "Usuario", new { area = "Administracion", id = id });
                 }
+                if (estudiante.DetalleEstudiante.Padres == null)
+                {
+                    estudiante.DetalleEstudiante.Padres = new Padres { };
+                }
             }
 
             ObtenerDatos cursos = new ObtenerDatos(_data);
@@ -361,6 +390,36 @@ namespace Escuela.Areas.Administracion.Controllers
             return View(estudiante);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> EditarEstudiante(ApplicationUser estudiante)
+        {
+            if (ModelState.IsValid && (estudiante.Estado.Equals("Inscrito") || estudiante.Estado.Equals("Retirado")))
+            {
+                var usuario = await _userManager.FindByIdAsync(estudiante.Id);
+                var detalleEstudiante = _data.DetalleEstudiante.Find(estudiante.Id);
+
+                usuario.Nombres = estudiante.Nombres;
+                usuario.PrimerApellido = estudiante.PrimerApellido;
+                usuario.SegundoApellido = estudiante.SegundoApellido;
+                usuario.UserName = estudiante.UserName;
+                usuario.Estado = estudiante.Estado;
+
+                detalleEstudiante.IdCurso = estudiante.DetalleEstudiante.IdCurso;
+                detalleEstudiante.IdoRNE = estudiante.DetalleEstudiante.IdoRNE;
+                detalleEstudiante.IdPadres = estudiante.DetalleEstudiante.Padres.IdPadres;
+                detalleEstudiante.NumerodeOrden = estudiante.DetalleEstudiante.NumerodeOrden;
+
+                await _userManager.UpdateAsync(usuario);
+
+                _data.DetalleEstudiante.Update(detalleEstudiante);
+                await _data.SaveChangesAsync();
+
+                return RedirectToAction("Inicio", "Usuario", new { area = "Administracion" });
+            }
+            ObtenerDatos cursos = new ObtenerDatos(_data);
+            ViewBag.cursos = cursos.ObtenerCursosEstudiante(estudiante.Id);
+            return View(estudiante);
+        }
         
         public async Task<IActionResult> ReestablecerClave(string id)
         {
