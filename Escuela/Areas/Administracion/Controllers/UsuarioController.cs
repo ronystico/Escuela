@@ -43,8 +43,9 @@ namespace Escuela.Areas.Administracion.Controllers
             return View();
         }
 
-        // TODO: CRUD Padres
+        // TODO: Terminar CRUD Padres
         // TODO: Editar Profesor
+        // TODO: Al editar usuarios, volver a detalles
 
         [HttpPost]
         public async Task<IActionResult> Agregar(UsuarioViewModel usuario)
