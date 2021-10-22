@@ -17,6 +17,7 @@ namespace Escuela.Models
         [DisplayName("Primer Apellido")]
         [StringLength(50)]
         public string PrimerApellido { get; set; }
+
         // segundo apellido
         [Column("segundo_apellido")]
         [Required(ErrorMessage = "Falta el campo: Segundo apellido")]
@@ -36,6 +37,11 @@ namespace Escuela.Models
         [DisplayName("Estado")]
         [StringLength(10)]
         public string Estado { get; set; }
+
+        [Column("fecha_agregado")]
+        [Required(ErrorMessage = "Falta el campo: Fecha Agregado")]
+        [DisplayName("Fecha Agregado")]
+        public DateTime FechaAgregado { get; set; }
 
         public virtual DetalleEstudiante DetalleEstudiante { get; set; }
 
