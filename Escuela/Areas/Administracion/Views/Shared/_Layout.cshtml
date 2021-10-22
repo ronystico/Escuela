@@ -6,7 +6,7 @@
     <title>@ViewData["Title"] - Escuela</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
-    @RenderSection("css", false)
+    @await RenderSectionAsync("css", required: false)
 </head>
 <body>
     <header>
