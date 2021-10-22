@@ -1,0 +1,39 @@
+@model AgregarProfesorViewModel
+@{ ViewData["Title"] = "Editar Profesor"; }
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="container">
+    <dl class="row">
+        <dt class="col-sm-2 mb-3 mt-3">
+            Nombres y apellidos
+        </dt>
+        <dd class="col-sm-10 mb-3 mt-3">
+            @ViewBag.nombres
+        </dd>
+    </dl>
+
+    <form method="POST" asp-action="EditarProfesor">
+        <input asp-for="UserId" value="@ViewBag.id" hidden />
+
+        <div class="form-group">
+            <h2>Cursos/Asignaturas</h2>
+            <br />
+
+            @foreach (var cursoasignatura in ViewBag.cursosasignaturas)
+            {
+<input type="checkbox" name="IdDetalleCursosAsignatura" value="@cursoasignatura.Value" checked="@cursoasignatura.Selected" class="form-check-input" />
+                <label class="form-check-label">@cursoasignatura.Text</label> <br />}
+        </div>
+        <button type="submit" class="btn btn-warning">Editar profesor</button>
+        <a asp-action="DetalleProfesor" asp-route-id="@ViewBag.id" class="btn btn-primary">Volver atrás</a>
+    </form>
+</div>
+
+
+
+@section Scripts{
+    @{
+                        <partial name="_ValidationScriptsPartial" />
+    }
+}
