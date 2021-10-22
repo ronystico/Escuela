@@ -1,67 +1,126 @@
 @model ApplicationUser
-@{
-    ViewData["Title"] = "Detalle Estudiante";
-}
+@{ ViewData["Title"] = "Detalle Estudiante"; }
 
-<h1>@ViewData["Title"]</h1>
+<h1 class="mb-3">@ViewData["Title"]</h1>
+<hr />
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th scope="col">Primer Apellido</th>
-            <th scope="col">Segundo Apellido</th>
-            <th scope="col">Nombres</th>
-            <th scope="col">Rol</th>
-            <th scope="col">Usuario</th>
-            <th scope="col">Estado</th>
-            <th scope="col">Curso</th>
-            <th scope="col">Número de Orden</th>
-            <th scope="col">ID o RNE</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>@Model.PrimerApellido</td>
-            <td>@Model.SegundoApellido</td>
-            <td>@Model.Nombres</td>
-            <td>@ViewBag.roles</td>
-            <td>@Model.UserName</td>
-            <td>@Model.Estado</td>
-            <td>@(Model.DetalleEstudiante.Curso.Nombre + " " + Model.DetalleEstudiante.Curso.Seccion)</td>
-            <td>@Model.DetalleEstudiante.NumerodeOrden</td>
-            <td>@Model.DetalleEstudiante.IdoRNE</td>
-        </tr>
-    </tbody>
-</table>
+<div class="container">
+    <dl class="row">
+        <dt class="col-sm-2 mb-3">
+            @Html.DisplayNameFor(model => model.PrimerApellido)
+        </dt>
+        <dd class="col-sm-10 mb-3">
+            @Html.DisplayFor(model => model.PrimerApellido)
+        </dd>
+        <dt class="col-sm-2 mb-3">
+            @Html.DisplayNameFor(model => model.SegundoApellido)
+        </dt>
+        <dd class="col-sm-10 mb-3">
+            @Html.DisplayFor(model => model.SegundoApellido)
+        </dd>
+        <dt class="col-sm-2 mb-3">
+            @Html.DisplayNameFor(model => model.Nombres)
+        </dt>
+        <dd class="col-sm-10 mb-3">
+            @Html.DisplayFor(model => model.Nombres)
+        </dd>
+        <dt class="col-sm-2 mb-3">
+            @Html.DisplayNameFor(model => model.Estado)
+        </dt>
+        <dd class="col-sm-10 mb-3">
+            @Html.DisplayFor(model => model.Estado)
+        </dd>
+        <dt class="col-sm-2 mb-3">
+            Rol
+        </dt>
+        <dd class="col-sm-10 mb-3">
+            @ViewBag.roles
+        </dd>
+        <dt class="col-sm-2 mb-3">
+            Nombre de Usuario
+        </dt>
+        <dd class="col-sm-10 mb-3">
+            @Html.DisplayFor(model => model.UserName)
+        </dd>
+        <dt class="col-sm-2 mb-3">
+            Curso/Sección
+        </dt>
+        <dd class="col-sm-10 mb-3">
+            @(Model.DetalleEstudiante.Curso.Nombre + " " + Model.DetalleEstudiante.Curso.Seccion)
+        </dd>
+        <dt class="col-sm-2 mb-3">
+            @Html.DisplayNameFor(model => model.DetalleEstudiante.NumerodeOrden)
+        </dt>
+        <dd class="col-sm-10 mb-3">
+            @Html.DisplayFor(model => model.DetalleEstudiante.NumerodeOrden)
+        </dd>
+        <dt class="col-sm-2 mb-3">
+            @Html.DisplayNameFor(model => model.DetalleEstudiante.IdoRNE)
+        </dt>
+        <dd class="col-sm-10 mb-3">
+            @Html.DisplayFor(model => model.DetalleEstudiante.IdoRNE)
+        </dd>
+    </dl>
 
-<h2>Detalles Padre</h2>
+    <h2 class="mb-3">Detalle Padres</h2>
+    <hr />
+    <h3 class="mb-3">Madre</h3>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th scope="col">Primer Apellido Madre</th>
-            <th scope="col">Segundo Apellido Madre</th>
-            <th scope="col">Nombres Madre</th>
-            <th scope="col">Teléfono Madre</th>
-            <th scope="col">Primer Apellido Padre</th>
-            <th scope="col">Segundo Apellido Padre</th>
-            <th scope="col">Nombres Padre</th>
-            <th scope="col">Teléfono Padre</th>
-        </tr>
-    </thead>
-    <tbody>
-            <tr>
-                <td>@Model.DetalleEstudiante.Padres.PrimerApellidoMadre</td>
-                <td>@Model.DetalleEstudiante.Padres.SegundoApellidoMadre</td>
-                <td>@Model.DetalleEstudiante.Padres.NombresMadre</td>
-                <td>@Model.DetalleEstudiante.Padres.TelefonoMadre</td>
-                <td>@Model.DetalleEstudiante.Padres.PrimerApellidoPadre</td>
-                <td>@Model.DetalleEstudiante.Padres.SegundoApellidoPadre</td>
-                <td>@Model.DetalleEstudiante.Padres.NombresPadre</td>
-                <td>@Model.DetalleEstudiante.Padres.TelefonoPadre</td>
-            </tr>
-    </tbody>
-</table>
+    <dl class="row">
+        <dt class="col-sm-2 mb-3">
+            @Html.DisplayNameFor(model => model.DetalleEstudiante.Padres.PrimerApellidoMadre)
+        </dt>
+        <dd class="col-sm-10 mb-3">
+            @Html.DisplayFor(model => model.DetalleEstudiante.Padres.PrimerApellidoMadre)
+        </dd>
+        <dt class="col-sm-2 mb-3">
+            @Html.DisplayNameFor(model => model.DetalleEstudiante.Padres.SegundoApellidoMadre)
+        </dt>
+        <dd class="col-sm-10 mb-3">
+            @Html.DisplayFor(model => model.DetalleEstudiante.Padres.SegundoApellidoMadre)
+        </dd>
+        <dt class="col-sm-2 mb-3">
+            @Html.DisplayNameFor(model => model.DetalleEstudiante.Padres.NombresMadre)
+        </dt>
+        <dd class="col-sm-10 mb-3">
+            @Html.DisplayFor(model => model.DetalleEstudiante.Padres.NombresMadre)
+        </dd>
+        <dt class="col-sm-2 mb-3">
+            @Html.DisplayNameFor(model => model.DetalleEstudiante.Padres.TelefonoMadre)
+        </dt>
+        <dd class="col-sm-10 mb-3">
+            @Html.DisplayFor(model => model.DetalleEstudiante.Padres.TelefonoMadre)
+        </dd>
+    </dl>
+
+    <h3 class="mb-3">Padre</h3>
+    <dl class="row">
+        <dt class="col-sm-2 mb-3">
+            @Html.DisplayNameFor(model => model.DetalleEstudiante.Padres.PrimerApellidoPadre)
+        </dt>
+        <dd class="col-sm-10 mb-3">
+            @Html.DisplayFor(model => model.DetalleEstudiante.Padres.PrimerApellidoPadre)
+        </dd>
+        <dt class="col-sm-2 mb-3">
+            @Html.DisplayNameFor(model => model.DetalleEstudiante.Padres.SegundoApellidoPadre)
+        </dt>
+        <dd class="col-sm-10 mb-3">
+            @Html.DisplayFor(model => model.DetalleEstudiante.Padres.SegundoApellidoPadre)
+        </dd>
+        <dt class="col-sm-2 mb-3">
+            @Html.DisplayNameFor(model => model.DetalleEstudiante.Padres.NombresPadre)
+        </dt>
+        <dd class="col-sm-10 mb-3">
+            @Html.DisplayFor(model => model.DetalleEstudiante.Padres.NombresPadre)
+        </dd>
+        <dt class="col-sm-2 mb-3">
+            @Html.DisplayNameFor(model => model.DetalleEstudiante.Padres.TelefonoPadre)
+        </dt>
+        <dd class="col-sm-10 mb-3">
+            @Html.DisplayFor(model => model.DetalleEstudiante.Padres.TelefonoPadre)
+        </dd>
+    </dl>
+</div>
 
 <div>
     <a class="btn btn-warning" asp-action="EditarEstudiante" asp-route-id="@Model.Id">Editar</a>

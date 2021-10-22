@@ -4,65 +4,67 @@
     ViewData["Title"] = "Agregar Padres";
 }
 
-<h1>AgregarPadres</h1>
-
-<h4>Padres</h4>
+<h1>Agregar Padres</h1>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="AgregarPadres">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="NombresMadre" class="control-label"></label>
-                <input asp-for="NombresMadre" class="form-control" />
-                <span asp-validation-for="NombresMadre" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PrimerApellidoMadre" class="control-label"></label>
-                <input asp-for="PrimerApellidoMadre" class="form-control" />
-                <span asp-validation-for="PrimerApellidoMadre" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SegundoApellidoMadre" class="control-label"></label>
-                <input asp-for="SegundoApellidoMadre" class="form-control" />
-                <span asp-validation-for="SegundoApellidoMadre" class="text-danger"></span>
-            </div>
 
-            <div class="form-group">
-                <label asp-for="TelefonoMadre" class="control-label"></label>
-                <input asp-for="TelefonoMadre" class="form-control" />
-                <span asp-validation-for="TelefonoMadre" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NombresPadre" class="control-label"></label>
-                <input asp-for="NombresPadre" class="form-control" />
-                <span asp-validation-for="NombresPadre" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PrimerApellidoPadre" class="control-label"></label>
-                <input asp-for="PrimerApellidoPadre" class="form-control" />
-                <span asp-validation-for="PrimerApellidoPadre" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SegundoApellidoPadre" class="control-label"></label>
-                <input asp-for="SegundoApellidoPadre" class="form-control" />
-                <span asp-validation-for="SegundoApellidoPadre" class="text-danger"></span>
-            </div>
+<div class="container">
+    <form asp-action="AgregarPadres">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="NombresMadre" class="control-label"></label>
+            <input asp-for="NombresMadre" class="form-control" />
+            <span asp-validation-for="NombresMadre" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="PrimerApellidoMadre" class="control-label"></label>
+            <input asp-for="PrimerApellidoMadre" class="form-control" />
+            <span asp-validation-for="PrimerApellidoMadre" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="SegundoApellidoMadre" class="control-label"></label>
+            <input asp-for="SegundoApellidoMadre" class="form-control" />
+            <span asp-validation-for="SegundoApellidoMadre" class="text-danger"></span>
+        </div>
 
-            <div class="form-group">
-                <label asp-for="TelefonoPadre" class="control-label"></label>
-                <input asp-for="TelefonoPadre" class="form-control" />
-                <span asp-validation-for="TelefonoPadre" class="text-danger"></span>
-            </div>
-            @if (ViewBag.referencia.Equals("EditarEstudiante"))
-            {
-                <input type="submit" value="Crear Padres" asp-route-id="@ViewBag.id" asp-route-referencia="EditarEstudiante" class="btn btn-primary" />
-            }
-            else
-            {
-                <input type="submit" value="Crear Padres" asp-route-id="@ViewBag.id" class="btn btn-primary" />
-            }
-            <a asp-action="BuscarPadres" class="btn btn-primary">Volver Atrás</a>
-        </form>
-    </div>
+        <div class="form-group">
+            <label asp-for="TelefonoMadre" class="control-label"></label>
+            <input asp-for="TelefonoMadre" class="form-control" />
+            <span asp-validation-for="TelefonoMadre" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="NombresPadre" class="control-label"></label>
+            <input asp-for="NombresPadre" class="form-control" />
+            <span asp-validation-for="NombresPadre" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="PrimerApellidoPadre" class="control-label"></label>
+            <input asp-for="PrimerApellidoPadre" class="form-control" />
+            <span asp-validation-for="PrimerApellidoPadre" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="SegundoApellidoPadre" class="control-label"></label>
+            <input asp-for="SegundoApellidoPadre" class="form-control" />
+            <span asp-validation-for="SegundoApellidoPadre" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="TelefonoPadre" class="control-label"></label>
+            <input asp-for="TelefonoPadre" class="form-control" />
+            <span asp-validation-for="TelefonoPadre" class="text-danger"></span>
+        </div>
+        @if (ViewBag.referencia.Equals("EditarEstudiante"))
+        {
+            <input type="submit" value="Crear Padres" asp-route-id="@ViewBag.id" asp-route-referencia="EditarEstudiante" class="btn btn-primary" />
+        }
+        else
+        {
+            <input type="submit" value="Crear Padres" asp-route-id="@ViewBag.id" class="btn btn-primary" />
+        }
+        <a asp-action="BuscarPadres" class="btn btn-primary">Volver Atrás</a>
+    </form>
 </div>
+
+@section Scripts{
+    @{
+                        <partial name="_ValidationScriptsPartial" /> }
+}
