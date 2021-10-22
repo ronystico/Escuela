@@ -10,16 +10,16 @@
 <form method="POST" asp-action="Eliminar">
     <input asp-for="IdAsignatura" hidden />
 
-    <div class="form-group"
+    <div class="form-group">
     <label asp-for="Nombre"></label>
     <input asp-for="Nombre" disabled />
     </div>
-    <input type="submit" class="btn btn-danger" asp-route-id="@Model.IdAsignatura" value="Eliminar"></input>
+    <input type="submit" class="btn btn-danger" asp-route-id="@Model.IdAsignatura" value="Eliminar" />
 </form>
 <a asp-action="Inicio" class="btn btn-primary">Volver atrás</a>
 
 @section Scripts{
     @{
-        <partial name="_ValidationScriptsPartial"></partial>
+        <partial name="_ValidationScriptsPartial" />
     }
 }
