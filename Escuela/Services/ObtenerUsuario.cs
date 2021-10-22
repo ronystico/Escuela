@@ -26,39 +26,7 @@ namespace Escuela.Services
                                 UserName = usuario.UserName,
                                 IdentityRole = nombrerol,
                                 Estado = usuario.Estado
-                            }).ToList();
-        }
-        public UsuarioViewModel ObtenerUnUsuarioConRol(string id){
-            return (from usuario in _data.Users.ToList() where usuario.Id == id
-                            join asociacionrol in _data.UserRoles.ToList() on usuario.Id equals asociacionrol.UserId
-                            join nombrerol in _data.Roles.ToList() on asociacionrol.RoleId equals nombrerol.Id
-                            select new UsuarioViewModel
-                            {
-                                Id = usuario.Id,
-                                PrimerApellido = usuario.PrimerApellido,
-                                SegundoApellido = usuario.SegundoApellido,
-                                Nombres = usuario.Nombres,
-                                UserName = usuario.UserName,
-                                IdentityRole = nombrerol,
-                                Estado = usuario.Estado
-                            }).FirstOrDefault();
-        }
-        public DetalleEstudianteViewModel ObtenerDetalleEstudiante(string id){
-            return (from usuario in _data.Users.ToList() where usuario.Id == id
-                            join asociacionrol in _data.UserRoles.ToList() on usuario.Id equals asociacionrol.UserId
-                            join nombrerol in _data.Roles.ToList() on asociacionrol.RoleId equals nombrerol.Id
-                            join detalleestudiante in _data.DetalleEstudiante.ToList() on usuario.Id equals detalleestudiante.ApplicationUser.Id
-                            select new DetalleEstudianteViewModel
-                            {
-                                Id = usuario.Id,
-                                PrimerApellido = usuario.PrimerApellido,
-                                SegundoApellido = usuario.SegundoApellido,
-                                Nombres = usuario.Nombres,
-                                UserName = usuario.UserName,
-                                IdentityRole = nombrerol,
-                                Estado = usuario.Estado,
-                                DetalleEstudiante = detalleestudiante
-                            }).FirstOrDefault();
-        }
+                            }).OrderBy(s => s.PrimerApellido).ToList();
+        } 
     }
 }
