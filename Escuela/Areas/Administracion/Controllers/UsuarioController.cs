@@ -32,7 +32,8 @@ namespace Escuela.Areas.Administracion.Controllers
         public IActionResult Inicio()
         {
             ObtenerUsuario usuarios = new ObtenerUsuario(_data);
-            return View(usuarios.ObtenerTodosLosUsuariosConRol());
+            var listaUsuarios = usuarios.ObtenerTodosLosUsuariosConRol();
+            return View(listaUsuarios);
         }
 
         public IActionResult Agregar()
@@ -40,17 +41,18 @@ namespace Escuela.Areas.Administracion.Controllers
             ObtenerDatos roles = new ObtenerDatos(_data);
             ViewBag.roles = roles.ObtenerRoles();
 
-            return View();
+            return View(new UsuarioViewModel());
         }
 
         // TODO: Terminar CRUD Padres
-        // TODO: Editar Profesor
-        // TODO: Al editar usuarios, volver a detalles
 
         [HttpPost]
         public async Task<IActionResult> Agregar(UsuarioViewModel usuario)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && 
+                (usuario.IdentityRole.Name.Equals("Estudiante") ||
+                usuario.IdentityRole.Name.Equals("Profesor") ||
+                usuario.IdentityRole.Name.Equals("Administracion")))
             {
                 var user = new ApplicationUser
                 {
@@ -58,7 +60,8 @@ namespace Escuela.Areas.Administracion.Controllers
                     PrimerApellido = usuario.PrimerApellido,
                     SegundoApellido = usuario.SegundoApellido,
                     Nombres = usuario.Nombres,
-                    Estado = "Inscrito"
+                    Estado = "Inscrito",
+                    FechaAgregado = System.DateTime.Now
                 };
                 var result = await _userManager.CreateAsync(user, usuario.Password);
                 if (result.Succeeded)
@@ -75,13 +78,12 @@ namespace Escuela.Areas.Administracion.Controllers
                             RedirectToAction("AgregarProfesor", "Usuario", new { area = "Administracion", id = usuarioCreado.Id }),
                             _ =>
                             RedirectToAction("Inicio", "Usuario", new { area = "Administracion" })
-                        };
-                        ;
+                        };;
                     }
                 }
                 else
                 {
-
+                    
                 }
                 foreach (var error in result.Errors)
                 {
@@ -94,10 +96,11 @@ namespace Escuela.Areas.Administracion.Controllers
                     {
                         ModelState.AddModelError(string.Empty, error.Description);
                     }
-                    ObtenerDatos roles = new ObtenerDatos(_data);
-                    ViewBag.roles = roles.ObtenerRoles();
                 }
             }
+            ObtenerDatos roles = new ObtenerDatos(_data);
+            ViewBag.roles = roles.ObtenerRoles();
+
             return View(usuario);
         }
 
@@ -117,14 +120,7 @@ namespace Escuela.Areas.Administracion.Controllers
             }
             else
             {
-                Padres padrevacio = new Padres()
-                {
-                    //IdPadres = 0,
-                    //NombresMadre = " ",
-                    //PrimerApellidoMadre = " ",
-                    //NombresPadre = " ",
-                    //PrimerApellidoPadre = " "
-                };
+                Padres padrevacio = new Padres();
                 ViewBag.padres = padrevacio;
             }
             return View();
@@ -420,7 +416,47 @@ namespace Escuela.Areas.Administracion.Controllers
             ViewBag.cursos = cursos.ObtenerCursosEstudiante(estudiante.Id);
             return View(estudiante);
         }
-        
+
+        public async Task<IActionResult> EditarProfesor(string id)
+        {
+            var usuario = await _userManager.FindByIdAsync(id);
+            ViewBag.nombres = usuario.Nombres + " " + usuario.PrimerApellido + " " + usuario.SegundoApellido;
+
+            ViewBag.id = id;
+            ObtenerDatos datos = new ObtenerDatos(_data);
+            ViewBag.cursosasignaturas = datos.ObtenerDetalleProfesorCursosAsignaturas(id);
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditarProfesor(AgregarProfesorViewModel profesor)
+        {
+            if (ModelState.IsValid)
+            {
+                var eliminarExistente = _data.DetalleProfesorCursosAsignatura.Where(a => a.UserId == profesor.UserId);
+                _data.RemoveRange(eliminarExistente);
+
+                List<DetalleProfesorCursosAsignatura> asignaturasProfesor = new List<DetalleProfesorCursosAsignatura>();
+
+                if(profesor.IdDetalleCursosAsignatura != null)
+                {
+                    foreach (var cursoAsignaturaSeleccionada in profesor.IdDetalleCursosAsignatura)
+                    {
+                        asignaturasProfesor.Add(new DetalleProfesorCursosAsignatura
+                        {
+                            UserId = profesor.UserId,
+                            IdDetalleCursosAsignatura = cursoAsignaturaSeleccionada
+                        });
+                    }
+                    await _data.AddRangeAsync(asignaturasProfesor);
+                }
+
+                await _data.SaveChangesAsync();
+                return RedirectToAction("DetalleProfesor", "Usuario", new { area = "Administracion", id = profesor.UserId });
+            }
+            return View(profesor);
+        }
+
         public async Task<IActionResult> ReestablecerClave(string id)
         {
             var usuario = await _userManager.FindByIdAsync(id);
@@ -454,7 +490,7 @@ namespace Escuela.Areas.Administracion.Controllers
                     {
                         if (error.Code.Equals("PasswordRequiresDigit"))
                         {
-                            ModelState.AddModelError(string.Empty, "La contraseña debe tener al menos un número");
+                            ModelState.AddModelError(string.Empty, "La contraseña requiere al menos un número");
                         }
                         else
                         {
