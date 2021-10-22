@@ -72,13 +72,14 @@ namespace Escuela.Data
                 new ApplicationUser
                 {
                     Id = "29ce004f-6192-496b-a359-56bbbfd90ca1",
-                    UserName = "klkcompay@dominican.com",
-                    NormalizedUserName = "KLKCOMPAY@DOMINICAN.COM",
-                    PasswordHash = hasher.HashPassword(null, "csUZdHdbnY4ts7j"),
-                    PrimerApellido = "Dominicano",
-                    SegundoApellido = "Soy",
-                    Nombres = "Klk Compay",
-                    Estado = "Inscrito"
+                    UserName = "administrador",
+                    NormalizedUserName = "ADMINISTRADOR",
+                    PasswordHash = hasher.HashPassword(null, "administrador1"),
+                    PrimerApellido = "Administrando",
+                    SegundoApellido = "Administración",
+                    Nombres = "Administrador",
+                    Estado = "Inscrito",
+                    FechaAgregado = DateTime.Now
                 }
             );
 
