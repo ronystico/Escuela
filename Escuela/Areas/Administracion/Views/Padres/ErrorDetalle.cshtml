@@ -1,0 +1,7 @@
+﻿@{ ViewData["Title"] = "Error"; }
+
+<h1 class="text-danger">@ViewData["Title"]</h1>
+
+<p class="text-danger">Parece que intentaste abrir los padres de un estudiante sin haberlos registrado</p>
+
+<a asp-controller="Usuario" asp-action="DetalleEstudiante" asp-route-id="@ViewBag.id" class="btn btn-primary">Volver a Estudiante</a>

@@ -28,12 +28,12 @@ namespace Escuela.Controllers
             return View(await _context.Padres.ToListAsync());
         }
 
-        // GET: Administracion/Padres/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET: Administracion/Padres/Detalle/5
+        public async Task<IActionResult> Detalle(int? id,string id2)
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("ErrorDetalle", "Padres", new { area = "Administracion", id2 = id2 });
             }
 
             var padres = await _context.Padres.Include(s => s.DetalleEstudiante)
@@ -41,6 +41,7 @@ namespace Escuela.Controllers
                 .Include(s => s.DetalleEstudiante)
                 .ThenInclude(s => s.Curso)
                 .FirstOrDefaultAsync(m => m.IdPadres == id);
+
             if (padres == null)
             {
                 return NotFound();
@@ -49,30 +50,30 @@ namespace Escuela.Controllers
             return View(padres);
         }
 
-        // GET: Administracion/Padres/Create
-        public IActionResult Create()
+        // GET: Administracion/Padres/Agregar
+        public IActionResult Agregar()
         {
             return View();
         }
 
-        // POST: Administracion/Padres/Create
+        // POST: Administracion/Padres/Agregar
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdPadres,PrimerApellidoMadre,SegundoApellidoMadre,NombresMadre,TelefonoMadre,PrimerApellidoPadre,SegundoApellidoPadre,NombresPadre,TelefonoPadre")] Padres padres)
+        public async Task<IActionResult> Agregar([Bind("IdPadres,PrimerApellidoMadre,SegundoApellidoMadre,NombresMadre,TelefonoMadre,PrimerApellidoPadre,SegundoApellidoPadre,NombresPadre,TelefonoPadre")] Padres padres)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(padres);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Inicio", "Padres", new { area = "Administracion" });
             }
             return View(padres);
         }
 
-        // GET: Administracion/Padres/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        // GET: Administracion/Padres/Editar/5
+        public async Task<IActionResult> Editar(int? id)
         {
             if (id == null)
             {
@@ -87,12 +88,12 @@ namespace Escuela.Controllers
             return View(padres);
         }
 
-        // POST: Administracion/Padres/Edit/5
+        // POST: Administracion/Padres/Editar/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdPadres,PrimerApellidoMadre,SegundoApellidoMadre,NombresMadre,TelefonoMadre,PrimerApellidoPadre,SegundoApellidoPadre,NombresPadre,TelefonoPadre")] Padres padres)
+        public async Task<IActionResult> Editar(int id, [Bind("IdPadres,PrimerApellidoMadre,SegundoApellidoMadre,NombresMadre,TelefonoMadre,PrimerApellidoPadre,SegundoApellidoPadre,NombresPadre,TelefonoPadre")] Padres padres)
         {
             if (id != padres.IdPadres)
             {
@@ -108,7 +109,7 @@ namespace Escuela.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PadresExists(padres.IdPadres))
+                    if (!PadresExisten(padres.IdPadres))
                     {
                         return NotFound();
                     }
@@ -117,13 +118,13 @@ namespace Escuela.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Detalle", "Padres", new { area = "Administracion", id = padres.IdPadres });
             }
             return View(padres);
         }
 
-        // GET: Administracion/Padres/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // GET: Administracion/Padres/Eliminar/5
+        public async Task<IActionResult> Eliminar(int? id)
         {
             if (id == null)
             {
@@ -141,17 +142,24 @@ namespace Escuela.Controllers
         }
 
         // POST: Administracion/Padres/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName("Eliminar")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> EliminarConfirmado(int id)
         {
             var padres = await _context.Padres.FindAsync(id);
             _context.Padres.Remove(padres);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return RedirectToAction("Inicio", "Padres", new { area = "Administracion" });
         }
 
-        private bool PadresExists(int id)
+        public IActionResult ErrorDetalle(string id2)
+        {
+            ViewBag.id = id2;
+            return View();
+        }
+
+        private bool PadresExisten(int id)
         {
             return _context.Padres.Any(e => e.IdPadres == id);
         }

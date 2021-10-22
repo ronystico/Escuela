@@ -1,17 +1,27 @@
 ﻿@model Padres
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Editar Padres";
 }
 
-<h1>Create</h1>
+<h1>@ViewData["Title"]</h1>
 
-<h4>Padres</h4>
 <hr />
-<div class="row">
+<div class="container">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Editar">
+
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <h2>Madre</h2>
+
+            <input type="hidden" asp-for="IdPadres" />
+
+            <div class="form-group">
+                <label asp-for="NombresMadre" class="control-label"></label>
+                <input asp-for="NombresMadre" class="form-control" />
+                <span asp-validation-for="NombresMadre" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="PrimerApellidoMadre" class="control-label"></label>
                 <input asp-for="PrimerApellidoMadre" class="form-control" />
@@ -22,15 +32,19 @@
                 <input asp-for="SegundoApellidoMadre" class="form-control" />
                 <span asp-validation-for="SegundoApellidoMadre" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="NombresMadre" class="control-label"></label>
-                <input asp-for="NombresMadre" class="form-control" />
-                <span asp-validation-for="NombresMadre" class="text-danger"></span>
-            </div>
+
             <div class="form-group">
                 <label asp-for="TelefonoMadre" class="control-label"></label>
                 <input asp-for="TelefonoMadre" class="form-control" />
                 <span asp-validation-for="TelefonoMadre" class="text-danger"></span>
+            </div>
+
+            <h2>Padre</h2>
+
+            <div class="form-group">
+                <label asp-for="NombresPadre" class="control-label"></label>
+                <input asp-for="NombresPadre" class="form-control" />
+                <span asp-validation-for="NombresPadre" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="PrimerApellidoPadre" class="control-label"></label>
@@ -42,25 +56,18 @@
                 <input asp-for="SegundoApellidoPadre" class="form-control" />
                 <span asp-validation-for="SegundoApellidoPadre" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="NombresPadre" class="control-label"></label>
-                <input asp-for="NombresPadre" class="form-control" />
-                <span asp-validation-for="NombresPadre" class="text-danger"></span>
-            </div>
+
             <div class="form-group">
                 <label asp-for="TelefonoPadre" class="control-label"></label>
                 <input asp-for="TelefonoPadre" class="form-control" />
                 <span asp-validation-for="TelefonoPadre" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input asp-route-id="@Model.IdPadres" type="submit" value="Editar padres" class="btn btn-warning" />
+                <a asp-action="Inicio" class="btn btn-primary">Volver Atrás</a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Inicio">Back to List</a>
 </div>
 
 @section Scripts {

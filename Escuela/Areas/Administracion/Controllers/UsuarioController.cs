@@ -44,8 +44,6 @@ namespace Escuela.Areas.Administracion.Controllers
             return View(new UsuarioViewModel());
         }
 
-        // TODO: Terminar CRUD Padres
-
         [HttpPost]
         public async Task<IActionResult> Agregar(UsuarioViewModel usuario)
         {
@@ -402,7 +400,10 @@ namespace Escuela.Areas.Administracion.Controllers
 
                 detalleEstudiante.IdCurso = estudiante.DetalleEstudiante.IdCurso;
                 detalleEstudiante.IdoRNE = estudiante.DetalleEstudiante.IdoRNE;
-                detalleEstudiante.IdPadres = estudiante.DetalleEstudiante.Padres.IdPadres;
+                if(estudiante.DetalleEstudiante.Padres.IdPadres != 0)
+                {
+                    detalleEstudiante.IdPadres = estudiante.DetalleEstudiante.Padres.IdPadres;
+                }
                 detalleEstudiante.NumerodeOrden = estudiante.DetalleEstudiante.NumerodeOrden;
 
                 await _userManager.UpdateAsync(usuario);
