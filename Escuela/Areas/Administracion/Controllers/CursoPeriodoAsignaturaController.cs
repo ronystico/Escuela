@@ -1,6 +1,5 @@
 using Escuela.Data;
 using Escuela.Models;
-using Escuela.Models.Interfaces;
 using Escuela.Models.ViewModels;
 using Escuela.Services;
 using Microsoft.AspNetCore.Authorization;
