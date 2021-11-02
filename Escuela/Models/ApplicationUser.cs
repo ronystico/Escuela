@@ -45,6 +45,6 @@ namespace Escuela.Models
 
         public virtual DetalleEstudiante DetalleEstudiante { get; set; }
 
-        public virtual ICollection<DetalleProfesorCursosAsignatura> DetalleProfesorCursosAsignatura { get; set; }
+        public virtual ICollection<DetalleProfesorCursoperiodoAsignatura> DetalleProfesorCursoperiodoAsignatura { get; set; }
     }
 }

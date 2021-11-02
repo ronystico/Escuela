@@ -4,15 +4,15 @@
 <h1>@ViewData["Title"]</h1>
 <hr />
 
-<div class="container">
-        <form asp-action="Agregar" method="post">
-            <div asp-validation-summary="All" class="text-danger"></div>
-
-                <div class="form-group">
-                    <label asp-for="Nombres" class="requerido"></label>
-                    <input asp-for="Nombres" class="form-control" onchange="ponerUsuario();" />
-                    <span asp-validation-for="Nombres" class="text-danger"></span>
-                </div>
+<form asp-action="Agregar" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Nombres" class="requerido"></label>
+                <input asp-for="Nombres" class="form-control" onchange="ponerUsuario();" />
+                <span asp-validation-for="Nombres" class="text-danger"></span>
+            </div>
 
             <div class="form-group">
                 <label asp-for="PrimerApellido" class="requerido"></label>
@@ -25,85 +25,90 @@
                 <input asp-for="SegundoApellido" class="form-control" onchange="ponerUsuario();" />
                 <span asp-validation-for="SegundoApellido" class="text-danger"></span>
             </div>
+        </div>
+        <div class="col-md-6">
+            @* Rol *@
+            <div class="form-group">
+                <label for="Rol" class="requerido">Rol</label>
+                <select asp-for="IdentityRole.Name" asp-items="@ViewBag.roles" class="form-control"></select>
+            </div>
 
-                @* Rol *@
-                <div class="form-group">
-                    <label for="Rol" class="requerido">Rol</label>
-                    <select asp-for="IdentityRole.Name" asp-items="@ViewBag.roles" class="form-control"></select>
+            <div class="form-group">
+                <label asp-for="UserName" class="requerido"></label>
+                <div class="input-group">
+                    <input asp-for="UserName" class="form-control" />
+                    <button type="button" class="btn btn-primary" onclick="usuarioComoClave();">Usar como Clave</button>
                 </div>
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
 
-                <div class="form-group">
-                    <label asp-for="UserName" class="requerido"></label>
-                    <div class="input-group">
-                        <input asp-for="UserName" class="form-control" />
-                        <button type="button" class="btn btn-primary" onclick="usuarioComoClave();">Usar como Clave</button>
-                    </div>
-                    <span asp-validation-for="UserName" class="text-danger"></span>
+            <div class="form-group">
+                <label asp-for="Password" class="requerido"></label>
+                <div class="input-group">
+                    <input asp-for="Password" class="form-control" />
+                    <button type="button" class="btn btn-outline-primary" onmouseover="mouseoverClave();" onmouseout="mouseoutClave();">
+                        <i class="fas fa-eye"></i>
+                    </button>
                 </div>
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
 
-                <div class="form-group">
-                    <label asp-for="Password" class="requerido"></label>
-                    <div class="input-group">
-                        <input asp-for="Password" class="form-control" />
-                        <button type="button" class="btn btn-outline-primary">
-                            <i class="fas fa-eye" onmouseover="mouseoverClave();" onmouseout="mouseoutClave();"></i>
-                        </button>
-                    </div>
-                    <span asp-validation-for="Password" class="text-danger"></span>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="ConfirmPassword" class="requerido"></label>
-                    <input asp-for="ConfirmPassword" class="form-control" />
-                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-                </div>
-
-                <div>
-                    <input asp-for="Estado" value="Inscrito" hidden>
-                    <input asp-for="FechaAgregado" value="@Model.FechaAgregado" hidden>
-                </div>
-            <button type="submit" class="btn btn-primary">Agregar</button>
-        </form>
+            <div class="form-group">
+                <label asp-for="ConfirmPassword" class="requerido"></label>
+                <input asp-for="ConfirmPassword" class="form-control" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="Estado" value="Inscrito" class="form-control" hidden>
+                <input asp-for="FechaAgregado" value="@Model.FechaAgregado" class="form-control" hidden>
+            </div>
+        </div>
     </div>
+    <div class="form-group">
+        <input type="submit" class="btn btn-primary" value="Agregar" />
+    </div>
+</form>
 
+<div>
+    <a asp-action="Inicio" class="btn btn-primary">Volver atr&aacute;s</a>
+</div>
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-    <script>
+        @section Scripts {
+            <partial name="_ValidationScriptsPartial" />
+            <script>
 
-        function ponerUsuario() {
-            let texto = document.getElementById("UserName").value = document.getElementById("Nombres").value.toLowerCase()
-                + document.getElementById("PrimerApellido").value.toLowerCase() +
-                document.getElementById("SegundoApellido").value.toLowerCase();
+                function ponerUsuario() {
+                    let texto = document.getElementById("UserName").value = document.getElementById("Nombres").value.charAt(0).toLowerCase()
+                        + document.getElementById("PrimerApellido").value.toLowerCase();
 
-            function eliminarDiacriticos(texto) {
-                return texto.normalize('NFD').replace(/[\u0300-\u036f]|[\s]/g, "");
-            }
+                    function eliminarDiacriticos(texto) {
+                        return texto.normalize('NFD').replace(/[\u0300-\u036f]|[\s]/g, "");
+                    }
 
-            let aleatorio = Math.floor(Math.random() * 99);
-            document.getElementById("UserName").value = eliminarDiacriticos(texto) + aleatorio;
+                    let aleatorio = Math.floor(Math.random() * 99);
+                    document.getElementById("UserName").value = eliminarDiacriticos(texto) + aleatorio;
+                }
+
+            </script>
+            <script>
+                function mouseoverClave(obj) {
+                    var obj = document.getElementById('Password');
+                    obj.type = "text";
+                }
+                function mouseoutClave(obj) {
+                    var obj = document.getElementById('Password');
+                    obj.type = "password";
+                }
+            </script>
+            <script>
+                function usuarioComoClave() {
+                    var valor = document.getElementById('UserName').value;
+                    document.getElementById('Password').value = valor;
+                    document.getElementById('ConfirmPassword').value = valor;
+                }
+            </script>
         }
-
-    </script>
-    <script>
-        function mouseoverClave(obj) {
-            var obj = document.getElementById('Password');
-            obj.type = "text";
+        @section css {
+            <link href="~/css/all.css" rel="stylesheet" />
+            <link href="~/css/site.css" rel="stylesheet" />
         }
-        function mouseoutClave(obj) {
-            var obj = document.getElementById('Password');
-            obj.type = "password";
-        }
-    </script>
-    <script>
-        function usuarioComoClave() {
-            var valor = document.getElementById('UserName').value;
-            document.getElementById('Password').value = valor;
-            document.getElementById('ConfirmPassword').value = valor;
-        }
-    </script>
-}
-@section css {
-    <link href="~/css/all.css" rel="stylesheet" />
-    <link href="~/css/site.css" rel="stylesheet" />
-}

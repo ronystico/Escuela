@@ -7,12 +7,10 @@
 <h1>@ViewData["Title"]</h1>
 <hr />
 
-<div class="container">
-    <div class="col-md-4">
-        <form asp-action="Agregar">
-
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
+<form asp-action="Agregar">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row">
+        <div class="col-md-6">
             <h2>Madre</h2>
 
             <div class="form-group">
@@ -38,7 +36,8 @@
                 <input asp-for="TelefonoMadre" class="form-control" />
                 <span asp-validation-for="TelefonoMadre" class="text-danger"></span>
             </div>
-
+        </div>
+        <div class="col-md-6">
             <h2>Padre</h2>
 
             <div class="form-group">
@@ -63,21 +62,22 @@
                 <input asp-for="TelefonoPadre" class="form-control" />
                 <span asp-validation-for="TelefonoPadre" class="text-danger"></span>
             </div>
-
-            <div class="form-group">
-                <input type="submit" value="Agregar" class="btn btn-primary" />
-                <a asp-action="Inicio" class="btn btn-primary">Volver Atrás</a>
-            </div>
-
-        </form>
+        </div>
     </div>
+    <div class="form-group">
+        <input type="submit" value="Agregar" class="btn btn-primary" />
+    </div>
+</form>
+
+<div>
+    <a asp-action="Inicio" class="btn btn-primary">Volver Atrás</a>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-<script src="~/js/jquery.mask.js"></script>
-<script>
-    $('#TelefonoMadre').mask('000-000-0000');
-    $('#TelefonoPadre').mask('000-000-0000');
-</script>
+    <script src="~/js/jquery.mask.js"></script>
+    <script>
+        $('#TelefonoMadre').mask('000-000-0000');
+        $('#TelefonoPadre').mask('000-000-0000');
+    </script>
 }

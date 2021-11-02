@@ -1,116 +1,138 @@
-using Escuela.Data;
-using Escuela.Models;
-using Escuela.Models.Interfaces;
-using Escuela.Models.ViewModels;
-using Escuela.Services;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Primitives;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using Escuela.Data;
+using Escuela.Models;
+using Microsoft.AspNetCore.Authorization;
 
-namespace Escuela.Controllers
+namespace Escuela.Views
 {
     [Area("Administracion")]
     [Authorize(Roles = "Administracion")]
     public class CursoController : Controller
     {
-        private readonly ApplicationDbContext _data;
+        private readonly ApplicationDbContext _context;
 
-        public CursoController(ApplicationDbContext data)
+        public CursoController(ApplicationDbContext context)
         {
-            _data = data;
+            _context = context;
         }
 
-        [HttpGet]
-        public IActionResult Inicio()
+        // GET: Curso
+        public async Task<IActionResult> Inicio()
         {
-            var cursosasignatura = _data.Curso.Include(a => a.DetalleCursosAsignatura)
-                .ThenInclude(a => a.Asignatura)
-                .ToList();
-            return View(cursosasignatura);
+            return View(await _context.Curso.ToListAsync());
         }
 
-        [HttpGet]
+        // GET: Curso/Agregar
         public IActionResult Agregar()
         {
             return View();
         }
 
+        // POST: Curso/Agregar
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public async Task<IActionResult> Agregar(Curso curso)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Agregar([Bind("IdCurso,Nombre,Seccion")] Curso curso)
         {
             if (ModelState.IsValid)
             {
-                await _data.AddAsync(curso);
-                _data.SaveChanges();
+                _context.Add(curso);
+                await _context.SaveChangesAsync();
                 return RedirectToAction("Inicio");
             }
             return View(curso);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Editar(int id)
+        // GET: Curso/Editar/5
+        public async Task<IActionResult> Editar(int? id)
         {
-            var curso = await _data.Curso.FindAsync(id);
-
-            ObtenerDatos datos = new ObtenerDatos(_data);
-            ViewBag.asignaturas = datos.ObtenerAsignaturasCurso(id);
-
-            var cursoasignatura = new CursoAsignaturaViewModel()
+            if (id == null)
             {
-                Curso = curso,
-                DetalleCursosAsignatura = null
-            };
+                return NotFound();
+            }
 
-            return View(cursoasignatura);
+            var curso = await _context.Curso.FindAsync(id);
+            if (curso == null)
+            {
+                return NotFound();
+            }
+            return View(curso);
         }
 
+        // POST: Curso/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public async Task<IActionResult> Editar(CursoAsignaturaViewModel cursoAsignatura)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Editar(int id, [Bind("IdCurso,Nombre,Seccion")] Curso curso)
         {
+            if (id != curso.IdCurso)
+            {
+                return NotFound();
+            }
+
             if (ModelState.IsValid)
             {
-                var eliminarExistente = await _data.DetalleCursosAsignatura.Where(cu => cu.Curso.IdCurso == cursoAsignatura.Curso.IdCurso).ToListAsync();
-                _data.RemoveRange(eliminarExistente);
-
-                var asignaturas = new List<DetalleCursosAsignatura>();
-
-                if(cursoAsignatura.AsignaturasSeleccionadas != null)
+                try
                 {
-                    foreach (var asignaturacurso in cursoAsignatura.AsignaturasSeleccionadas)
-                    {
-                        asignaturas.Add(new DetalleCursosAsignatura()
-                        {
-                            IdCurso = cursoAsignatura.Curso.IdCurso,
-                            IdAsignatura = asignaturacurso
-                        });
-                    }
-                    await _data.AddRangeAsync(asignaturas);
+                    _context.Update(curso);
+                    await _context.SaveChangesAsync();
                 }
-                _data.Curso.Update(cursoAsignatura.Curso);
-                await _data.SaveChangesAsync();
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!CursoExiste(curso.IdCurso))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
                 return RedirectToAction("Inicio");
             }
-            return View(cursoAsignatura);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Eliminar(int id)
-        {
-            var curso = await _data.Curso.FindAsync(id);
             return View(curso);
         }
 
+        // GET: Curso/Eliminar/5
+        public async Task<IActionResult> Eliminar(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var curso = await _context.Curso
+                .FirstOrDefaultAsync(m => m.IdCurso == id);
+            if (curso == null)
+            {
+                return NotFound();
+            }
+
+            return View(curso);
+        }
+
+        // POST: Curso/Delete/5
         [HttpPost, ActionName("Eliminar")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> EliminarConfirmado(int id)
         {
-            var Curso = await _data.Curso.FindAsync(id);
-            _data.Curso.Remove(Curso);
-            _data.SaveChanges();
+            var curso = await _context.Curso.FindAsync(id);
+            _context.Curso.Remove(curso);
+            await _context.SaveChangesAsync();
             return RedirectToAction("Inicio");
+        }
+
+        private bool CursoExiste(int id)
+        {
+            return _context.Curso.Any(e => e.IdCurso == id);
         }
     }
 }

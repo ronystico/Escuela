@@ -1,39 +1,94 @@
-@model AgregarProfesorViewModel
+@model ApplicationUser
 @{ ViewData["Title"] = "Editar Profesor"; }
 
 <h1>@ViewData["Title"]</h1>
+<hr />
 
-<div class="container">
-    <dl class="row">
-        <dt class="col-sm-2 mb-3 mt-3">
-            Nombres y apellidos
-        </dt>
-        <dd class="col-sm-10 mb-3 mt-3">
-            @ViewBag.nombres
-        </dd>
-    </dl>
+<form asp-action="EditarProfesor" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Nombres"></label>
+                <input asp-for="Nombres" class="form-control" onchange="ponerUsuario()" />
+                <span asp-validation-for="Nombres" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PrimerApellido"></label>
+                <input asp-for="PrimerApellido" class="form-control" onchange="ponerUsuario()" />
+                <span asp-validation-for="PrimerApellido" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SegundoApellido"></label>
+                <input asp-for="SegundoApellido" class="form-control" onchange="ponerUsuario()" />
+                <span asp-validation-for="SegundoApellido" class="text-danger"></span>
+            </div>
 
-    <form method="POST" asp-action="EditarProfesor">
-        <input asp-for="UserId" value="@ViewBag.id" hidden />
-
-        <div class="form-group">
-            <h2>Cursos/Asignaturas</h2>
-            <br />
-
-            @foreach (var cursoasignatura in ViewBag.cursosasignaturas)
-            {
-<input type="checkbox" name="IdDetalleCursosAsignatura" value="@cursoasignatura.Value" checked="@cursoasignatura.Selected" class="form-check-input" />
-                <label class="form-check-label">@cursoasignatura.Text</label> <br />}
+            @* Rol *@
+            <div class="form-group">
+                <label for="Rol">Rol</label>
+                <select id="rol" name="rol" class="form-control" disabled>
+                    <option value="Profesor">Profesor</option>
+                </select>
+            </div>
         </div>
-        <button type="submit" class="btn btn-warning">Editar profesor</button>
-        <a asp-action="DetalleProfesor" asp-route-id="@ViewBag.id" class="btn btn-primary">Volver atrás</a>
-    </form>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="Nombre de Usuario">Nombre de Usuario</label>
+                <input asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Estado"></label>
+                <select asp-for="Estado" class="form-control">
+                    <option value="Inscrito">Inscrito</option>
+                    <option value="Retirado">Retirado</option>
+                </select>
+                <span asp-validation-for="Estado" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label for="Asignaturas">Periodo/Subperiodo - Curso/Seccion - Asignatura</label>
+                @foreach (var periodoSubperiodoCursoSeccionAsignatura in ViewData["Asignaturas"] as List<AgregarProfesorViewModel>)
+                {
+                    <div class="form-check">
+                        <input type="checkbox"
+                               name="IdDetalleCursoperiodoAsignatura"
+                               value="@periodoSubperiodoCursoSeccionAsignatura.IDAsignatura"
+                               @Html.Raw(periodoSubperiodoCursoSeccionAsignatura.Seleccionado ? "checked" : "")
+                               class="form-check-input" />
+                        <label class="form-check-label">@periodoSubperiodoCursoSeccionAsignatura.Nombre</label>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <input asp-for="Id" value="@Model.Id" hidden />
+        <input type="submit" class="btn btn-warning" value="Editar profesor" asp-route-id="@Model.Id" />
+    </div>
+</form>
+
+
+<div>
+    <a asp-action="DetalleProfesor" asp-route-id="@ViewBag.id" class="btn btn-primary">Volver atr&aacute;s</a>
 </div>
-
-
 
 @section Scripts{
     @{
-                        <partial name="_ValidationScriptsPartial" />
+        <partial name="_ValidationScriptsPartial" />
     }
+    <script>
+
+        function ponerUsuario() {
+            let texto = document.getElementById("UserName").value = document.getElementById("Nombres").value.charAt(0).toLowerCase()
+                + document.getElementById("PrimerApellido").value.toLowerCase();
+
+            function eliminarDiacriticos(texto) {
+                return texto.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+            }
+
+            let aleatorio = Math.floor(Math.random() * 99);
+            document.getElementById("UserName").value = eliminarDiacriticos(texto) + aleatorio;
+        }
+    </script>
 }

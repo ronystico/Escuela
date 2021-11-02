@@ -5,19 +5,29 @@
 
 <h1>@ViewData["Title"]</h1>
 
+
 <form method="POST" asp-action="Editar">
-    <input asp-for="IdAsignatura" hidden />
-
-    <div class="form-group">
-    <label asp-for="Nombre"></label>
-    <input asp-for="Nombre" class="form-control" />
-    <span asp-validation-for="Nombre"></span>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <input asp-for="IdAsignatura" hidden />
+            </div>
+            <div class="form-group">
+                <label asp-for="Nombre" class="control-label"></label>
+                <input asp-for="Nombre" class="form-control" />
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-warning" value="Editar" />
+            </div>
+        </div>
     </div>
-
-    <button type="submit" class="btn btn-warning" value="Editar"></button>
-    <a asp-action="Inicio" class="btn btn-primary">Volver atrás</a>
 </form>
 
+
+<div>
+    <a asp-action="Inicio" class="btn btn-primary">Volver a la lista</a>
+</div>
 
 @section Scripts{
     @{

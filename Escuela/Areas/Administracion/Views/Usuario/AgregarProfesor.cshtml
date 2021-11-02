@@ -3,25 +3,36 @@
 
 <h1>@ViewData["Title"]</h1>
 
-<div class="container">
-    <form method="POST" asp-action="AgregarProfesor">
-        <input asp-for="UserId" value="@ViewBag.id" hidden />
 
-        <div class="form-group">
-            <label for="Asignaturas" class="requerido">Cursos/Asignaturas</label><br />
-            @foreach (var cursoasignatura in ViewBag.cursosasignaturas)
-            {
-<input type="checkbox" name="IdDetalleCursosAsignatura" value="@cursoasignatura.Value" checked="@cursoasignatura.Selected" class="form-check-input" />
-                <label class="form-check-label">@cursoasignatura.Text</label> <br />}
+<form method="POST" asp-action="AgregarProfesor">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="Asignaturas" class="requerido">Periodo/Subperiodo - Curso/Seccion - Asignatura</label>
+                @foreach (var periodoSubperiodoCursoSeccionAsignatura in ViewBag.asignaturas)
+                {
+                    <div class="form-check">
+                        <input type="checkbox"
+                               name="IdDetalleCursoperiodoAsignatura"
+                               value="@periodoSubperiodoCursoSeccionAsignatura.Value"
+                               class="form-check-input" />
+                        <label class="form-check-label">@periodoSubperiodoCursoSeccionAsignatura.Text</label>
+                    </div>
+                }
+            </div>
         </div>
-        <button type="submit" class="btn btn-primary">Agregar profesor</button>
-        <a asp-action="Inicio" class="btn btn-primary">Volver atrás</a>
-    </form>
+    </div>
+    <div class="form-group">
+        <input type="submit" class="btn btn-primary" asp-route-id="@ViewBag.id" value="Agregar profesor" />
+    </div>
+</form>
+    
+
+<div>
+    <a asp-action="Inicio" class="btn btn-primary">No agregar asignaturas</a>
 </div>
 
-
-
-@section Scripts{
-    @{
-                        <partial name="_ValidationScriptsPartial" /> }
-}
+    @section Scripts{
+        @{
+            <partial name="_ValidationScriptsPartial" /> }
+    }

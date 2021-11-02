@@ -39,6 +39,10 @@ namespace Escuela.Controllers
             var padres = await _context.Padres.Include(s => s.DetalleEstudiante)
                 .ThenInclude(s => s.ApplicationUser)
                 .Include(s => s.DetalleEstudiante)
+                .ThenInclude(s => s.DetalleCursoPeriodo)
+                .ThenInclude(s => s.Periodo)
+                .Include(s => s.DetalleEstudiante)
+                .ThenInclude(s => s.DetalleCursoPeriodo)
                 .ThenInclude(s => s.Curso)
                 .FirstOrDefaultAsync(m => m.IdPadres == id);
 
@@ -141,7 +145,7 @@ namespace Escuela.Controllers
             return View(padres);
         }
 
-        // POST: Administracion/Padres/Delete/5
+        // POST: Administracion/Padres/Eliminar/5
         [HttpPost, ActionName("Eliminar")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EliminarConfirmado(int id)

@@ -38,8 +38,8 @@ namespace Escuela.Areas.Administracion.Controllers
 
         public IActionResult Agregar()
         {
-            ObtenerDatos roles = new ObtenerDatos(_data);
-            ViewBag.roles = roles.ObtenerRoles();
+            ObtenerDatos datos = new ObtenerDatos(_data);
+            ViewBag.Roles = datos.ObtenerRoles();
 
             return View(new UsuarioViewModel());
         }
@@ -104,8 +104,6 @@ namespace Escuela.Areas.Administracion.Controllers
 
         public async Task<IActionResult> AgregarEstudiante(string id, int id2)
         {
-            ObtenerDatos cursos = new ObtenerDatos(_data);
-            ViewBag.cursos = cursos.ObtenerCursos();
             ViewBag.user = await _userManager.FindByIdAsync(id);
             ViewBag.id = id;
             if (id2 != 0)
@@ -121,6 +119,7 @@ namespace Escuela.Areas.Administracion.Controllers
                 Padres padrevacio = new Padres();
                 ViewBag.padres = padrevacio;
             }
+            ObtenerCursosPeriodos();
             return View();
         }
 
@@ -135,7 +134,7 @@ namespace Escuela.Areas.Administracion.Controllers
                     detalles = new DetalleEstudiante()
                     {
                         UserId = estudiante.DetalleEstudiante.ApplicationUser.Id,
-                        IdCurso = estudiante.DetalleEstudiante.IdCurso,
+                        IdDetalleCursoPeriodo = estudiante.DetalleEstudiante.IdDetalleCursoPeriodo,
                         NumerodeOrden = estudiante.DetalleEstudiante.NumerodeOrden,
                         IdoRNE = estudiante.DetalleEstudiante.IdoRNE
                     };
@@ -145,7 +144,7 @@ namespace Escuela.Areas.Administracion.Controllers
                     detalles = new DetalleEstudiante()
                     {
                         UserId = estudiante.DetalleEstudiante.ApplicationUser.Id,
-                        IdCurso = estudiante.DetalleEstudiante.IdCurso,
+                        IdDetalleCursoPeriodo = estudiante.DetalleEstudiante.IdDetalleCursoPeriodo,
                         NumerodeOrden = estudiante.DetalleEstudiante.NumerodeOrden,
                         IdPadres = estudiante.DetalleEstudiante.IdPadres,
                         IdoRNE = estudiante.DetalleEstudiante.IdoRNE
@@ -158,29 +157,42 @@ namespace Escuela.Areas.Administracion.Controllers
             return View(estudiante);
         }
 
-        public IActionResult AgregarProfesor(string id)
+        public async Task<IActionResult> AgregarProfesor(string id)
         {
+            if(id == null)
+            {
+                return NotFound();
+            }
+            var usuario = await _userManager.FindByIdAsync(id);
+            if(usuario == null)
+            {
+                return NotFound();
+            }
+            var roles = await _userManager.GetRolesAsync(usuario);
+            if (!roles.Contains("Profesor"))
+            {
+                return NotFound();
+            }
             ViewBag.id = id;
-            ObtenerDatos datos = new ObtenerDatos(_data);
-            ViewBag.cursosasignaturas = datos.ObtenerDetalleCursosAsignaturas();
+            ObtenerAsignaturas();
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> AgregarProfesor(AgregarProfesorViewModel profesor)
+        public async Task<IActionResult> AgregarProfesor(AgregarProfesorViewModel profesor, string id)
         {
             if (ModelState.IsValid)
             {
-                var eliminarExistente = _data.DetalleProfesorCursosAsignatura.Where(a => a.UserId == profesor.UserId);
+                var eliminarExistente = _data.DetalleProfesorCursoperiodoAsignatura.Where(a => a.UserId == id);
                 _data.RemoveRange(eliminarExistente);
 
-                List<DetalleProfesorCursosAsignatura> asignaturasProfesor = new List<DetalleProfesorCursosAsignatura>();
-                foreach (var cursoAsignaturaSeleccionada in profesor.IdDetalleCursosAsignatura)
+                List<DetalleProfesorCursoperiodoAsignatura> asignaturasProfesor = new List<DetalleProfesorCursoperiodoAsignatura>();
+                foreach (var cursoAsignaturaSeleccionada in profesor.IdDetalleCursoperiodoAsignatura)
                 {
-                    asignaturasProfesor.Add(new DetalleProfesorCursosAsignatura
+                    asignaturasProfesor.Add(new DetalleProfesorCursoperiodoAsignatura
                     {
-                        UserId = profesor.UserId,
-                        IdDetalleCursosAsignatura = cursoAsignaturaSeleccionada
+                        UserId = id,
+                        IdDetalleCursoperiodoAsignatura = cursoAsignaturaSeleccionada
                     });
                 }
                 await _data.AddRangeAsync(asignaturasProfesor);
@@ -220,6 +232,7 @@ namespace Escuela.Areas.Administracion.Controllers
         {
             ViewBag.id = id;
             ViewBag.id2 = id2;
+            ViewBag.referencia = referencia;
             if (referencia != null)
             {
                 ViewBag.referencia = referencia;
@@ -256,30 +269,51 @@ namespace Escuela.Areas.Administracion.Controllers
 
         public async Task<IActionResult> DetalleProfesor(string id)
         {
+            if(id == null)
+            {
+                return NotFound();
+            }
             var roles = await _userManager.GetRolesAsync(await _userManager.FindByIdAsync(id));
             ViewBag.roles = roles[0];
-            var profesor = await _data.Users.Include(a => a.DetalleProfesorCursosAsignatura)
-                .ThenInclude(a => a.DetalleCursosAsignatura)
+            var profesor = await _data.Users
+                .Include(a => a.DetalleProfesorCursoperiodoAsignatura)
+                .ThenInclude(a => a.DetalleCursoperiodoAsignatura)
                 .ThenInclude(a => a.Asignatura)
-                .Include(a => a.DetalleProfesorCursosAsignatura)
-                .ThenInclude(a => a.DetalleCursosAsignatura)
-                .ThenInclude(a => a.Curso)
+                .Include(a => a.DetalleProfesorCursoperiodoAsignatura)
+                .ThenInclude(a => a.DetalleCursoperiodoAsignatura)
+                .ThenInclude(a => a.DetalleCursoPeriodo)
+                .ThenInclude(s => s.Curso)
+                .Include(s => s.DetalleProfesorCursoperiodoAsignatura)
+                .ThenInclude(s => s.DetalleCursoperiodoAsignatura)
+                .ThenInclude(s => s.DetalleCursoPeriodo)
+                .ThenInclude(s => s.Periodo)
                 .Where(s => s.Id == id)
                 .FirstOrDefaultAsync();
             return View(profesor);
         }
 
-        public async Task<IActionResult> DetalleEstudiante(string id)
+        public async Task<IActionResult> DetalleEstudiante(string id, int? id2)
         {
+            if(id == null)
+            {
+                return NotFound();
+            }
             var roles = await _userManager.GetRolesAsync(await _userManager.FindByIdAsync(id));
             ViewBag.roles = roles[0];
 
-            var estudiante = await _data.Users.Where(s => s.Id == id).Include(s => s.DetalleEstudiante)
-                .ThenInclude(s => s.Curso).Include(s => s.DetalleEstudiante).ThenInclude(s => s.Padres)
+            var estudiante = await _data.Users.Where(s => s.Id == id)
+                .Include(s => s.DetalleEstudiante)
+                .ThenInclude(s => s.DetalleCursoPeriodo)
+                .ThenInclude(s => s.Periodo)
+                .Include(s => s.DetalleEstudiante)
+                .ThenInclude(s => s.DetalleCursoPeriodo)
+                .ThenInclude(s => s.Curso)
+                .Include(s => s.DetalleEstudiante)
+                .ThenInclude(s => s.Padres)
                 .FirstOrDefaultAsync();
             if (estudiante.DetalleEstudiante == null)
             {
-                return RedirectToAction("AgregarEstudiante", "Usuario", new { area = "Administracion", id = id });
+                return RedirectToAction("AgregarEstudiante", "Usuario", new { area = "Administracion", id = id, id2 = id2 });
             }
             if (estudiante.DetalleEstudiante.Padres == null)
             {
@@ -349,6 +383,11 @@ namespace Escuela.Areas.Administracion.Controllers
 
         public async Task<IActionResult> EditarEstudiante(string id, int? id2)
         {
+            if(id == null)
+            {
+                return NotFound();
+            }
+            ViewBag.id = id;
             var estudiante = await _userManager.FindByIdAsync(id);
 
             if (id2 != null)
@@ -379,8 +418,7 @@ namespace Escuela.Areas.Administracion.Controllers
                 }
             }
 
-            ObtenerDatos cursos = new ObtenerDatos(_data);
-            ViewBag.cursos = cursos.ObtenerCursosEstudiante(id);
+            CursoPeriodoEstudiante(estudiante);
             return View(estudiante);
         }
 
@@ -398,7 +436,7 @@ namespace Escuela.Areas.Administracion.Controllers
                 usuario.UserName = estudiante.UserName;
                 usuario.Estado = estudiante.Estado;
 
-                detalleEstudiante.IdCurso = estudiante.DetalleEstudiante.IdCurso;
+                detalleEstudiante.IdDetalleCursoPeriodo = estudiante.DetalleEstudiante.IdDetalleCursoPeriodo;
                 detalleEstudiante.IdoRNE = estudiante.DetalleEstudiante.IdoRNE;
                 if(estudiante.DetalleEstudiante.Padres.IdPadres != 0)
                 {
@@ -413,48 +451,78 @@ namespace Escuela.Areas.Administracion.Controllers
 
                 return RedirectToAction("Inicio", "Usuario", new { area = "Administracion" });
             }
-            ObtenerDatos cursos = new ObtenerDatos(_data);
-            ViewBag.cursos = cursos.ObtenerCursosEstudiante(estudiante.Id);
+
+            CursoPeriodoEstudiante(estudiante);
+
             return View(estudiante);
         }
 
         public async Task<IActionResult> EditarProfesor(string id)
         {
+            if(id == null)
+            {
+                return NotFound();
+            }
             var usuario = await _userManager.FindByIdAsync(id);
+            if (usuario == null)
+            {
+                return NotFound();
+            }
             ViewBag.nombres = usuario.Nombres + " " + usuario.PrimerApellido + " " + usuario.SegundoApellido;
-
             ViewBag.id = id;
-            ObtenerDatos datos = new ObtenerDatos(_data);
-            ViewBag.cursosasignaturas = datos.ObtenerDetalleProfesorCursosAsignaturas(id);
-            return View();
+            await _data.Entry(usuario).Collection(s => s.DetalleProfesorCursoperiodoAsignatura).LoadAsync();
+
+            EditarAsignaturasProfesor(usuario);
+            return View(usuario);
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditarProfesor(AgregarProfesorViewModel profesor)
+        public async Task<IActionResult> EditarProfesor(ApplicationUser profesor,AgregarProfesorViewModel asignaturas,string id)
         {
-            if (ModelState.IsValid)
+            if(id == null)
             {
-                var eliminarExistente = _data.DetalleProfesorCursosAsignatura.Where(a => a.UserId == profesor.UserId);
+                return NotFound();
+            }
+            var profesorObtenido = await _userManager.FindByIdAsync(id);
+            if(profesorObtenido == null)
+            {
+                return NotFound();
+            }
+            await _data.Entry(profesorObtenido).Collection(s => s.DetalleProfesorCursoperiodoAsignatura).LoadAsync();
+            if (ModelState.IsValid && (profesor.Estado.Equals("Inscrito") || profesor.Estado.Equals("Retirado")))
+            {
+                profesorObtenido.Nombres = profesor.Nombres;
+                profesorObtenido.PrimerApellido = profesor.PrimerApellido;
+                profesorObtenido.SegundoApellido = profesor.SegundoApellido;
+                profesorObtenido.UserName = profesor.UserName;
+                profesorObtenido.Estado = profesor.Estado;
+
+                var eliminarExistente = _data.DetalleProfesorCursoperiodoAsignatura.Where(a => a.UserId == id);
                 _data.RemoveRange(eliminarExistente);
 
-                List<DetalleProfesorCursosAsignatura> asignaturasProfesor = new List<DetalleProfesorCursosAsignatura>();
+                List<DetalleProfesorCursoperiodoAsignatura> asignaturasProfesor = new List<DetalleProfesorCursoperiodoAsignatura>();
 
-                if(profesor.IdDetalleCursosAsignatura != null)
+                if(asignaturas.IdDetalleCursoperiodoAsignatura != null)
                 {
-                    foreach (var cursoAsignaturaSeleccionada in profesor.IdDetalleCursosAsignatura)
+                    foreach (var IdDetalleCursoperiodoAsignatura in asignaturas.IdDetalleCursoperiodoAsignatura)
                     {
-                        asignaturasProfesor.Add(new DetalleProfesorCursosAsignatura
+                        asignaturasProfesor.Add(new DetalleProfesorCursoperiodoAsignatura
                         {
-                            UserId = profesor.UserId,
-                            IdDetalleCursosAsignatura = cursoAsignaturaSeleccionada
+                            UserId = id,
+                            IdDetalleCursoperiodoAsignatura = IdDetalleCursoperiodoAsignatura
                         });
                     }
                     await _data.AddRangeAsync(asignaturasProfesor);
+                    await _data.SaveChangesAsync();
                 }
 
+                await _userManager.UpdateAsync(profesorObtenido);
                 await _data.SaveChangesAsync();
-                return RedirectToAction("DetalleProfesor", "Usuario", new { area = "Administracion", id = profesor.UserId });
+                return RedirectToAction("DetalleProfesor", "Usuario", new { area = "Administracion", id = id });
             }
+            var funcionaporfavor = await _userManager.FindByIdAsync(id);
+            await _data.Entry(funcionaporfavor).Collection(s => s.DetalleProfesorCursoperiodoAsignatura).LoadAsync();
+            EditarAsignaturasProfesor(funcionaporfavor);
             return View(profesor);
         }
 
@@ -505,5 +573,105 @@ namespace Escuela.Areas.Administracion.Controllers
             return View(user);
         }
 
+        // Obtener Cursos y Periodos
+        private void ObtenerCursosPeriodos(object cursoPeriodo = null)
+        {
+            var cursosPeriodos = _data.DetalleCursoPeriodo
+                .Include(s => s.Periodo)
+                .Include(s => s.Curso)
+                .Select(s => new { 
+                    ID = s.IdDetalleCursoPeriodo, 
+                    Nombre = s.Periodo.Nombre + " / " + s.Periodo.Subperiodo + " - " + s.Curso.Nombre + " / " + s.Curso.Seccion
+                });
+            ViewBag.cursosperiodos = new SelectList(cursosPeriodos.AsNoTracking(), "ID", "Nombre", cursoPeriodo);
+        }
+
+        // TODO: editar estudiante guardar y profesores
+
+        // Obtener Cursos y Periodos de estudiante
+        private void CursoPeriodoEstudiante(ApplicationUser estudiante)
+        {
+            var cursosPeriodos = _data.DetalleCursoPeriodo
+                .Include(s => s.Periodo)
+                .Include(s => s.Curso)
+                .Select(s => new {
+                    ID = s.IdDetalleCursoPeriodo,
+                    Nombre = s.Periodo.Nombre + " / " + s.Periodo.Subperiodo + " - " + s.Curso.Nombre + " / " + s.Curso.Seccion
+                });
+
+            var cursoPeriodoEstudiante = new HashSet<int> { estudiante.DetalleEstudiante.IdDetalleCursoPeriodo };
+
+            var cursoPeriodoListo = new List<EditarEstudianteViewModel>();
+            foreach(var cursoPeriodo in cursosPeriodos)
+            {
+                cursoPeriodoListo.Add(new EditarEstudianteViewModel
+                {
+                    IdDetalleCursoPeriodo = cursoPeriodo.ID,
+                    Nombre = cursoPeriodo.Nombre,
+                    Seleccionado = cursoPeriodoEstudiante.Contains(cursoPeriodo.ID)
+                });
+            }
+            ViewData["CursoPeriodo"] = cursoPeriodoListo;
+        }
+
+        // Obtener asignaturas para los profesores
+        private void ObtenerAsignaturas(object asignatura = null)
+        {
+            var asignaturasObtenidas = _data.DetalleCursoperiodoAsignatura
+                .Include(s => s.Asignatura)
+                .Include(s => s.DetalleCursoPeriodo)
+                .ThenInclude(s => s.Curso)
+                .Include(s => s.DetalleCursoPeriodo)
+                .ThenInclude(s => s.Periodo)
+                .OrderBy(s => s.DetalleCursoPeriodo.Periodo.Nombre)
+                .ThenBy(s => s.DetalleCursoPeriodo.Curso.Nombre)
+                .ThenBy(s => s.DetalleCursoPeriodo.Curso.Seccion)
+                .ThenBy(s => s.Asignatura.Nombre)
+                .Select(s => new { 
+                ID = s.IdDetalleCursoperiodoAsignatura,
+                Nombre = s.DetalleCursoPeriodo.Periodo.Nombre + " / " + s.DetalleCursoPeriodo.Periodo.Subperiodo
+                + " - " +
+                s.DetalleCursoPeriodo.Curso.Nombre + " / " + s.DetalleCursoPeriodo.Curso.Seccion
+                + " - " +
+                s.Asignatura.Nombre
+                });
+            ViewBag.asignaturas = new SelectList(asignaturasObtenidas,"ID","Nombre",asignatura);
+        }
+
+        // Asignaturas para editar de un profesor
+        private void EditarAsignaturasProfesor(ApplicationUser profesor)
+        {
+            var asignaturasObtenidas = _data.DetalleCursoperiodoAsignatura
+                .Include(s => s.Asignatura)
+                .Include(s => s.DetalleCursoPeriodo)
+                .ThenInclude(s => s.Curso)
+                .Include(s => s.DetalleCursoPeriodo)
+                .ThenInclude(s => s.Periodo)
+                .OrderBy(s => s.DetalleCursoPeriodo.Periodo.Nombre)
+                .ThenBy(s => s.DetalleCursoPeriodo.Curso.Nombre)
+                .ThenBy(s => s.DetalleCursoPeriodo.Curso.Seccion)
+                .ThenBy(s => s.Asignatura.Nombre)
+                .Select(s => new {
+                    ID = s.IdDetalleCursoperiodoAsignatura,
+                    Nombre = s.DetalleCursoPeriodo.Periodo.Nombre + " / " + s.DetalleCursoPeriodo.Periodo.Subperiodo
+                + " - " +
+                s.DetalleCursoPeriodo.Curso.Nombre + " / " + s.DetalleCursoPeriodo.Curso.Seccion
+                + " - " +
+                s.Asignatura.Nombre
+                });
+
+            var asignaturasProfesor = new HashSet<int>(profesor.DetalleProfesorCursoperiodoAsignatura.Select(s => s.IdDetalleCursoperiodoAsignatura));
+            var asignaturasListas = new List<AgregarProfesorViewModel>();
+            foreach(var asignatura in asignaturasObtenidas)
+            {
+                asignaturasListas.Add(new AgregarProfesorViewModel
+                {
+                    IDAsignatura = asignatura.ID,
+                    Nombre = asignatura.Nombre,
+                    Seleccionado = asignaturasProfesor.Contains(asignatura.ID)
+                });
+            }
+            ViewData["Asignaturas"] = asignaturasListas;
+        }
     }
 }

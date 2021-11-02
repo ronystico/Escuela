@@ -17,6 +17,8 @@ namespace Escuela.Services
             _data = data;
         }
 
+        // En Agregar Usuario, muestra el rol estudiante por defecto
+        // ya que es un rol común
         public List<SelectListItem> ObtenerRoles(){
             List<IdentityRole> roles = _data.Roles.ToList();
             List<SelectListItem> selectroles = new List<SelectListItem>();
@@ -36,11 +38,28 @@ namespace Escuela.Services
             return selectroles;
         }
 
-        public List<Curso> ObtenerCursos(){
-            return _data.Curso.ToList();
+        // Obtiene los Periodos y los coloca en un SelectListItem
+        public List<SelectListItem> ObtenerPeriodosySubperiodos()
+        {
+            return _data.Periodo.Select(s => new SelectListItem
+            {
+                Value = s.IdPeriodo.ToString(),
+                Text = s.Nombre + " / " + s.Subperiodo
+            }).ToList();
         }
 
-        public List<SelectListItem> ObtenerCursosEstudiante(string id)
+        // Obtiene las asignaturas y las coloca en un SelectListItem
+        public List<SelectListItem> ObtenerAsignaturas()
+        {
+            return _data.Asignatura.Select(s => new SelectListItem
+            {
+                Value = s.IdAsignatura.ToString(),
+                Text = s.Nombre
+            }).ToList();
+        }
+
+        // TODO: Obtiene el Curso/Periodo actual del estudiante en EditarEstudiante
+        public List<SelectListItem> ObtenerCursoPeriodoEstudiante(string id)
         {
             var estudiante = _data.DetalleEstudiante.Where(s => s.UserId == id).FirstOrDefault();
             var cursos = _data.Curso.ToList();
@@ -68,45 +87,18 @@ namespace Escuela.Services
             return cursosSelectListItem;
         }
 
-        public List<CursoAsignaturaViewModel> ObtenerCursoconAsignaturas()
-        {
-            return (from curso in _data.Curso.ToList()
-                    join asignaturacurso in _data.DetalleCursosAsignatura.Include(a => a.Asignatura)
-                    .ToList()
-
-                    on curso.IdCurso equals asignaturacurso.IdCurso into ac
-                    from cursoac in ac.DefaultIfEmpty()
-                    select new CursoAsignaturaViewModel
-                    {
-                        Curso = curso,
-                        DetalleCursosAsignatura = cursoac,
-                    })
-                    .ToList();
-        }
-
-        public List<SelectListItem> ObtenerAsignaturas()
-        {
-            var buscarasignaturas = _data.Asignatura.ToList();
-            List<SelectListItem> asignaturas = new List<SelectListItem>();
-            foreach(var asignatura in buscarasignaturas)
-            {
-                asignaturas.Add(new SelectListItem { Value = asignatura.IdAsignatura.ToString(), Text = asignatura.Nombre });
-            }
-            return asignaturas;
-        }
-
         public List<SelectListItem> ObtenerAsignaturasCurso(int id)
         {
-            var cursosasignatura = _data.Asignatura.Include(a => a.DetalleCursosAsignatura)
-                .ThenInclude(a => a.Curso)
+            var cursosasignatura = _data.Asignatura.Include(a => a.DetalleCursoperiodoAsignatura)
+                .ThenInclude(a => a.Asignatura)
                 .ToList();
             List<SelectListItem> asignaturascurso = new List<SelectListItem>();
 
             foreach(var asignatura in cursosasignatura)
             {
-                foreach(var asignaturacurso in asignatura.DetalleCursosAsignatura)
+                foreach(var asignaturacurso in asignatura.DetalleCursoperiodoAsignatura)
                 {
-                    if (asignaturacurso.IdCurso == id)
+                    if (asignaturacurso.IdDetalleCursoPeriodo == id)
                     {
                         asignaturascurso.Add(new SelectListItem
                         {
@@ -127,54 +119,6 @@ namespace Escuela.Services
                 
             }
             return asignaturascurso;
-        }
-
-        public List<SelectListItem> ObtenerDetalleCursosAsignaturas()
-        {
-            var buscarCursosAsignaturas = _data.DetalleCursosAsignatura.Include(a => a.Asignatura)
-                .Include(a => a.Curso).ToList();
-            List<SelectListItem> CursosAsignaturas = new List<SelectListItem>();
-            foreach (var cursoAsignatura in buscarCursosAsignaturas)
-            {
-                CursosAsignaturas.Add(new SelectListItem { Value = cursoAsignatura.IdDetalleCursosAsignatura.ToString(),
-                    Text = cursoAsignatura.Curso.Nombre + " " + cursoAsignatura.Curso.Seccion + " - " + cursoAsignatura.Asignatura.Nombre });
-            }
-            return CursosAsignaturas;
-        }
-
-        public List<SelectListItem> ObtenerDetalleProfesorCursosAsignaturas(string id)
-        {
-            var buscarCursosAsignaturas = _data.DetalleCursosAsignatura.Include(a => a.Asignatura)
-                .Include(a => a.Curso).ToList();
-            var asignaturasProfesor = _data.DetalleProfesorCursosAsignatura.Where(s => s.UserId == id).ToList();
-
-            List<SelectListItem> CursosAsignaturas = new List<SelectListItem>();
-
-            foreach (var cursoAsignatura in buscarCursosAsignaturas)
-            {
-                foreach(var asignaturaProfesor in asignaturasProfesor)
-                {
-                    if (cursoAsignatura.IdDetalleCursosAsignatura == asignaturaProfesor.IdDetalleCursosAsignatura)
-                    {
-                        CursosAsignaturas.Add(new SelectListItem
-                        {
-                            Value = cursoAsignatura.IdDetalleCursosAsignatura.ToString(),
-                            Text = cursoAsignatura.Curso.Nombre + " " + cursoAsignatura.Curso.Seccion + " - " + cursoAsignatura.Asignatura.Nombre,
-                            Selected = true
-                        });
-                    }
-                }
-                if(!CursosAsignaturas.Any(s => s.Value.Equals(cursoAsignatura.IdDetalleCursosAsignatura.ToString())))
-                {
-                    CursosAsignaturas.Add(new SelectListItem
-                    {
-                        Value = cursoAsignatura.IdDetalleCursosAsignatura.ToString(),
-                        Text = cursoAsignatura.Curso.Nombre + " " + cursoAsignatura.Curso.Seccion + " - " + cursoAsignatura.Asignatura.Nombre
-                    });
-                }
-                
-            }
-            return CursosAsignaturas;
         }
     }
 }

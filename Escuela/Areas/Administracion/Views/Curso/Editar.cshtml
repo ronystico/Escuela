@@ -1,39 +1,44 @@
-@model CursoAsignaturaViewModel
+﻿@model Escuela.Models.Curso
+
 @{
     ViewData["Title"] = "Editar Curso";
 }
 
 <h1>@ViewData["Title"]</h1>
 
-<form method="POST" asp-action="Editar">
-    <input asp-for="Curso.IdCurso" hidden />
 
+<form asp-action="Editar">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-group">
-    <label asp-for="Curso.Nombre"></label>
-    <input asp-for="Curso.Nombre" />
-    <span asp-validation-for="Curso.Nombre"></span>
+        <input type="hidden" asp-for="IdCurso" />
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Nombre" class="control-label"></label>
+                <input asp-for="Nombre" class="form-control" />
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Seccion" class="control-label"></label>
+                <input asp-for="Seccion" class="form-control" />
+                <span asp-validation-for="Seccion" class="text-danger"></span>
+            </div>
+
+        </div>
     </div>
     <div class="form-group">
-        <label asp-for="Curso.Seccion"></label>
-        <input asp-for="Curso.Seccion" />
-        <span asp-validation-for="Curso.Seccion"></span>
+        <input type="submit" value="Editar" class="btn btn-warning" />
     </div>
-    <div class="form-group">
-        <label for="Asignaturas">Asignaturas</label><br />
-        @foreach (var asignatura in ViewBag.asignaturas)
-        {
-            <input type="checkbox" name="AsignaturasSeleccionadas" value="@asignatura.Value"
-                   checked="@asignatura.Selected" class="form-check-input" />
-            <label class="form-check-label">@asignatura.Text</label> <br />
-                    }
-    </div>
-    <button type="submit" class="btn btn-warning">Editar</button>
-    <a asp-action="Inicio" class="btn btn-primary">Volver atrás</a>
 </form>
+    
 
+<div>
+    <a class="btn btn-primary" asp-action="Inicio">Volver a la lista</a>
+</div>
 
-@section Scripts{
-    @{
-        <partial name="_ValidationScriptsPartial" />
-    }
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

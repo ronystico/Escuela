@@ -116,17 +116,17 @@ namespace Escuela.Data.Migrations
                         {
                             Id = "29ce004f-6192-496b-a359-56bbbfd90ca1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "be14649c-d060-432c-ae8f-7d668dfe3a12",
+                            ConcurrencyStamp = "f590d311-5713-47b9-a93a-1cfae2da13e0",
                             EmailConfirmed = false,
                             Estado = "Inscrito",
-                            FechaAgregado = new DateTime(2021, 10, 21, 18, 1, 53, 191, DateTimeKind.Local).AddTicks(8845),
+                            FechaAgregado = new DateTime(2021, 10, 27, 17, 37, 44, 298, DateTimeKind.Local).AddTicks(5438),
                             LockoutEnabled = false,
                             Nombres = "Administrador",
                             NormalizedUserName = "ADMINISTRADOR",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKruQG2BQfg1NSr3dDNW0A9Q1TpYwiu6C7m9kfid4TaDo7c9JX0xqdyWDS3e+xgMcw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEAHc2wbv42NDr8Ic5TVDOi2VgUQjoPYGNaG0ipCNXJnEKxLKhvTj4s/EYG/XB+qwcg==",
                             PhoneNumberConfirmed = false,
                             PrimerApellido = "Administrando",
-                            SecurityStamp = "63dc7bff-21d6-45a5-bbcc-4077e60e999b",
+                            SecurityStamp = "10b49703-6492-475d-b231-5f34d5306e14",
                             SegundoApellido = "Administración",
                             TwoFactorEnabled = false,
                             UserName = "administrador"
@@ -143,12 +143,61 @@ namespace Escuela.Data.Migrations
 
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
                         .HasColumnName("nombre");
 
                     b.HasKey("IdAsignatura");
 
                     b.ToTable("asignatura");
+                });
+
+            modelBuilder.Entity("Escuela.Models.Calificacion", b =>
+                {
+                    b.Property<int>("IdCalificacion")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id_calificacion")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CalificacionTotal")
+                        .HasColumnType("int")
+                        .HasColumnName("calificacion_total");
+
+                    b.Property<DateTime>("FechaAsignada")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("fecha_asignada");
+
+                    b.Property<DateTime>("FechaEditada")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("fecha_editada");
+
+                    b.Property<int>("IdDetalleCursoPeriodoAsignatura")
+                        .HasColumnType("int")
+                        .HasColumnName("id_detallecursoperiodo_asignatura");
+
+                    b.Property<string>("IdEstudiante")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("id_estudiante");
+
+                    b.Property<string>("IdProfesor")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("id_profesor");
+
+                    b.Property<string>("Observacion")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)")
+                        .HasColumnName("observacion");
+
+                    b.HasKey("IdCalificacion");
+
+                    b.HasIndex("IdDetalleCursoPeriodoAsignatura");
+
+                    b.HasIndex("IdEstudiante");
+
+                    b.HasIndex("IdProfesor");
+
+                    b.ToTable("calificacion");
                 });
 
             modelBuilder.Entity("Escuela.Models.Curso", b =>
@@ -176,29 +225,54 @@ namespace Escuela.Data.Migrations
                     b.ToTable("curso");
                 });
 
-            modelBuilder.Entity("Escuela.Models.DetalleCursosAsignatura", b =>
+            modelBuilder.Entity("Escuela.Models.DetalleCursoPeriodo", b =>
                 {
-                    b.Property<int>("IdDetalleCursosAsignatura")
+                    b.Property<int>("IdDetalleCursoPeriodo")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("id_detalle_cursos_asignatura")
+                        .HasColumnName("id_detalle_curso_periodo")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("IdCurso")
+                        .HasColumnType("int")
+                        .HasColumnName("id_curso");
+
+                    b.Property<int>("IdPeriodo")
+                        .HasColumnType("int")
+                        .HasColumnName("id_periodo");
+
+                    b.HasKey("IdDetalleCursoPeriodo");
+
+                    b.HasIndex("IdCurso");
+
+                    b.HasIndex("IdPeriodo");
+
+                    b.ToTable("detalle_curso_periodo");
+                });
+
+            modelBuilder.Entity("Escuela.Models.DetalleCursoperiodoAsignatura", b =>
+                {
+                    b.Property<int>("IdDetalleCursoperiodoAsignatura")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id_detalle_cursoperiodo_asignatura")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("IdAsignatura")
                         .HasColumnType("int")
                         .HasColumnName("id_asignatura");
 
-                    b.Property<int>("IdCurso")
+                    b.Property<int>("IdDetalleCursoPeriodo")
                         .HasColumnType("int")
-                        .HasColumnName("id_curso");
+                        .HasColumnName("id_detalle_curso_periodo");
 
-                    b.HasKey("IdDetalleCursosAsignatura");
+                    b.HasKey("IdDetalleCursoperiodoAsignatura");
 
                     b.HasIndex("IdAsignatura");
 
-                    b.HasIndex("IdCurso");
+                    b.HasIndex("IdDetalleCursoPeriodo");
 
-                    b.ToTable("detalle_cursos_asignatura");
+                    b.ToTable("detalle_cursoperiodo_asignatura");
                 });
 
             modelBuilder.Entity("Escuela.Models.DetalleEstudiante", b =>
@@ -206,16 +280,17 @@ namespace Escuela.Data.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("IdCurso")
+                    b.Property<int>("IdDetalleCursoPeriodo")
                         .HasColumnType("int")
-                        .HasColumnName("id_curso");
+                        .HasColumnName("id_detalle_curso_periodo");
 
                     b.Property<int?>("IdPadres")
                         .HasColumnType("int")
                         .HasColumnName("id_padres");
 
                     b.Property<string>("IdoRNE")
-                        .HasColumnType("nvarchar(max)")
+                        .HasMaxLength(13)
+                        .HasColumnType("nvarchar(13)")
                         .HasColumnName("id_o_rne");
 
                     b.Property<int>("NumerodeOrden")
@@ -224,36 +299,36 @@ namespace Escuela.Data.Migrations
 
                     b.HasKey("UserId");
 
-                    b.HasIndex("IdCurso");
+                    b.HasIndex("IdDetalleCursoPeriodo");
 
                     b.HasIndex("IdPadres");
 
                     b.ToTable("detalle_estudiante");
                 });
 
-            modelBuilder.Entity("Escuela.Models.DetalleProfesorCursosAsignatura", b =>
+            modelBuilder.Entity("Escuela.Models.DetalleProfesorCursoperiodoAsignatura", b =>
                 {
-                    b.Property<int>("IdDetalleProfesorCursosAsignatura")
+                    b.Property<int>("IdDetalleProfesorCursoperiodoAsignatura")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("id_detalle_profesor_cursos_asignatura")
+                        .HasColumnName("id_detalle_profesor_cursoperiodo_asignatura")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("IdDetalleCursosAsignatura")
+                    b.Property<int>("IdDetalleCursoperiodoAsignatura")
                         .HasColumnType("int")
-                        .HasColumnName("id_detalle_cursos_asignatura");
+                        .HasColumnName("id_detalle_cursoperiodo_asignatura");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("UserId");
 
-                    b.HasKey("IdDetalleProfesorCursosAsignatura");
+                    b.HasKey("IdDetalleProfesorCursoperiodoAsignatura");
 
-                    b.HasIndex("IdDetalleCursosAsignatura");
+                    b.HasIndex("IdDetalleCursoperiodoAsignatura");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("detalle_profesor_cursos_asignatura");
+                    b.ToTable("detalle_profesor_cursoperiodo_asignatura");
                 });
 
             modelBuilder.Entity("Escuela.Models.Padres", b =>
@@ -309,6 +384,39 @@ namespace Escuela.Data.Migrations
                     b.ToTable("padres");
                 });
 
+            modelBuilder.Entity("Escuela.Models.Periodo", b =>
+                {
+                    b.Property<int>("IdPeriodo")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id_periodo")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("FechaFin")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("fecha_fin");
+
+                    b.Property<DateTime>("FechaInicio")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("fecha_inicio");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("nombre");
+
+                    b.Property<string>("Subperiodo")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("subperiodo");
+
+                    b.HasKey("IdPeriodo");
+
+                    b.ToTable("periodo");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -339,21 +447,21 @@ namespace Escuela.Data.Migrations
                         new
                         {
                             Id = "4671823f-f30c-445c-8433-c9edb7d7caa8",
-                            ConcurrencyStamp = "8046647d-88c5-45c3-b49b-271aa146780e",
+                            ConcurrencyStamp = "bf84df26-b37d-4d00-acbb-9a41035a8942",
                             Name = "Administracion",
                             NormalizedName = "ADMINISTRACION"
                         },
                         new
                         {
                             Id = "1ae745c4-32de-4d4b-b941-39315e76c62b",
-                            ConcurrencyStamp = "4499e376-6653-4b1a-b58b-3bf567f6a523",
+                            ConcurrencyStamp = "72b2de37-7840-45a5-858d-b71b71dfd51d",
                             Name = "Profesor",
                             NormalizedName = "PROFESOR"
                         },
                         new
                         {
                             Id = "b5042ce0-f40d-483e-8514-e014b145b4d9",
-                            ConcurrencyStamp = "1023bcbf-e3c8-476b-9716-adff7733dda4",
+                            ConcurrencyStamp = "d643196a-f765-483d-a0de-791d657c4372",
                             Name = "Estudiante",
                             NormalizedName = "ESTUDIANTE"
                         });
@@ -474,30 +582,72 @@ namespace Escuela.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Escuela.Models.DetalleCursosAsignatura", b =>
+            modelBuilder.Entity("Escuela.Models.Calificacion", b =>
+                {
+                    b.HasOne("Escuela.Models.DetalleCursoperiodoAsignatura", "DetalleCursoperiodoAsignatura")
+                        .WithMany()
+                        .HasForeignKey("IdDetalleCursoPeriodoAsignatura")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Escuela.Models.ApplicationUser", "ApplicationUserEstudiante")
+                        .WithMany()
+                        .HasForeignKey("IdEstudiante");
+
+                    b.HasOne("Escuela.Models.ApplicationUser", "ApplicationUserProfesor")
+                        .WithMany()
+                        .HasForeignKey("IdProfesor");
+
+                    b.Navigation("ApplicationUserEstudiante");
+
+                    b.Navigation("ApplicationUserProfesor");
+
+                    b.Navigation("DetalleCursoperiodoAsignatura");
+                });
+
+            modelBuilder.Entity("Escuela.Models.DetalleCursoPeriodo", b =>
+                {
+                    b.HasOne("Escuela.Models.Curso", "Curso")
+                        .WithMany("DetalleCursoPeriodo")
+                        .HasForeignKey("IdCurso")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Escuela.Models.Periodo", "Periodo")
+                        .WithMany("DetalleCursoPeriodo")
+                        .HasForeignKey("IdPeriodo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Curso");
+
+                    b.Navigation("Periodo");
+                });
+
+            modelBuilder.Entity("Escuela.Models.DetalleCursoperiodoAsignatura", b =>
                 {
                     b.HasOne("Escuela.Models.Asignatura", "Asignatura")
-                        .WithMany("DetalleCursosAsignatura")
+                        .WithMany("DetalleCursoperiodoAsignatura")
                         .HasForeignKey("IdAsignatura")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Escuela.Models.Curso", "Curso")
-                        .WithMany("DetalleCursosAsignatura")
-                        .HasForeignKey("IdCurso")
+                    b.HasOne("Escuela.Models.DetalleCursoPeriodo", "DetalleCursoPeriodo")
+                        .WithMany("DetalleCursoperiodoAsignatura")
+                        .HasForeignKey("IdDetalleCursoPeriodo")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Asignatura");
 
-                    b.Navigation("Curso");
+                    b.Navigation("DetalleCursoPeriodo");
                 });
 
             modelBuilder.Entity("Escuela.Models.DetalleEstudiante", b =>
                 {
-                    b.HasOne("Escuela.Models.Curso", "Curso")
+                    b.HasOne("Escuela.Models.DetalleCursoPeriodo", "DetalleCursoPeriodo")
                         .WithMany()
-                        .HasForeignKey("IdCurso")
+                        .HasForeignKey("IdDetalleCursoPeriodo")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -513,26 +663,26 @@ namespace Escuela.Data.Migrations
 
                     b.Navigation("ApplicationUser");
 
-                    b.Navigation("Curso");
+                    b.Navigation("DetalleCursoPeriodo");
 
                     b.Navigation("Padres");
                 });
 
-            modelBuilder.Entity("Escuela.Models.DetalleProfesorCursosAsignatura", b =>
+            modelBuilder.Entity("Escuela.Models.DetalleProfesorCursoperiodoAsignatura", b =>
                 {
-                    b.HasOne("Escuela.Models.DetalleCursosAsignatura", "DetalleCursosAsignatura")
-                        .WithMany("DetalleProfesorCursosAsignatura")
-                        .HasForeignKey("IdDetalleCursosAsignatura")
+                    b.HasOne("Escuela.Models.DetalleCursoperiodoAsignatura", "DetalleCursoperiodoAsignatura")
+                        .WithMany("DetalleProfesorCursoperiodoAsignatura")
+                        .HasForeignKey("IdDetalleCursoperiodoAsignatura")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Escuela.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("DetalleProfesorCursosAsignatura")
+                        .WithMany("DetalleProfesorCursoperiodoAsignatura")
                         .HasForeignKey("UserId");
 
                     b.Navigation("ApplicationUser");
 
-                    b.Navigation("DetalleCursosAsignatura");
+                    b.Navigation("DetalleCursoperiodoAsignatura");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -590,27 +740,37 @@ namespace Escuela.Data.Migrations
                 {
                     b.Navigation("DetalleEstudiante");
 
-                    b.Navigation("DetalleProfesorCursosAsignatura");
+                    b.Navigation("DetalleProfesorCursoperiodoAsignatura");
                 });
 
             modelBuilder.Entity("Escuela.Models.Asignatura", b =>
                 {
-                    b.Navigation("DetalleCursosAsignatura");
+                    b.Navigation("DetalleCursoperiodoAsignatura");
                 });
 
             modelBuilder.Entity("Escuela.Models.Curso", b =>
                 {
-                    b.Navigation("DetalleCursosAsignatura");
+                    b.Navigation("DetalleCursoPeriodo");
                 });
 
-            modelBuilder.Entity("Escuela.Models.DetalleCursosAsignatura", b =>
+            modelBuilder.Entity("Escuela.Models.DetalleCursoPeriodo", b =>
                 {
-                    b.Navigation("DetalleProfesorCursosAsignatura");
+                    b.Navigation("DetalleCursoperiodoAsignatura");
+                });
+
+            modelBuilder.Entity("Escuela.Models.DetalleCursoperiodoAsignatura", b =>
+                {
+                    b.Navigation("DetalleProfesorCursoperiodoAsignatura");
                 });
 
             modelBuilder.Entity("Escuela.Models.Padres", b =>
                 {
                     b.Navigation("DetalleEstudiante");
+                });
+
+            modelBuilder.Entity("Escuela.Models.Periodo", b =>
+                {
+                    b.Navigation("DetalleCursoPeriodo");
                 });
 #pragma warning restore 612, 618
         }

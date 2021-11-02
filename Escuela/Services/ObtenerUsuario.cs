@@ -26,7 +26,7 @@ namespace Escuela.Services
                                 UserName = usuario.UserName,
                                 IdentityRole = nombrerol,
                                 Estado = usuario.Estado
-                            }).OrderBy(s => s.PrimerApellido).ToList();
+                            }).OrderBy(s => s.Nombres).ToList();
         } 
     }
 }

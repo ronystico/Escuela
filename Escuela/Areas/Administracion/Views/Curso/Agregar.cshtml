@@ -1,30 +1,40 @@
-@model Curso
+﻿@model Escuela.Models.Curso
+
 @{
     ViewData["Title"] = "Agregar Curso";
 }
 
-<h1>@ViewData["Title"]</h1>
+<h1 class="mb-3">@ViewData["Title"]</h1>
 
-<h2 class="text-warning mb-3 mt-3">Luego de agregar el curso, debes editarlo para agregar asignaturas</h2>
 
-<form method="POST" asp-action="Agregar">
-    <div class="form-group">
-        <label asp-for="Nombre"></label>
-        <input asp-for="Nombre" />
-        <span asp-validation-for="Nombre"></span>
+<form asp-action="Agregar">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Nombre" class="control-label"></label>
+                <input asp-for="Nombre" class="form-control" />
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Seccion" class="control-label"></label>
+                <input asp-for="Seccion" class="form-control" />
+                <span asp-validation-for="Seccion" class="text-danger"></span>
+            </div>
+        </div>
     </div>
     <div class="form-group">
-        <label asp-for="Seccion"></label>
-        <input asp-for="Seccion" />
-        <span asp-validation-for="Seccion"></span>
+        <input type="submit" value="Agregar" class="btn btn-primary" />
     </div>
-    <input type="submit" class="btn btn-primary" value="Agregar" />
-    <a asp-action="Inicio" class="btn btn-primary">Volver atrás</a>
 </form>
+    
 
+<div>
+    <a class="btn btn-primary" asp-action="Inicio">Volver a la lista</a>
+</div>
 
 @section Scripts {
-@{
-    <partial name="_ValidationScriptsPartial" />
-}
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

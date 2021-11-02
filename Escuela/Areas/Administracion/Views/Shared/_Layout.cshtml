@@ -10,6 +10,7 @@
 </head>
 <body>
     <header>
+        <a class="sr-only sr-only-focusable" href="#contenido">Ir al contenido principal</a>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Inicio" asp-action="Inicio">Escuela</a>
@@ -28,11 +29,17 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="Administracion" asp-controller="Padres" asp-action="Inicio">Padres</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Administracion" asp-controller="Curso" asp-action="Inicio">Cursos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Administracion" asp-controller="Asignatura" asp-action="Inicio">Asignaturas</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Periodos/Cursos/Asignaturas
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <a class="dropdown-item" asp-area="Administracion" asp-controller="Periodo" asp-action="Inicio">Periodos</a>
+                                <a class="dropdown-item" asp-area="Administracion" asp-controller="Curso" asp-action="Inicio">Cursos</a>
+                                
+                                <a class="dropdown-item" asp-area="Administracion" asp-controller="Asignatura" asp-action="Inicio">Asignaturas</a>
+                                <a class="dropdown-item" asp-area="Administracion" asp-controller="CursoPeriodoAsignatura" asp-action="Inicio">Periodos/Cursos/Asignaturas</a>
+                            </div>
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />
@@ -41,14 +48,14 @@
         </nav>
     </header>
     <div class="container">
-        <main role="main" class="pb-3">
+        <main role="main" id="contenido" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2021 - Escuela - <a asp-area="" asp-controller="Inicio" asp-action="Privacy">No abras este enlace, dará error</a>
+            &copy; 2021 - Escuela
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

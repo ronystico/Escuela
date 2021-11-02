@@ -1,0 +1,40 @@
+@model IEnumerable<DetalleCursoPeriodo>
+@{
+    ViewData["Title"] = "Lista de Periodos/Cursos/Asignaturas";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<a class="btn btn-primary mb-3" asp-action="Agregar">Agregar</a>
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-striped">
+            <tr>
+                <th>Periodo/Subperiodo</th>
+                <th>Curso/Secci&oacute;n</th>
+                <th>Asignaturas</th>
+                <th>Acciones</th>
+            </tr>
+            @foreach (var cursoPeriodo in Model.ToList())
+            {
+<tr>
+    <td>@(cursoPeriodo.Periodo.Nombre + " / " + cursoPeriodo.Periodo.Subperiodo)</td>
+    <td>@(cursoPeriodo.Curso.Nombre + " / " + cursoPeriodo.Curso.Seccion)</td>
+    <td>
+        @foreach (var asignaturacurso in cursoPeriodo.DetalleCursoperiodoAsignatura)
+        {
+            if (@asignaturacurso != null)
+            {
+@asignaturacurso.Asignatura.Nombre <br />                    }
+
+                }
+    </td>
+    <td>
+        <a class="link-primary" asp-action="Editar" asp-route-id="@cursoPeriodo.IdDetalleCursoPeriodo">Editar</a>
+        <a class="link-primary" asp-action="Eliminar" asp-route-id="@cursoPeriodo.IdDetalleCursoPeriodo">Eliminar</a>
+    </td>
+</tr>}
+        </table>
+        </div>
+</div>

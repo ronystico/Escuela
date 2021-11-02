@@ -7,10 +7,9 @@
 <h1>@ViewData["Title"]</h1>
 <hr />
 
-<div class="container">
-
-    <h2>Madre</h2>
-
+<div class="row">
+    <div class="col-md-6">
+    <p class="h2">Madre</p>
     <dl class="row">
         <dt class="col-sm-2 mb-3 mt-3">
             @Html.DisplayNameFor(model => model.NombresMadre)
@@ -37,9 +36,9 @@
             @Html.DisplayFor(model => model.TelefonoMadre)
         </dd>
     </dl>
-
-    <h2>Padre</h2>
-
+        </div>
+    <div class="col-md-6">
+    <p class="h2">Padre</p>
     <dl class="row">
         <dt class="col-sm-2 mb-3 mt-3">
             @Html.DisplayNameFor(model => model.NombresPadre)
@@ -70,15 +69,12 @@
 
 <h2>Estudiantes</h2>
 
-<table class="table table-striped table-responsive">
+<table class="table table-striped">
     <thead>
         <tr>
-            <th>Primer<br /> Apellido</th>
-            <th>Segundo<br /> Apellido</th>
-            <th>Nombres</th>
+            <th>Nombre Completo</th>
             <th>Estado</th>
-            <th>Usuario</th>
-            <th>Curso</th>
+            <th>Periodo/Subperiodo<br /> - <br /> Curso/Sección</th>
             <th>Número<br /> de<br /> Orden</th>
             <th>ID o RNE</th>
             <th>Acciones</th>
@@ -88,12 +84,9 @@
         @foreach(var estudiante in Model.DetalleEstudiante)
             {
                 <tr>
-                    <td>@estudiante.ApplicationUser.PrimerApellido</td>
-                    <td>@estudiante.ApplicationUser.SegundoApellido</td>
-                    <td>@estudiante.ApplicationUser.Nombres</td>
+                    <td>@(estudiante.ApplicationUser.Nombres + " " + estudiante.ApplicationUser.PrimerApellido + " " + estudiante.ApplicationUser.SegundoApellido)</td>
                     <td>@estudiante.ApplicationUser.Estado</td>
-                    <td>@estudiante.ApplicationUser.UserName</td>
-                    <td>@(estudiante.Curso.Nombre + " " + @estudiante.Curso.Seccion)</td>
+                    <td>@(estudiante.DetalleCursoPeriodo.Periodo.Nombre + " / " + estudiante.DetalleCursoPeriodo.Periodo.Subperiodo + " - " + estudiante.DetalleCursoPeriodo.Curso.Nombre + " / " + estudiante.DetalleCursoPeriodo.Curso.Seccion)</td>
                     <td>@estudiante.NumerodeOrden</td>
                     <td>@estudiante.IdoRNE</td>
                     <td>
@@ -103,6 +96,7 @@
             }
     </tbody>
 </table>
+    </div>
 
 <div>
     <a asp-action="Editar" asp-route-id="@Model.IdPadres" class="btn btn-warning">Editar</a>

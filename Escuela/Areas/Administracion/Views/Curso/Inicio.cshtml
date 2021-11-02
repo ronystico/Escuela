@@ -1,38 +1,46 @@
-@model IEnumerable<Curso>
+﻿@model IEnumerable<Escuela.Models.Curso>
+
 @{
-    ViewData["Title"] = "Lista de cursos";
+    ViewData["Title"] = "Lista de Cursos";
 }
 
 <h1>@ViewData["Title"]</h1>
 
 <a class="btn btn-primary mb-3" asp-action="Agregar">Agregar</a>
 
-<table class="table table-striped">
-    <tr>
-        <th>Nombre</th>
-        <th>Seccion</th>
-        <th>Asignaturas</th>
-        <th>Acciones</th>
-    </tr>
-    @foreach (var curso in Model.ToList())
-    {
-        <tr>
-            <td>@curso.Nombre</td>
-            <td>@curso.Seccion</td>
-            <td>
-                @foreach (var asignaturacurso in curso.DetalleCursosAsignatura)
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Nombre)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Seccion)
+                    </th>
+                    <th>
+                        Acciones
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
                 {
-                    if (@asignaturacurso != null)
-                    {
-                        @asignaturacurso.Asignatura.Nombre <br />
-                    }
-                    
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Nombre)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Seccion)
+                        </td>
+                        <td>
+                            <a asp-action="Editar" asp-route-id="@item.IdCurso">Editar</a> <br>
+                            <a asp-action="Eliminar" asp-route-id="@item.IdCurso">Eliminar</a>
+                        </td>
+                    </tr>
                 }
-            </td>
-            <td>
-                <a class="link-primary" asp-action="Editar" asp-route-id="@curso.IdCurso">Editar</a>
-                <a class="link-primary" asp-action="Eliminar" asp-route-id="@curso.IdCurso">Eliminar</a>
-            </td>
-        </tr>
-    }
-</table>
+            </tbody>
+        </table>
+    </div>
+</div>

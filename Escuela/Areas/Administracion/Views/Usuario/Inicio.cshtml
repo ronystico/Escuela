@@ -7,42 +7,44 @@
 
 <a class="btn btn-primary mb-3" asp-action="Agregar">Agregar</a>
 
-<div class="container">
-    <table class="table table-striped table-responsive">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Primer<br /> Apellido</th>
-                <th scope="col">Segundo<br /> Apellido</th>
-                <th scope="col">Nombres</th>
-                <th scope="col">Usuario</th>
-                <th scope="col">Rol</th>
-                <th scope="col">Estado</th>
-                <th scope="col">Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            @{
-                int i = 1;
-            }
-            @foreach (var usuario in Model.ToList())
-            {
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-striped">
+            <thead>
                 <tr>
-                    <th scope="row">@i</th>
-                    <td>@usuario.PrimerApellido</td>
-                    <td>@usuario.SegundoApellido</td>
-                    <td>@usuario.Nombres</td>
-                    <td>@usuario.UserName</td>
-                    <td>@usuario.IdentityRole.Name</td>
-                    <td>@usuario.Estado</td>
-                    <td>
-                        <a asp-action="Detalles" asp-route-id="@usuario.Id" asp-route-rol="@usuario.IdentityRole.Name">Más Detalles</a><br>
-                        <a asp-action="Editar" asp-route-id="@usuario.Id" asp-route-rol="@usuario.IdentityRole.Name">Editar</a><br>
-                        <a asp-action="ReestablecerClave" asp-route-id="@usuario.Id">Reestablecer Clave</a>
-                    </td>
+                    <th scope="col">#</th>
+                    <th scope="col">Nombres</th>
+                    <th scope="col">Primer<br /> Apellido</th>
+                    <th scope="col">Segundo<br /> Apellido</th>
+                    <th scope="col">Usuario</th>
+                    <th scope="col">Rol</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col">Acciones</th>
                 </tr>
-                i++;
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @{
+                    int i = 1;
+                }
+                @foreach (var usuario in Model.ToList())
+                {
+                    <tr>
+                        <th scope="row">@i</th>
+                        <td>@usuario.Nombres</td>
+                        <td>@usuario.PrimerApellido</td>
+                        <td>@usuario.SegundoApellido</td>
+                        <td>@usuario.UserName</td>
+                        <td>@usuario.IdentityRole.Name</td>
+                        <td>@usuario.Estado</td>
+                        <td>
+                            <a asp-action="Detalles" asp-route-id="@usuario.Id" asp-route-rol="@usuario.IdentityRole.Name">Más Detalles</a><br>
+                            <a asp-action="Editar" asp-route-id="@usuario.Id" asp-route-rol="@usuario.IdentityRole.Name">Editar</a><br>
+                            <a asp-action="ReestablecerClave" asp-route-id="@usuario.Id">Reestablecer Clave</a>
+                        </td>
+                    </tr>
+                    i++;
+                }
+            </tbody>
+        </table>
+    </div>
 </div>

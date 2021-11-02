@@ -20,10 +20,10 @@ namespace Escuela.Models
 
         [Column("seccion")]
         [Required(ErrorMessage = "Falta el campo Seccion")]
-        [DisplayName("Seccion")]
+        [DisplayName("Sección")]
         [StringLength(10)]
         public string Seccion { get; set; }
 
-        public virtual ICollection<DetalleCursosAsignatura> DetalleCursosAsignatura { get; set; }
+        public virtual ICollection<DetalleCursoPeriodo> DetalleCursoPeriodo { get; set; }
     }
 }

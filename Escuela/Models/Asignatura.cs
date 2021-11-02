@@ -15,8 +15,9 @@ namespace Escuela.Models
         [Column("nombre")]
         [Required(ErrorMessage = "Falta el campo: Nombre")]
         [DisplayName("Nombre")]
+        [StringLength(100)]
         public string Nombre { get; set; }
 
-        public virtual ICollection<DetalleCursosAsignatura> DetalleCursosAsignatura { get; set; }
+        public virtual ICollection<DetalleCursoperiodoAsignatura> DetalleCursoperiodoAsignatura { get; set; }
     }
 }

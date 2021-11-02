@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace Escuela.Models.ViewModels
 {
-    public class CursoAsignaturaViewModel
+    public class CursoPeriodoAsignaturaViewModel
     {
-        public Curso Curso { get; set; }
-        public DetalleCursosAsignatura DetalleCursosAsignatura { get; set; }
+        public DetalleCursoPeriodo DetalleCursoPeriodo { get; set; }
+        public DetalleCursoperiodoAsignatura DetalleCursoperiodoAsignatura { get; set; }
         public List<int> AsignaturasSeleccionadas { get; set; }
     }
 }

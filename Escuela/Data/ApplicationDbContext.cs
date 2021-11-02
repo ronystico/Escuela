@@ -19,32 +19,45 @@ namespace Escuela.Data
         public DbSet<DetalleEstudiante> DetalleEstudiante { get; set; }
         public DbSet<Padres> Padres { get; set; }
         public DbSet<Asignatura> Asignatura { get; set; }
-        public DbSet<DetalleCursosAsignatura> DetalleCursosAsignatura { get; set; }
-        public DbSet<DetalleProfesorCursosAsignatura> DetalleProfesorCursosAsignatura { get; set; }
+        public DbSet<DetalleCursoperiodoAsignatura> DetalleCursoperiodoAsignatura { get; set; }
+        public DbSet<DetalleProfesorCursoperiodoAsignatura> DetalleProfesorCursoperiodoAsignatura { get; set; }
+        public DbSet<Periodo> Periodo { get; set; }
+        public DbSet<DetalleCursoPeriodo> DetalleCursoPeriodo { get; set; }
+        public DbSet<Calificacion> Calificacion { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<DetalleCursosAsignatura>()
+            modelBuilder.Entity<DetalleCursoPeriodo>()
                 .HasOne(c => c.Curso)
-                .WithMany(ca => ca.DetalleCursosAsignatura)
+                .WithMany(ca => ca.DetalleCursoPeriodo)
                 .HasForeignKey(ca => ca.IdCurso);
 
-            modelBuilder.Entity<DetalleCursosAsignatura>()
-                .HasOne(a => a.Asignatura)
-                .WithMany(ca => ca.DetalleCursosAsignatura)
-                .HasForeignKey(ca => ca.IdAsignatura);
+            modelBuilder.Entity<DetalleCursoPeriodo>()
+                .HasOne(a => a.Periodo)
+                .WithMany(ca => ca.DetalleCursoPeriodo)
+                .HasForeignKey(ca => ca.IdPeriodo);
 
-            modelBuilder.Entity<DetalleProfesorCursosAsignatura>()
-                .HasOne(a => a.ApplicationUser)
-                .WithMany(au => au.DetalleProfesorCursosAsignatura)
-                .HasForeignKey(au => au.UserId);
+            modelBuilder.Entity<DetalleCursoperiodoAsignatura>()
+                .HasOne(a => a.DetalleCursoPeriodo)
+                .WithMany(au => au.DetalleCursoperiodoAsignatura)
+                .HasForeignKey(au => au.IdDetalleCursoPeriodo);
 
-            modelBuilder.Entity<DetalleProfesorCursosAsignatura>()
-                .HasOne(p => p.DetalleCursosAsignatura)
-                .WithMany(pa => pa.DetalleProfesorCursosAsignatura)
-                .HasForeignKey(pa => pa.IdDetalleCursosAsignatura);
+            modelBuilder.Entity<DetalleCursoperiodoAsignatura>()
+                .HasOne(p => p.Asignatura)
+                .WithMany(pa => pa.DetalleCursoperiodoAsignatura)
+                .HasForeignKey(pa => pa.IdAsignatura);
+
+            modelBuilder.Entity<DetalleProfesorCursoperiodoAsignatura>()
+            .HasOne(s => s.ApplicationUser)
+            .WithMany(s => s.DetalleProfesorCursoperiodoAsignatura)
+            .HasForeignKey(s => s.UserId);
+
+            modelBuilder.Entity<DetalleProfesorCursoperiodoAsignatura>()
+            .HasOne(s => s.DetalleCursoperiodoAsignatura)
+            .WithMany(s => s.DetalleProfesorCursoperiodoAsignatura)
+            .HasForeignKey(s => s.IdDetalleCursoperiodoAsignatura);
 
             modelBuilder.Entity<IdentityRole>().HasData(
                 new IdentityRole

@@ -1,129 +1,139 @@
 @model ApplicationUser
 @{ ViewData["Title"] = "Detalle Estudiante"; }
 
-<h1 class="mb-3">@ViewData["Title"]</h1>
-<hr />
+<div class="row">
+    <div class="col-md-6">
+        <p class="h1">@ViewData["Title"]</p>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2 mb-3">
+                @Html.DisplayNameFor(model => model.Nombres)
+            </dt>
+            <dd class="col-sm-10 mb-3">
+                @Html.DisplayFor(model => model.Nombres)
+            </dd>
+            <dt class="col-sm-2 mb-3">
+                @Html.DisplayNameFor(model => model.PrimerApellido)
+            </dt>
+            <dd class="col-sm-10 mb-3">
+                @Html.DisplayFor(model => model.PrimerApellido)
+            </dd>
+            <dt class="col-sm-2 mb-3">
+                @Html.DisplayNameFor(model => model.SegundoApellido)
+            </dt>
+            <dd class="col-sm-10 mb-3">
+                @Html.DisplayFor(model => model.SegundoApellido)
+            </dd>
+            <dt class="col-sm-2 mb-3">
+                @Html.DisplayNameFor(model => model.Estado)
+            </dt>
+            <dd class="col-sm-10 mb-3">
+                @Html.DisplayFor(model => model.Estado)
+            </dd>
+            <dt class="col-sm-2 mb-3">
+                Rol
+            </dt>
+            <dd class="col-sm-10 mb-3">
+                @ViewBag.roles
+            </dd>
+            <dt class="col-sm-2 mb-3">
+                Usuario
+            </dt>
+            <dd class="col-sm-10 mb-3">
+                @Html.DisplayFor(model => model.UserName)
+            </dd>
+            <dt class="col-sm-4 mb-3">
+                Periodo/Subperiodo - Curso/Sección
+            </dt>
+            <dd class="col-sm-8 mb-3">
+                @(Model.DetalleEstudiante.DetalleCursoPeriodo.Periodo.Nombre + " / " + Model.DetalleEstudiante.DetalleCursoPeriodo.Periodo.Subperiodo
+              + " - " +
+              Model.DetalleEstudiante.DetalleCursoPeriodo.Curso.Nombre + " / " +
+              Model.DetalleEstudiante.DetalleCursoPeriodo.Curso.Seccion)
+            </dd>
+            <dt class="col-sm-2 mb-3">
+                @Html.DisplayNameFor(model => model.DetalleEstudiante.NumerodeOrden)
+            </dt>
+            <dd class="col-sm-10 mb-3">
+                @Html.DisplayFor(model => model.DetalleEstudiante.NumerodeOrden)
+            </dd>
+            <dt class="col-sm-2 mb-3">
+                @Html.DisplayNameFor(model => model.DetalleEstudiante.IdoRNE)
+            </dt>
+            <dd class="col-sm-10 mb-3">
+                @Html.DisplayFor(model => model.DetalleEstudiante.IdoRNE)
+            </dd>
+        </dl>
+    </div>
 
-<div class="container">
-    <dl class="row">
-        <dt class="col-sm-2 mb-3">
-            @Html.DisplayNameFor(model => model.PrimerApellido)
-        </dt>
-        <dd class="col-sm-10 mb-3">
-            @Html.DisplayFor(model => model.PrimerApellido)
-        </dd>
-        <dt class="col-sm-2 mb-3">
-            @Html.DisplayNameFor(model => model.SegundoApellido)
-        </dt>
-        <dd class="col-sm-10 mb-3">
-            @Html.DisplayFor(model => model.SegundoApellido)
-        </dd>
-        <dt class="col-sm-2 mb-3">
-            @Html.DisplayNameFor(model => model.Nombres)
-        </dt>
-        <dd class="col-sm-10 mb-3">
-            @Html.DisplayFor(model => model.Nombres)
-        </dd>
-        <dt class="col-sm-2 mb-3">
-            @Html.DisplayNameFor(model => model.Estado)
-        </dt>
-        <dd class="col-sm-10 mb-3">
-            @Html.DisplayFor(model => model.Estado)
-        </dd>
-        <dt class="col-sm-2 mb-3">
-            Rol
-        </dt>
-        <dd class="col-sm-10 mb-3">
-            @ViewBag.roles
-        </dd>
-        <dt class="col-sm-2 mb-3">
-            Usuario
-        </dt>
-        <dd class="col-sm-10 mb-3">
-            @Html.DisplayFor(model => model.UserName)
-        </dd>
-        <dt class="col-sm-2 mb-3">
-            Curso/Sección
-        </dt>
-        <dd class="col-sm-10 mb-3">
-            @(Model.DetalleEstudiante.Curso.Nombre + " " + Model.DetalleEstudiante.Curso.Seccion)
-        </dd>
-        <dt class="col-sm-2 mb-3">
-            @Html.DisplayNameFor(model => model.DetalleEstudiante.NumerodeOrden)
-        </dt>
-        <dd class="col-sm-10 mb-3">
-            @Html.DisplayFor(model => model.DetalleEstudiante.NumerodeOrden)
-        </dd>
-        <dt class="col-sm-2 mb-3">
-            @Html.DisplayNameFor(model => model.DetalleEstudiante.IdoRNE)
-        </dt>
-        <dd class="col-sm-10 mb-3">
-            @Html.DisplayFor(model => model.DetalleEstudiante.IdoRNE)
-        </dd>
-    </dl>
+    <div class="col-md-6">
+        <p class="h1">Detalle Padres</p>
+        <hr />
+        <p class="h2 mb-3">Madre</p>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2 mb-3">
+                @Html.DisplayNameFor(model => model.DetalleEstudiante.Padres.NombresMadre)
+            </dt>
+            <dd class="col-sm-10 mb-3">
+                @Html.DisplayFor(model => model.DetalleEstudiante.Padres.NombresMadre)
+            </dd>
+            <dt class="col-sm-2 mb-3">
+                @Html.DisplayNameFor(model => model.DetalleEstudiante.Padres.PrimerApellidoMadre)
+            </dt>
+            <dd class="col-sm-10 mb-3">
+                @Html.DisplayFor(model => model.DetalleEstudiante.Padres.PrimerApellidoMadre)
+            </dd>
+            <dt class="col-sm-2 mb-3">
+                @Html.DisplayNameFor(model => model.DetalleEstudiante.Padres.SegundoApellidoMadre)
+            </dt>
+            <dd class="col-sm-10 mb-3">
+                @Html.DisplayFor(model => model.DetalleEstudiante.Padres.SegundoApellidoMadre)
+            </dd>
 
-    <h2 class="mb-3">Detalle Padres</h2>
-    <hr />
-    <h3 class="mb-3">Madre</h3>
+            <dt class="col-sm-2 mb-3">
+                @Html.DisplayNameFor(model => model.DetalleEstudiante.Padres.TelefonoMadre)
+            </dt>
+            <dd class="col-sm-10 mb-3">
+                @Html.DisplayFor(model => model.DetalleEstudiante.Padres.TelefonoMadre)
+            </dd>
+        </dl>
 
-    <dl class="row">
-        <dt class="col-sm-2 mb-3">
-            @Html.DisplayNameFor(model => model.DetalleEstudiante.Padres.PrimerApellidoMadre)
-        </dt>
-        <dd class="col-sm-10 mb-3">
-            @Html.DisplayFor(model => model.DetalleEstudiante.Padres.PrimerApellidoMadre)
-        </dd>
-        <dt class="col-sm-2 mb-3">
-            @Html.DisplayNameFor(model => model.DetalleEstudiante.Padres.SegundoApellidoMadre)
-        </dt>
-        <dd class="col-sm-10 mb-3">
-            @Html.DisplayFor(model => model.DetalleEstudiante.Padres.SegundoApellidoMadre)
-        </dd>
-        <dt class="col-sm-2 mb-3">
-            @Html.DisplayNameFor(model => model.DetalleEstudiante.Padres.NombresMadre)
-        </dt>
-        <dd class="col-sm-10 mb-3">
-            @Html.DisplayFor(model => model.DetalleEstudiante.Padres.NombresMadre)
-        </dd>
-        <dt class="col-sm-2 mb-3">
-            @Html.DisplayNameFor(model => model.DetalleEstudiante.Padres.TelefonoMadre)
-        </dt>
-        <dd class="col-sm-10 mb-3">
-            @Html.DisplayFor(model => model.DetalleEstudiante.Padres.TelefonoMadre)
-        </dd>
-    </dl>
+        <p class="h2 mb-3">Padre</p>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2 mb-3">
+                @Html.DisplayNameFor(model => model.DetalleEstudiante.Padres.NombresPadre)
+            </dt>
+            <dd class="col-sm-10 mb-3">
+                @Html.DisplayFor(model => model.DetalleEstudiante.Padres.NombresPadre)
+            </dd>
+            <dt class="col-sm-2 mb-3">
+                @Html.DisplayNameFor(model => model.DetalleEstudiante.Padres.PrimerApellidoPadre)
+            </dt>
+            <dd class="col-sm-10 mb-3">
+                @Html.DisplayFor(model => model.DetalleEstudiante.Padres.PrimerApellidoPadre)
+            </dd>
+            <dt class="col-sm-2 mb-3">
+                @Html.DisplayNameFor(model => model.DetalleEstudiante.Padres.SegundoApellidoPadre)
+            </dt>
+            <dd class="col-sm-10 mb-3">
+                @Html.DisplayFor(model => model.DetalleEstudiante.Padres.SegundoApellidoPadre)
+            </dd>
 
-    <h3 class="mb-3">Padre</h3>
-    <dl class="row">
-        <dt class="col-sm-2 mb-3">
-            @Html.DisplayNameFor(model => model.DetalleEstudiante.Padres.PrimerApellidoPadre)
-        </dt>
-        <dd class="col-sm-10 mb-3">
-            @Html.DisplayFor(model => model.DetalleEstudiante.Padres.PrimerApellidoPadre)
-        </dd>
-        <dt class="col-sm-2 mb-3">
-            @Html.DisplayNameFor(model => model.DetalleEstudiante.Padres.SegundoApellidoPadre)
-        </dt>
-        <dd class="col-sm-10 mb-3">
-            @Html.DisplayFor(model => model.DetalleEstudiante.Padres.SegundoApellidoPadre)
-        </dd>
-        <dt class="col-sm-2 mb-3">
-            @Html.DisplayNameFor(model => model.DetalleEstudiante.Padres.NombresPadre)
-        </dt>
-        <dd class="col-sm-10 mb-3">
-            @Html.DisplayFor(model => model.DetalleEstudiante.Padres.NombresPadre)
-        </dd>
-        <dt class="col-sm-2 mb-3">
-            @Html.DisplayNameFor(model => model.DetalleEstudiante.Padres.TelefonoPadre)
-        </dt>
-        <dd class="col-sm-10 mb-3">
-            @Html.DisplayFor(model => model.DetalleEstudiante.Padres.TelefonoPadre)
-        </dd>
-    </dl>
+            <dt class="col-sm-2 mb-3">
+                @Html.DisplayNameFor(model => model.DetalleEstudiante.Padres.TelefonoPadre)
+            </dt>
+            <dd class="col-sm-10 mb-3">
+                @Html.DisplayFor(model => model.DetalleEstudiante.Padres.TelefonoPadre)
+            </dd>
+        </dl>
+    </div>
 </div>
 
 <div>
     <a class="btn btn-warning" asp-action="EditarEstudiante" asp-route-id="@Model.Id">Editar</a>
     <a class="btn btn-primary" asp-controller="Padres" asp-action="Detalle" asp-route-id="@Model.DetalleEstudiante.IdPadres" asp-route-id2="@Model.Id">Más Detalles Padres</a>
+    <a class="btn btn-danger" asp-action="ReestablecerClave" asp-route-id="@Model.Id">Reestablecer Clave</a>
     <a class="btn btn-primary" asp-action="Inicio">Volver Atrás</a>
 </div>

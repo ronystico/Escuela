@@ -1,0 +1,51 @@
+﻿@model Escuela.Models.Periodo
+
+@{
+    ViewData["Title"] = "Editar Periodo";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+
+<form asp-action="Editar">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="IdPeriodo" />
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Nombre" class="control-label"></label>
+                <input asp-for="Nombre" class="form-control" />
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Subperiodo" class="control-label"></label>
+                <input asp-for="Subperiodo" class="form-control" />
+                <span asp-validation-for="Subperiodo" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="FechaInicio" class="control-label"></label>
+                <input asp-for="FechaInicio" class="form-control" />
+                <span asp-validation-for="FechaInicio" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FechaFin" class="control-label"></label>
+                <input asp-for="FechaFin" class="form-control" />
+                <span asp-validation-for="FechaFin" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Editar" class="btn btn-warning" asp-route-id="@Model.IdPeriodo" />
+    </div>
+</form>
+    
+
+<div>
+    <a class="btn btn-primary" asp-action="Inicio">Volver a la lista</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
