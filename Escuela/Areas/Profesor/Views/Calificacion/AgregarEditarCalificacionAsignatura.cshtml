@@ -1,0 +1,86 @@
+﻿@model List<DetalleCursoperiodoAsignatura>
+@{
+    ViewData["Title"] = "Agregar/Editar Calificación";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <p><strong>Periodo: </strong>@Model[0].DetalleCursoPeriodo.Periodo.Nombre</p>
+        <p><strong>Subperiodo: </strong>@Model[0].DetalleCursoPeriodo.Periodo.Subperiodo</p>
+        <p><strong>Curso: </strong> @Model[0].DetalleCursoPeriodo.Curso.Nombre</p>
+    </div>
+    <div class="col-md-6">
+        <p><strong>Secci&oacute;n: </strong>@Model[0].DetalleCursoPeriodo.Curso.Seccion</p>
+        <p><strong>Asignatura: </strong>@Model[0].Asignatura.Nombre</p>
+    </div>
+</div>
+
+<h2>Estudiante</h2>
+
+<dl class="row">
+    @foreach (var estudiante in Model[0].DetalleCursoPeriodo.DetalleEstudiante.OrderBy(s => s.NumerodeOrden))
+    {
+        <dt class="col-sm-2 mb-3">
+            N&uacute;mero de orden
+        </dt>
+        <dd class="col-sm-10 mb-3">
+            @estudiante.NumerodeOrden
+        </dd>
+        <dt class="col-sm-2 mb-3">
+            Nombre Completo
+        </dt>
+        <dd class="col-sm-10 mb-3">
+            @(estudiante.ApplicationUser.Nombres + " " + estudiante.ApplicationUser.PrimerApellido + " " + estudiante.ApplicationUser.SegundoApellido)
+        </dd>
+    }
+</dl>
+
+<form class="row">
+    @{
+        int i = 1;
+    }
+    @foreach (var estudiante in Model[0].DetalleCursoPeriodo.DetalleEstudiante.OrderBy(s => s.NumerodeOrden))
+    {
+        @if (!Model[0].Calificacion.Where(s => s.IdEstudiante == estudiante.UserId).Any())
+        {
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="Calificación">Calificaci&oacute;n</label>
+                    <input type="text" name="@i" id="" class="form-control" />
+                    @*Validación*@
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="Observación">Observaci&oacute;n</label>
+                    <textarea name="@i" id="" class="form-control"></textarea>
+                    @*Validación*@
+                </div>
+            </div>
+        }
+        @foreach (var calificacion in Model[0].Calificacion.Where(s => s.IdEstudiante == estudiante.UserId))
+        {
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="Calificación">Calificaci&oacute;n</label>
+                    <input type="text" name="@i" id="" value="@calificacion.CalificacionTotal" class="form-control" />
+                    @*Validación*@
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="Observación">Observaci&oacute;n</label>
+                    <textarea name="@i" id="" class="form-control">@calificacion.Observacion</textarea>
+                    @*Validación*@
+                </div>
+            </div>
+            i++;
+        }
+    }
+    </form>
+
+
+<button class="btn btn-warning">Editar</button>
+<a class="btn btn-primary" asp-action="CalificacionesAsignatura" asp-route-id="@ViewBag.id">Volver a la lista</a>

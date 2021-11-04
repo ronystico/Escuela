@@ -1,0 +1,30 @@
+﻿@model IEnumerable<CalificacionInicioViewModel>
+@{
+    ViewData["Title"] = "Lista de Asignaturas";
+}
+
+<h1 class="mb-3">@ViewData["Title"]</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Periodo/Subperiodo</th>
+            <th>Curso/Seccion</th>
+            <th>Asignatura</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var asignatura in Model)
+            {
+                <tr>
+                    <td>@asignatura.NombrePeriodoSubperiodo</td>
+                    <td>@asignatura.NombreCursoSeccion</td>
+                    <td>@asignatura.NombreAsignatura</td>
+                    <td>
+                        <a asp-action="CalificacionesAsignatura" asp-route-id="@asignatura.IDAsignatura" asp-area="Profesor">Seleccionar</a>
+                    </td>
+                </tr>
+            }
+    </tbody>
+</table>

@@ -105,6 +105,11 @@ namespace Escuela
                     areaName: "Administracion",
                     pattern: "{controller=Usuario}/{action=Inicio}/{id?}/{id2?}/{referencia?}/{rol?}"
                 );
+                endpoints.MapAreaControllerRoute(
+                    name: "Profesor",
+                    areaName: "Profesor",
+                    pattern: "{controller=Calificacion}/{action=Inicio}/{id?}/{id2?}"
+                );
             });
         }
     }

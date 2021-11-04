@@ -52,7 +52,7 @@ namespace Escuela.Controllers
                        RedirectToAction("Inicio", "Usuario",
                        new { area = "Administracion" }),
                     "Profesor" =>
-                       RedirectToAction("Inicio", "Usuario",
+                       RedirectToAction("Inicio", "Calificacion",
                        new { area = "Profesor" }),
                     _ =>
                     View()

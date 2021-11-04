@@ -27,8 +27,6 @@
   <ItemGroup>
     <Folder Include="Areas\Estudiante\Controllers\" />
     <Folder Include="Areas\Estudiante\Views\" />
-    <Folder Include="Areas\Profesor\Controller\" />
-    <Folder Include="Areas\Profesor\Views\" />
     <Folder Include="wwwroot\carouselimages\" />
   </ItemGroup>
 

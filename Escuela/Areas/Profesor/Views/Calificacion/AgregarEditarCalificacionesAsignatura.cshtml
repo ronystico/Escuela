@@ -1,0 +1,61 @@
+﻿@model List<DetalleCursoperiodoAsignatura>
+@{
+    ViewData["Title"] = "Agregar/Editar Calificaciones";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <p><strong>Periodo: </strong>@Model[0].DetalleCursoPeriodo.Periodo.Nombre</p>
+        <p><strong>Subperiodo: </strong>@Model[0].DetalleCursoPeriodo.Periodo.Subperiodo</p>
+        <p><strong>Curso: </strong> @Model[0].DetalleCursoPeriodo.Curso.Nombre</p>
+    </div>
+    <div class="col-md-6">
+        <p><strong>Secci&oacute;n: </strong>@Model[0].DetalleCursoPeriodo.Curso.Seccion</p>
+        <p><strong>Asignatura: </strong>@Model[0].Asignatura.Nombre</p>
+    </div>
+</div>
+
+<form asp-action="AgregarEditarCalificacionesAsignatura" method="post">
+    <table class="table table-striped mt-3">
+        <thead>
+            <tr>
+                <th># <br /> de orden</th>
+                <th>Nombre Completo</th>
+                <th>Calificaci&oacute;n</th>
+                <th>Observaci&oacute;n</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ 
+                int i = 1;
+            } 
+            @foreach (var estudiante in Model[0].DetalleCursoPeriodo.DetalleEstudiante.OrderBy(s => s.NumerodeOrden))
+            {
+            <tr>
+                <td>@estudiante.NumerodeOrden</td>
+                <td>@(estudiante.ApplicationUser.Nombres + " " + estudiante.ApplicationUser.PrimerApellido + " " + estudiante.ApplicationUser.SegundoApellido)</td>
+                @if (!Model[0].Calificacion.Where(s => s.IdEstudiante == estudiante.UserId).Any())
+                {
+                    <td><input type="text" name="@i" id="" class="form-control" /></td>
+                    <td><textarea name="@i" id="" class="form-control" ></textarea></td>
+                }
+                @foreach (var calificacion in Model[0].Calificacion.Where(s => s.IdEstudiante == estudiante.UserId))
+                {
+                    <td><input type="text" name="@i" id="" value="@calificacion.CalificacionTotal" class="form-control" /></td>
+                    <td><textarea name="@i" id="" class="form-control">@calificacion.Observacion</textarea></td>
+                    i++;
+                }
+            </tr>
+            }
+        </tbody>
+    </table>
+</form>
+
+<button class="btn btn-primary">Agregar</button>
+<a class="btn btn-primary" asp-action="CalificacionesAsignatura" asp-route-id="@ViewBag.id">Volver a la lista</a>
+
+@section Scripts{ 
+<partial name="_ValidationScriptsPartial" />
+}

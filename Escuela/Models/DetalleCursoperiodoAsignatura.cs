@@ -23,6 +23,8 @@ namespace Escuela.Models
         [ForeignKey("IdAsignatura")]
         public Asignatura Asignatura { get; set; }
 
+        public ICollection<Calificacion> Calificacion { get; set; }
+
         public virtual ICollection<DetalleProfesorCursoperiodoAsignatura> DetalleProfesorCursoperiodoAsignatura { get; set; }
     }
 }

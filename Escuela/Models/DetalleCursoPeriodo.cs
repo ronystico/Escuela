@@ -28,6 +28,8 @@ namespace Escuela.Models
         [ForeignKey("IdPeriodo")]
         public Periodo Periodo { get; set; }
 
+        public ICollection<DetalleEstudiante> DetalleEstudiante { get; set; }
+
         public ICollection<DetalleCursoperiodoAsignatura> DetalleCursoperiodoAsignatura { get; set; }
     }
 }
