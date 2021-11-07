@@ -32,6 +32,11 @@ namespace Escuela.Controllers
         {
             return View();
         }
+        
+        [AllowAnonymous]
+        public IActionResult Acercade(){
+            return View();
+        }
 
         public IActionResult VermiInformacion()
         {
@@ -46,7 +51,7 @@ namespace Escuela.Controllers
                 return rol switch
                 {
                     "Estudiante" =>
-                        RedirectToAction("Inicio", "Usuario",
+                        RedirectToAction("Inicio", "Calificaciones",
                         new { area = "Estudiante" }),
                     "Administracion" =>
                        RedirectToAction("Inicio", "Usuario",
