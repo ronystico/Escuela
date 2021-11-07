@@ -22,7 +22,7 @@
     <td>@(cursoPeriodo.Periodo.Nombre + " / " + cursoPeriodo.Periodo.Subperiodo)</td>
     <td>@(cursoPeriodo.Curso.Nombre + " / " + cursoPeriodo.Curso.Seccion)</td>
     <td>
-        @foreach (var asignaturacurso in cursoPeriodo.DetalleCursoperiodoAsignatura)
+        @foreach (var asignaturacurso in cursoPeriodo.DetalleCursoperiodoAsignatura.OrderBy(s => s.Asignatura.Nombre))
         {
             if (@asignaturacurso != null)
             {

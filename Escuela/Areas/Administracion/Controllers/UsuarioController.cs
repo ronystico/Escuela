@@ -33,6 +33,7 @@ namespace Escuela.Areas.Administracion.Controllers
         {
             ObtenerUsuario usuarios = new ObtenerUsuario(_data);
             var listaUsuarios = usuarios.ObtenerTodosLosUsuariosConRol();
+
             return View(listaUsuarios);
         }
 
@@ -407,11 +408,11 @@ namespace Escuela.Areas.Administracion.Controllers
             else
             {
                 await _data.Entry(estudiante).Reference(s => s.DetalleEstudiante).LoadAsync();
-                await _data.Entry(estudiante.DetalleEstudiante).Reference(s => s.Padres).LoadAsync();
                 if (estudiante.DetalleEstudiante == null)
                 {
                     return RedirectToAction("AgregarEstudiante", "Usuario", new { area = "Administracion", id = id });
                 }
+                await _data.Entry(estudiante.DetalleEstudiante).Reference(s => s.Padres).LoadAsync();
                 if (estudiante.DetalleEstudiante.Padres == null)
                 {
                     estudiante.DetalleEstudiante.Padres = new Padres { };
