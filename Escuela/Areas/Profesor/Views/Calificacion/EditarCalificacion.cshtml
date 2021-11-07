@@ -1,0 +1,79 @@
+@model AgregarEditarCalificacionViewModel
+@{
+    ViewData["Title"] = "Editar Calificación";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <p><strong>Periodo: </strong>@Model.DetalleCursoperiodoAsignatura[0].DetalleCursoPeriodo.Periodo.Nombre</p>
+        <p><strong>Subperiodo: </strong>@Model.DetalleCursoperiodoAsignatura[0].DetalleCursoPeriodo.Periodo.Subperiodo</p>
+        <p><strong>Curso: </strong>@Model.DetalleCursoperiodoAsignatura[0].DetalleCursoPeriodo.Curso.Nombre</p>
+    </div>
+    <div class="col-md-6">
+        <p><strong>Secci&oacute;n: </strong>@Model.DetalleCursoperiodoAsignatura[0].DetalleCursoPeriodo.Curso.Seccion</p>
+        <p><strong>Asignatura: </strong>@Model.DetalleCursoperiodoAsignatura[0].Asignatura.Nombre</p>
+    </div>
+</div>
+
+<h2>Estudiante</h2>
+
+<dl class="row">
+    @foreach (var item in Model.DetalleCursoperiodoAsignatura[0].Calificacion)
+    {
+                <dt class="col-sm-2 mb-3">
+            N&uacute;mero de orden
+        </dt>
+        <dd class="col-sm-10 mb-3">
+            @item.ApplicationUserEstudiante.DetalleEstudiante.NumerodeOrden
+        </dd>
+        <dt class="col-sm-2 mb-3">
+            Nombre Completo
+        </dt>
+        <dd class="col-sm-10 mb-3">
+            @(item.ApplicationUserEstudiante.Nombres 
+            + " " + 
+            item.ApplicationUserEstudiante.PrimerApellido 
+            + " " + 
+            item.ApplicationUserEstudiante.SegundoApellido)
+        </dd>
+    }
+    </dl>
+
+
+<form class="row" asp-action="AgregarEditarCalificacionAsignatura" method="post">
+        @if (Model.DetalleCursoperiodoAsignatura[0].Calificacion.Where(s => s.IdEstudiante == ViewBag.id2).Any()){
+            @foreach (var calificacion in Model.DetalleCursoperiodoAsignatura[0].Calificacion.Where(s => s.IdEstudiante == ViewBag.id2).DefaultIfEmpty())
+        {
+            <input asp-for="@calificacion.IdDetalleCursoPeriodoAsignatura" value="@ViewBag.id" hidden />
+            <input asp-for="@calificacion.IdEstudiante" value="@ViewBag.id2" hidden />
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="Calificación">Calificaci&oacute;n</label>
+                    <input type="text" asp-for="@calificacion.CalificacionTotal" value="@calificacion.CalificacionTotal" class="form-control" />
+                    <span asp-validation-for="@calificacion.CalificacionTotal" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="Observación">Observaci&oacute;n</label>
+                    <textarea asp-for="@calificacion.Observacion" class="form-control">@calificacion.Observacion</textarea>
+                    <span asp-validation-for="@calificacion.Observacion" class="text-danger"></span>
+                </div>
+            </div>
+        }
+    }
+<div class="form-group">
+    <input type="submit" class="btn btn-warning" value="Editar" asp-route-id="@ViewBag.id" asp-route-id2="@ViewBag.id2" />
+</div>
+    
+</form>
+
+<div class="row">
+    <a class="btn btn-primary" asp-action="CalificacionesAsignatura" asp-route-id="@ViewBag.id">Volver a la lista</a>
+</div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}

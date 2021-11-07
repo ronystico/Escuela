@@ -3,13 +3,13 @@
     ViewData["Title"] = "Calificaciones";
 }
 
-<h1>@ViewData["Title"]</h1>
+<h1 class="mb-3">@ViewData["Title"]</h1>
 
 <div class="row">
     <div class="col-md-6">
         <p><strong>Periodo: </strong>@Model[0].DetalleCursoPeriodo.Periodo.Nombre</p>
         <p><strong>Subperiodo: </strong>@Model[0].DetalleCursoPeriodo.Periodo.Subperiodo</p>
-        <p><strong>Curso: </strong> @Model[0].DetalleCursoPeriodo.Curso.Nombre</p>
+        <p><strong>Curso: </strong>@Model[0].DetalleCursoPeriodo.Curso.Nombre</p>
     </div>
     <div class="col-md-6">
         <p><strong>Secci&oacute;n: </strong>@Model[0].DetalleCursoPeriodo.Curso.Seccion</p>
@@ -18,12 +18,14 @@
 </div>
 
 <div class="row">
-        <div class="col-md-3 mb-2">
-            <a asp-action="AgregarEditarCalificacionesAsignatura" asp-route-id="@ViewBag.id" asp-area="Profesor" class="btn btn-primary">Agregar/Editar Calificaciones</a>
-        </div>
-        <div class="col-md-3">
-            <a class="btn btn-primary" asp-area="Profesor" asp-controller="Calificacion" asp-action="Inicio">Volver a Asignaturas</a>
-        </div>
+    @* <div class="col-md-3 mb-2">
+        <a asp-action="AgregarEditarCalificacionesAsignatura" asp-route-id="@ViewBag.id" asp-area="Profesor" class="btn
+        btn-primary">Agregar/Editar Calificaciones</a>
+        </div> *@
+    <div class="col-md-3">
+        <a class="btn btn-primary" asp-area="Profesor" asp-controller="Calificacion" asp-action="Inicio">Volver a
+            Asignaturas</a>
+    </div>
 </div>
 
 <table class="table table-striped mt-3">
@@ -39,29 +41,61 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var estudiante in Model[0].DetalleCursoPeriodo.DetalleEstudiante.OrderBy(s => s.NumerodeOrden))
-        {
-        <tr>
-            <td>@estudiante.NumerodeOrden</td>
-            <td>@(estudiante.ApplicationUser.Nombres + " " + estudiante.ApplicationUser.PrimerApellido + " " + estudiante.ApplicationUser.SegundoApellido)</td>
-            @if (!Model[0].Calificacion.Where(s => s.IdEstudiante == estudiante.UserId).Any())
+        @foreach (var calificacionRevisar in Model[0].Calificacion)
             {
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            }
-            @foreach (var calificacion in Model[0].Calificacion.Where(s => s.IdEstudiante == estudiante.UserId))
-            {
-                <td>@calificacion.CalificacionTotal</td>
-                <td>@calificacion.Observacion</td>
-                <td>@calificacion.FechaAsignada</td>
-                <td>@calificacion.FechaEditada</td>
+                if (!Model[0].DetalleCursoPeriodo.DetalleEstudiante.Any(s => s.UserId == calificacionRevisar.IdEstudiante))
+                {
+                    <tr>
+                        <td>@calificacionRevisar.ApplicationUserEstudiante.DetalleEstudiante.NumerodeOrden</td>
+                        <td>@(calificacionRevisar.ApplicationUserEstudiante.Nombres + " " +
+                calificacionRevisar.ApplicationUserEstudiante.PrimerApellido + " " +
+                calificacionRevisar.ApplicationUserEstudiante.SegundoApellido)</td>
+
+                        <td>@calificacionRevisar.CalificacionTotal</td>
+                        <td>@calificacionRevisar.Observacion</td>
+                        <td>@calificacionRevisar.FechaAsignada</td>
+                        <td>@calificacionRevisar.FechaEditada</td>
+                        <td>
+                            <a class="disabled">Agregar</a><br />
+                            <a asp-action="EditarCalificacion" asp-route-id="@ViewBag.id" asp-route-id2="@calificacionRevisar.IdEstudiante"
+                    asp-area="Profesor">Editar</a>
+                        </td>
+                    </tr>
+                }
             }
 
-        <td>
-            <a asp-action="AgregarEditarCalificacionAsignatura" asp-route-id="@ViewBag.id" asp-route-id2="@estudiante.UserId" asp-area="Profesor">Agregar/Editar</a>
-        </td>
+        @foreach (var estudiante in Model[0].DetalleCursoPeriodo.DetalleEstudiante.OrderBy(s => s.NumerodeOrden))
+        {
+            
+
+            <tr>
+                <td>@estudiante.NumerodeOrden</td>
+                <td>@(estudiante.ApplicationUser.Nombres + " " + estudiante.ApplicationUser.PrimerApellido + " " +
+                estudiante.ApplicationUser.SegundoApellido)</td>
+                @if (!Model[0].Calificacion.Where(s => s.IdEstudiante == estudiante.UserId).Any())
+                {
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <a asp-action="AgregarCalificacion" asp-route-id="@ViewBag.id" asp-route-id2="@estudiante.UserId"
+                    asp-area="Profesor">Agregar</a><br />
+                        <a class="disabled">Editar</a>
+                    </td>
+                }
+                @foreach (var calificacion in Model[0].Calificacion.Where(s => s.IdEstudiante == estudiante.UserId))
+                {
+                    <td>@calificacion.CalificacionTotal</td>
+                    <td>@calificacion.Observacion</td>
+                    <td>@calificacion.FechaAsignada</td>
+                    <td>@calificacion.FechaEditada</td>
+                    <td>
+                        <a class="disabled">Agregar</a><br />
+                        <a asp-action="EditarCalificacion" asp-route-id="@ViewBag.id" asp-route-id2="@estudiante.UserId"
+                    asp-area="Profesor">Editar</a>
+                    </td>
+                }
             </tr>
         }
 
