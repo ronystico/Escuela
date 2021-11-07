@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -6,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Escuela.Models
 {
     [Table("calificacion")]
-    public class Calificacion
+    public class Calificacion : IValidatableObject
     {
         [Key]
         [Column("id_calificacion")]
@@ -27,8 +28,19 @@ namespace Escuela.Models
         [Column("fecha_editada")]
         public DateTime FechaEditada { get; set; }
 
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if(FechaEditada < FechaAsignada)
+            {
+                yield return new ValidationResult(
+                    errorMessage: "FechaEditada debe ser mayor a FechaAsignada",
+                    memberNames: new[] { "FechaEditada" });
+            }
+        }
+
         [Column("calificacion_total")]
         [DisplayName("Calificación Total")]
+        [Range(0,100,ErrorMessage = "La calificación debe ser del 0 al 100")]
         public int CalificacionTotal { get; set; }
 
         [Column("observacion")]

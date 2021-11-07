@@ -19,8 +19,8 @@ namespace Escuela.Models
         public string Nombre { get; set; }
 
         [Column("seccion")]
-        [Required(ErrorMessage = "Falta el campo Seccion")]
-        [DisplayName("Secci�n")]
+        [Required(ErrorMessage = "Falta el campo Sección")]
+        [DisplayName("Sección")]
         [StringLength(10)]
         public string Seccion { get; set; }
 
