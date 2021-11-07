@@ -1,0 +1,28 @@
+@model IEnumerable<DetalleCursoPeriodo>
+@{
+    ViewData["Title"] = "Lista de Periodos/Cursos";
+}
+
+<h1 class="mb-3">@ViewData["Title"]</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Periodo/Subperiodo</th>
+            <th>Curso/Seccion</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var cursoPeriodo in Model)
+            {
+                <tr>
+                    <td>@(cursoPeriodo.Periodo.Nombre + " / " + cursoPeriodo.Periodo.Subperiodo)</td>
+                    <td>@(cursoPeriodo.Curso.Nombre + " / " + cursoPeriodo.Curso.Seccion)</td>
+                    <td>
+                        <a asp-action="CalificacionPeriodoCurso" asp-route-id="@cursoPeriodo.IdDetalleCursoPeriodo" asp-area="Estudiante">Seleccionar</a>
+                    </td>
+                </tr>
+            }
+    </tbody>
+</table>

@@ -1,0 +1,62 @@
+@model CalificacionPeriodoCursoViewModel
+@{
+    ViewData["Title"] = "Calificaciones";
+}
+
+<h1 class="mb-3">@ViewData["Title"]</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <p><strong>Periodo: </strong>@Model.DetalleCursoperiodoAsignatura[0].DetalleCursoPeriodo.Periodo.Nombre</p>
+        <p><strong>Subperiodo: </strong>@Model.DetalleCursoperiodoAsignatura[0].DetalleCursoPeriodo.Periodo.Subperiodo</p>
+    </div>
+    <div class="col-md-6">
+        <p><strong>Curso: </strong>@Model.DetalleCursoperiodoAsignatura[0].DetalleCursoPeriodo.Curso.Nombre</p>
+        <p><strong>Secci&oacute;n: </strong>@Model.DetalleCursoperiodoAsignatura[0].DetalleCursoPeriodo.Curso.Seccion</p>
+    </div>
+</div>
+
+<div class="row">
+        <div class="col-md-3">
+            <a class="btn btn-primary" asp-area="Estudiante" asp-controller="Calificaciones" asp-action="Inicio">Volver atr&aacute;s</a>
+        </div>
+</div>
+
+<table class="table table-striped mt-3">
+    <thead>
+        <tr>
+            <th>Asignatura</th>
+            <th>Calificaci&oacute;n</th>
+            <th>Observaci&oacute;n</th>
+            <th>Nombre Profesor</th>
+            <th>Fecha Asignada</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var asignaturas in Model.DetalleCursoperiodoAsignatura)
+        {
+        <tr>
+            <td>@asignaturas.Asignatura.Nombre</td>
+            @if (!Model.Calificacion.Where(s => s.IdEstudiante == ViewBag.id2 &&
+            s.IdDetalleCursoPeriodoAsignatura == asignaturas.IdDetalleCursoperiodoAsignatura).Any())
+            {
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            }
+            @foreach (var calificacion in Model.Calificacion.Where(s => s.IdEstudiante == ViewBag.id2
+            && s.IdDetalleCursoPeriodoAsignatura == asignaturas.IdDetalleCursoperiodoAsignatura))
+            {
+                <td>@calificacion.CalificacionTotal</td>
+                <td>@calificacion.Observacion</td>
+                <td>@(calificacion.ApplicationUserProfesor.Nombres + " " + 
+                    calificacion.ApplicationUserProfesor.PrimerApellido + " " +
+                    calificacion.ApplicationUserProfesor.SegundoApellido)</td>
+                <td>@calificacion.FechaAsignada</td>
+            }
+            </tr>
+        }
+
+    </tbody>
+</table>
