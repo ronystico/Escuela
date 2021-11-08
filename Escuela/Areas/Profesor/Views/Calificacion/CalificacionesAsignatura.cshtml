@@ -18,15 +18,17 @@
 </div>
 
 <div class="row">
-    @* <div class="col-md-3 mb-2">
-        <a asp-action="AgregarEditarCalificacionesAsignatura" asp-route-id="@ViewBag.id" asp-area="Profesor" class="btn
-        btn-primary">Agregar/Editar Calificaciones</a>
-        </div> *@
-    <div class="col-md-3">
+    
+    <div class="col-md-3 mb-2">
         <a class="btn btn-primary" asp-area="Profesor" asp-controller="Calificacion" asp-action="Inicio">Volver a
             Asignaturas</a>
     </div>
+    <div class="col-md-3">
+        <a asp-action="AgregarEditarCalificacionesAsignatura" asp-route-id="@ViewBag.id" asp-area="Profesor" class="btn
+        btn-primary">Agregar/Editar Calificaciones</a>
+        </div>
 </div>
+
 
 <table class="table table-striped mt-3">
     <thead>

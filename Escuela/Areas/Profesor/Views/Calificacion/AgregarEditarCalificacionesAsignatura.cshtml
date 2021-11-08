@@ -3,23 +3,43 @@
     ViewData["Title"] = "Agregar/Editar Calificaciones";
 }
 
-<h1>@ViewData["Title"]</h1>
+<h1 class="mb-3">@ViewData["Title"]</h1>
 
 <div class="row">
     <div class="col-md-6">
-        <p><strong>Periodo: </strong>@Model.DetalleCursoperiodoAsignatura[0].DetalleCursoPeriodo.Periodo.Nombre</p>
-        <p><strong>Subperiodo: </strong>@Model.DetalleCursoperiodoAsignatura[0].DetalleCursoPeriodo.Periodo.Subperiodo
-        </p>
-        <p><strong>Curso: </strong>@Model.DetalleCursoperiodoAsignatura[0].DetalleCursoPeriodo.Curso.Nombre</p>
+        <p><strong>Periodo: </strong>@Model.DetalleCursoperiodoAsignatura.DetalleCursoPeriodo.Periodo.Nombre</p>
+        <p><strong>Subperiodo: </strong>@Model.DetalleCursoperiodoAsignatura.DetalleCursoPeriodo.Periodo.Subperiodo</p>
+        <p><strong>Curso: </strong>@Model.DetalleCursoperiodoAsignatura.DetalleCursoPeriodo.Curso.Nombre</p>
     </div>
     <div class="col-md-6">
-        <p><strong>Secci&oacute;n: </strong>@Model.DetalleCursoperiodoAsignatura[0].DetalleCursoPeriodo.Curso.Seccion
-        </p>
-        <p><strong>Asignatura: </strong>@Model.DetalleCursoperiodoAsignatura[0].Asignatura.Nombre</p>
+        <p><strong>Secci&oacute;n: </strong>@Model.DetalleCursoperiodoAsignatura.DetalleCursoPeriodo.Curso.Seccion</p>
+        <p><strong>Asignatura: </strong>@Model.DetalleCursoperiodoAsignatura.Asignatura.Nombre</p>
     </div>
 </div>
 
-<form asp-action="AgregarEditarCalificacionesAsignatura" method="post" class="row">
+<div class="row">
+    <div class="col-md-3 mb-3">
+        <a class="btn btn-primary" asp-area="Profesor" asp-action="CalificacionesAsignatura" asp-route-id="@ViewBag.id"
+            asp-action="Inicio">Volver a
+            Calificaciones</a>
+    </div>
+    <div class="col-md-3">
+        <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">Ayuda</a>
+    </div>
+</div>
+
+<p>
+  
+</p>
+<div class="collapse" id="collapseExample">
+  <div class="card card-body">
+    Si desea asignar una calificaci&oacute;n m&aacute;s tarde, deje el valor en 0
+    <br>
+    Si realmente desea asignar 0 a un estudiante, busque al estudiante y use el bot&oacute;n Agregar desde la lista de calificaciones
+  </div>
+</div>
+
+<form asp-action="AgregarEditarCalificacionesAsignatura" method="post">
     <table class="table table-striped mt-3">
         <thead>
             <tr>
@@ -31,62 +51,81 @@
         </thead>
         <tbody>
             @{
-                int i = 0;
+                int estudiante = 0;
             }
-            @foreach (var estudiante in
-            Model.DetalleCursoperiodoAsignatura[0].DetalleCursoPeriodo.DetalleEstudiante.OrderBy(s => s.NumerodeOrden))
+            @for (int iterator = 0; iterator < Model.Calificacion.Count; iterator++)
             {
-                <tr>
-                    <td>@estudiante.NumerodeOrden</td>
-                    <td>@(estudiante.ApplicationUser.Nombres + " " + estudiante.ApplicationUser.PrimerApellido + " " +
-                    estudiante.ApplicationUser.SegundoApellido)</td>
+                if (!Model.DetalleCursoperiodoAsignatura.DetalleCursoPeriodo.DetalleEstudiante.Any(s => s.UserId == Model.Calificacion[iterator].IdEstudiante))
+                {
+                    <tr>
+                        <td>@Model.Calificacion[iterator].ApplicationUserEstudiante.DetalleEstudiante.NumerodeOrden</td>
+                        <td>@(Model.Calificacion[iterator].ApplicationUserEstudiante.Nombres + " " +
+                    Model.Calificacion[iterator].ApplicationUserEstudiante.PrimerApellido + " " +
+                    Model.Calificacion[iterator].ApplicationUserEstudiante.SegundoApellido)</td>
 
-                    @if (!Model.DetalleCursoperiodoAsignatura[0].Calificacion.Where(s => s.IdEstudiante ==
-                   estudiante.UserId).Any())
-                    {
-                        <input asp-for="@Model.Calificacion[i].IdDetalleCursoPeriodoAsignatura" value="@ViewBag.id" hidden />
-                        <input asp-for="@Model.Calificacion[i].IdEstudiante" value="@estudiante.UserId" hidden />
-                        <td><input type="text" asp-for="@Model.Calificacion[i].CalificacionTotal" value="" class="form-control" />
-                        <span asp-validation-for="@Model.Calificacion[i].CalificacionTotal" class="text-danger"></span>
+                        <td>
+                        <input asp-for="@Model.Calificacion[estudiante].CalificacionTotal" value="@Model.Calificacion[iterator].CalificacionTotal" class="form-control" />
+                        <span asp-validation-for="@Model.Calificacion[estudiante].CalificacionTotal" class="text-danger"></span>
                         </td>
 
-                        <td><input type="text" asp-for="@Model.Calificacion[i].Observacion"
-                        class="form-control" />
-                        <span asp-validation-for="@Model.Calificacion[i].Observacion" class="text-danger"></span></td>
-                        i++;
-                    }
-                    else
+                        <td>
+                        <input asp-for="@Model.Calificacion[estudiante].Observacion" value="@Model.Calificacion[iterator].Observacion" class="form-control" />
+                        <span asp-validation-for="@Model.Calificacion[estudiante].Observacion" class="text-danger"></span>
+                        <input asp-for="@Model.Calificacion[estudiante].IdEstudiante" hidden />
+                        </td>
+                    </tr>
+                    estudiante++;
+                }
+            }
+
+            @for (int iterator1 = 0, iteratorCalificacionNueva = 0; iterator1 < Model.DetalleEstudiante.Count; iterator1++)
+            {
+                <tr>
+                    
+                    @if (!Model.Calificacion.Where(s => s.IdEstudiante == Model.DetalleEstudiante[iterator1].UserId).Any())
                     {
-                        @foreach (var calificacion in Model.DetalleCursoperiodoAsignatura[0].Calificacion.Where(s =>
-                       s.IdEstudiante == estudiante.UserId).DefaultIfEmpty())
-                        {
-                            <input asp-for="@Model.Calificacion[i].IdDetalleCursoPeriodoAsignatura" value="@ViewBag.id" hidden />
-                            <input asp-for="@Model.Calificacion[i].IdEstudiante" value="@ViewBag.id2" hidden />
+                        <td>@Model.DetalleEstudiante[iterator1].NumerodeOrden</td>
+                    <td>@(Model.DetalleEstudiante[iterator1].ApplicationUser.Nombres + " " + Model.DetalleEstudiante[iterator1].ApplicationUser.PrimerApellido + " " +
+                    Model.DetalleEstudiante[iterator1].ApplicationUser.SegundoApellido)</td>
+                        <td>
+                        <input asp-for="@Model.CalificacionNueva[iteratorCalificacionNueva].CalificacionTotal" class="form-control" />
+                        <span asp-validation-for="@Model.CalificacionNueva[iteratorCalificacionNueva].CalificacionTotal" class="text-danger"></span>
+                        </td>
 
-                            <td><input type="text" asp-for="@Model.Calificacion[i].CalificacionTotal" value="@calificacion.CalificacionTotal"
-                        class="form-control" />
-                            <span asp-validation-for="@Model.Calificacion[i].CalificacionTotal" class="text-danger"></span></td>
+                        <td>
+                        <input asp-for="@Model.CalificacionNueva[iteratorCalificacionNueva].Observacion" class="form-control" />
+                        <span asp-validation-for="@Model.CalificacionNueva[iteratorCalificacionNueva].Observacion" class="text-danger"></span>
+                        <input asp-for="@Model.CalificacionNueva[iteratorCalificacionNueva].IdEstudiante" value="@Model.DetalleEstudiante[iterator1].UserId" hidden />
+                        </td>
+                        iteratorCalificacionNueva++;
+                    }
+                    else{
+                        <td>@Model.Calificacion[estudiante].ApplicationUserEstudiante.DetalleEstudiante.NumerodeOrden</td>
+                    <td>@(Model.Calificacion[estudiante].ApplicationUserEstudiante.Nombres + " " + Model.Calificacion[estudiante].ApplicationUserEstudiante.PrimerApellido + " " +
+                    Model.Calificacion[estudiante].ApplicationUserEstudiante.SegundoApellido)</td>
+                        <td>
+                        <input asp-for="@Model.Calificacion[estudiante].CalificacionTotal"  class="form-control" />
+                        <span asp-validation-for="@Model.Calificacion[estudiante].CalificacionTotal" class="text-danger"></span>
+                        </td>
 
-                            <td><input type="text" asp-for="@Model.Calificacion[i].Observacion"
-                        class="form-control" value="@calificacion.Observacion" />
-                            <span asp-validation-for="@Model.Calificacion[i].Observacion" class="text-danger"></span></td>
-                            i++;
-                        }
+                        <td>
+                        <input asp-for="@Model.Calificacion[estudiante].Observacion" class="form-control" />
+                        <span asp-validation-for="@Model.Calificacion[estudiante].Observacion" class="text-danger"></span>
+                        <input asp-for="@Model.Calificacion[estudiante].IdEstudiante" hidden />
+                        </td>
+                        estudiante++;
                     }
                 </tr>
             }
-        </tbody>
+        </tbody>                        
     </table>
+
     <div class="form-group">
-        <input type="submit" class="btn btn-primary" asp-route-id="@ViewBag.id" value="Agregar/Editar" />
+        <input type="submit" asp-route-id="@ViewBag.id" class="btn btn-primary" value="Guardar" />
     </div>
 
 </form>
 
-<div class="row">
-    <a class="btn btn-primary" asp-action="CalificacionesAsignatura" asp-route-id="@ViewBag.id">Volver a la lista</a>
-</div>
-
 @section Scripts{
-<partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial" />
 }

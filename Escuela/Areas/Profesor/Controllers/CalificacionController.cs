@@ -82,7 +82,7 @@ namespace Escuela.Controllers
             {
                 return NotFound();
             }
-            
+
             ViewBag.id = id;
             ViewBag.id2 = id2;
 
@@ -127,7 +127,7 @@ namespace Escuela.Controllers
                     {
                         IdEstudiante = calificacion.IdEstudiante,
                         IdProfesor = profesor.Id,
-                        IdDetalleCursoPeriodoAsignatura = calificacion.IdDetalleCursoPeriodoAsignatura,
+                        IdDetalleCursoPeriodoAsignatura = id,
                         FechaAsignada = DateTime.Now,
                         CalificacionTotal = calificacion.CalificacionTotal,
                         Observacion = calificacion.Observacion,
@@ -191,7 +191,7 @@ namespace Escuela.Controllers
                 if (_data.Calificacion.Any(s => s.IdDetalleCursoPeriodoAsignatura == calificacion.IdDetalleCursoPeriodoAsignatura
              && s.IdEstudiante == calificacion.IdEstudiante))
                 {
-                    var calificacionActual = await _data.Calificacion.Where(s => s.IdDetalleCursoPeriodoAsignatura == calificacion.IdDetalleCursoPeriodoAsignatura
+                    var calificacionActual = await _data.Calificacion.Where(s => s.IdDetalleCursoPeriodoAsignatura == id
                 && s.IdEstudiante == calificacion.IdEstudiante).FirstOrDefaultAsync();
 
                     var usuario = _signInManager.Context.User.Identity.Name;
@@ -224,30 +224,117 @@ namespace Escuela.Controllers
 
         public async Task<IActionResult> AgregarEditarCalificacionesAsignatura(int id)
         {
+            if (id == 0)
+            {
+                return NotFound();
+            }
             ViewBag.id = id;
 
-            var detalleAsignaturas = await detalleCursoperiodoAsignaturasAsync(id);
-            var detallesListos = new AgregarEditarCalificacionesViewModel
+            var detalleAsignaturas = await agregarEditarCalificacionesAsync(id);
+            var calificacionesNuevas = new List<Calificacion>();
+
+            foreach (var calificacionNueva in detalleAsignaturas.DetalleCursoPeriodo.DetalleEstudiante)
+            {
+                calificacionesNuevas.Add(new Calificacion());
+            }
+
+            var asignaturasListas = new AgregarEditarCalificacionesViewModel
             {
                 DetalleCursoperiodoAsignatura = detalleAsignaturas,
-                Calificacion = new List<Calificacion>(){
-                    new Calificacion{
-
-                    }
-                }
+                DetalleEstudiante = detalleAsignaturas.DetalleCursoPeriodo.DetalleEstudiante.OrderBy(s => s.NumerodeOrden).ToList(),
+                Calificacion = detalleAsignaturas.Calificacion.ToList(),
+                CalificacionNueva = calificacionesNuevas
             };
 
-            return View(detallesListos);
+            return View(asignaturasListas);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AgregarEditarCalificacionesAsignatura(int id, AgregarEditarCalificacionesViewModel klkylodato2)
+        public async Task<IActionResult> AgregarEditarCalificacionesAsignatura(int id, AgregarEditarCalificacionesViewModel calificaciones)
         {
+            if (id == 0)
+            {
+                return NotFound();
+            }
+
             ViewBag.id = id;
 
-            var detalleAsignaturas = await detalleCursoperiodoAsignaturasAsync(id);
+            //
 
-            return View(detalleAsignaturas);
+            if (ModelState.IsValid)
+            {
+                var calificacionesNuevasModelo = new List<Calificacion>();
+
+                var usuario = _signInManager.Context.User.Identity.Name;
+                var profesor = await _userManager.FindByNameAsync(usuario);
+
+                // comienzo calificaciones nuevas
+                if (calificaciones.CalificacionNueva != null)
+                {
+                    foreach (var calificacion in calificaciones.CalificacionNueva)
+                    {
+                        if (!_data.Calificacion.Any(s => s.IdDetalleCursoPeriodoAsignatura == id
+                 && s.IdEstudiante == calificacion.IdEstudiante) && calificacion.CalificacionTotal != 0)
+                        {
+                            calificacionesNuevasModelo.Add(new Calificacion
+                            {
+                                IdEstudiante = calificacion.IdEstudiante,
+                                IdProfesor = profesor.Id,
+                                IdDetalleCursoPeriodoAsignatura = id,
+                                FechaAsignada = DateTime.Now,
+                                CalificacionTotal = calificacion.CalificacionTotal,
+                                Observacion = calificacion.Observacion,
+                                FechaEditada = DateTime.Now
+                            });
+                        }
+                    }
+                    await _data.Calificacion.AddRangeAsync(calificacionesNuevasModelo);
+                    await _data.SaveChangesAsync();
+                }
+                // fin calificaciones nuevas
+
+                // comienzo calificaciones editar
+                if (calificaciones.Calificacion != null)
+                {
+                    foreach (var calificacion in calificaciones.Calificacion)
+                    {
+                        if (_data.Calificacion.Any(s => s.IdDetalleCursoPeriodoAsignatura == id
+                     && s.IdEstudiante == calificacion.IdEstudiante))
+                        {
+                            var calificacionActual = await _data.Calificacion.Where(s => s.IdDetalleCursoPeriodoAsignatura == id
+                        && s.IdEstudiante == calificacion.IdEstudiante).FirstOrDefaultAsync();
+
+                            calificacionActual.IdProfesor = profesor.Id;
+                            calificacionActual.CalificacionTotal = calificacion.CalificacionTotal;
+                            calificacionActual.Observacion = calificacion.Observacion;
+                            calificacionActual.FechaEditada = DateTime.Now;
+                            _data.Calificacion.Update(calificacionActual);
+                        }
+                    }
+                    await _data.SaveChangesAsync();
+                }
+                // fin calificaciones editar
+
+                return RedirectToAction("CalificacionesAsignatura", new { id = id });
+            }
+
+            var detalleAsignaturas = await agregarEditarCalificacionesAsync(id);
+            var calificacionesNuevas = new List<Calificacion>();
+
+            foreach (var calificacionNueva in detalleAsignaturas.DetalleCursoPeriodo.DetalleEstudiante)
+            {
+                calificacionesNuevas.Add(new Calificacion());
+            }
+
+            var asignaturasListas = new AgregarEditarCalificacionesViewModel
+            {
+                DetalleCursoperiodoAsignatura = detalleAsignaturas,
+                DetalleEstudiante = detalleAsignaturas.DetalleCursoPeriodo.DetalleEstudiante.ToList(),
+                Calificacion = detalleAsignaturas.Calificacion.ToList(),
+                CalificacionNueva = calificacionesNuevas
+            };
+
+            return View(asignaturasListas);
         }
 
         private async Task<List<DetalleCursoperiodoAsignatura>> detalleCursoperiodoAsync(int id)
@@ -260,6 +347,26 @@ namespace Escuela.Controllers
                 .ThenInclude(s => s.Periodo)
                 .Where(s => s.IdDetalleCursoperiodoAsignatura == id)
                 .ToListAsync();
+        }
+
+        private async Task<DetalleCursoperiodoAsignatura> agregarEditarCalificacionesAsync(int id)
+        {
+            return await _data.DetalleCursoperiodoAsignatura
+                .Include(s => s.Asignatura)
+                .Include(s => s.DetalleCursoPeriodo)
+                .ThenInclude(s => s.Curso)
+                .Include(s => s.DetalleCursoPeriodo)
+                .ThenInclude(s => s.Periodo)
+                .Include(s => s.DetalleCursoPeriodo)
+                .ThenInclude(s => s.DetalleEstudiante)
+                .ThenInclude(s => s.ApplicationUser)
+                .Include(s => s.Calificacion)
+                .ThenInclude(s => s.ApplicationUserEstudiante)
+                .ThenInclude(s => s.DetalleEstudiante)
+                .Include(s => s.Calificacion)
+                .ThenInclude(s => s.ApplicationUserProfesor)
+                .Where(s => s.IdDetalleCursoperiodoAsignatura == id)
+                .FirstOrDefaultAsync();
         }
 
         private async Task<List<DetalleCursoperiodoAsignatura>> detalleCursoperiodoAsignaturasAsync(int id)
