@@ -1,5 +1,6 @@
 ﻿using Escuela.Data;
 using Escuela.Models;
+using Escuela.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -30,11 +31,24 @@ namespace Escuela.Controllers
         [AllowAnonymous]
         public IActionResult Inicio()
         {
-            return View();
+            var imagenesActuales = _data.Carousel.OrderBy(s => s.IdImagen).ToList();
+            ViewBag.idnuevo = imagenesActuales.Count + 1;
+            var imagenesActualesModelo = new List<InicioCarouselViewModel>();
+            foreach (var imagenActual in imagenesActuales)
+            {
+                imagenesActualesModelo.Add(new InicioCarouselViewModel
+                {
+                    IdCarousel = imagenActual.IdCarousel,
+                    IdImagen = imagenActual.IdImagen,
+                    Imagen = imagenActual.Imagen
+                });
+            }
+            return View(imagenesActualesModelo);
         }
-        
+
         [AllowAnonymous]
-        public IActionResult Acercade(){
+        public IActionResult Acercade()
+        {
             return View();
         }
 

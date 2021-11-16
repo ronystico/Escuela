@@ -1,36 +1,36 @@
-﻿@{
+﻿@model List<InicioCarouselViewModel>
+@{
     ViewData["Title"] = "Inicio";
 }
 
-<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+<div id="carouselIndicators" class="carousel slide" data-ride="carousel">
     <ol class="carousel-indicators">
-        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+        @{
+            bool primerIndicador = true;
+        }
+        @foreach (var indicador in Model)
+        {
+            <li data-target="#carouselIndicators" data-slide-to="@indicador.IdImagen" class="@(primerIndicador ? Html.Raw("active") : Html.Raw(""))"></li>
+            primerIndicador = false;
+        }
     </ol>
     <div class="carousel-inner">
-        <div class="carousel-item active">
-            <a href="https://pixabay.com/photos/snow-covered-mountains-snow-alps-1209595/" target="_blank">
-                <img class="d-block w-100" src="~/carouselimages/1.jpg" alt="Primera Diapositiva">
-            </a>
-            
+        @{
+            bool primerImagen = true;
+        }
+        @foreach (var imagen in Model)
+        {
+            <div class="carousel-item @(primerImagen ? Html.Raw("active") : Html.Raw(""))">
+            <img class="d-block w-100" src="data:image/jpg;base64,@Convert.ToBase64String(imagen.Imagen)" alt="Diapositiva @imagen.IdImagen">
         </div>
-        <div class="carousel-item">
-            <a href="https://pixabay.com/photos/snow-covered-mountains-snow-alps-1209595/" target="_blank">
-                <img class="d-block w-100" src="~/carouselimages/2.jpg" alt="Segunda Diapositiva">
-                </a>
-        </div>
-        <div class="carousel-item">
-            <a href="https://pixabay.com/photos/snow-covered-mountains-snow-alps-1209595/" target="_blank">
-                <img class="d-block w-100" src="~/carouselimages/3.jpg" alt="Tercera Diapositiva">
-            </a>
-        </div>
+        primerImagen = false;
+        }
     </div>
-    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+    <a class="carousel-control-prev" href="#carouselIndicators" role="button" data-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="sr-only">Anterior</span>
     </a>
-    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+    <a class="carousel-control-next" href="#carouselIndicators" role="button" data-slide="next">
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="sr-only">Siguiente</span>
     </a>

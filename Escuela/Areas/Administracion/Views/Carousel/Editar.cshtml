@@ -1,0 +1,31 @@
+@model InicioCarouselViewModel
+@{
+    ViewData["Title"] = "Editar Imagen";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>Va a editar la imagen n&uacute;mero: @ViewBag.imagenactual</p>
+<p>Formatos admitidos: .jpg .jpeg .png</p>
+<hr>
+
+<div>
+    <p>Vista Previa</p>
+    <img src="data:image/jpg;base64,@Convert.ToBase64String(@Model.Imagen)" class="img-thumbnail h-25 w-25" />
+</div>
+
+<form enctype="multipart/form-data" method="post">
+<div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="Imagen"></label>
+        <input type="file" asp-for="ImagenParaSubir" class="form-control-file" />
+        <span asp-validation-for="ImagenParaSubir" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input asp-page-handler="Editar" asp-route-id="@ViewBag.imagenactual" type="submit" value="Editar" class="btn btn-warning" />
+    </div>
+</form>
+
+<div>
+    <a asp-action="Inicio" class="btn btn-primary">Volver a la lista</a>
+</div>
