@@ -84,7 +84,7 @@ namespace Escuela.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Usuario, Input.Clave, Input.Recordarme, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("Un usuario inició sesión");
+                    _logger.LogInformation($"El usuario {Input.Usuario} iniciï¿½ sesiï¿½n");
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
@@ -98,7 +98,7 @@ namespace Escuela.Areas.Identity.Pages.Account
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Inicio de sesión inválido");
+                    ModelState.AddModelError(string.Empty, "Inicio de sesiï¿½n invï¿½lido");
                     return Page();
                 }
             }
