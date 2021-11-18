@@ -80,6 +80,13 @@ namespace Escuela.Data
                     NormalizedName = "Estudiante".ToUpper()
                 });
 
+            modelBuilder.Entity<CategoriaNoticia>().HasData(
+                new CategoriaNoticia{
+                    IdCategoriaNoticia = 1,
+                    Nombre = "General"
+                }
+            );
+
             var hasher = new PasswordHasher<ApplicationUser>();
 
             modelBuilder.Entity<ApplicationUser>().HasData(
