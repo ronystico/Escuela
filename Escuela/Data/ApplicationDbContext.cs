@@ -25,6 +25,7 @@ namespace Escuela.Data
         public DbSet<DetalleCursoPeriodo> DetalleCursoPeriodo { get; set; }
         public DbSet<Calificacion> Calificacion { get; set; }
         public DbSet<Carousel> Carousel { get; set; }
+        public DbSet<CategoriaNoticia> CategoriaNoticia { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

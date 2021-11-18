@@ -1,0 +1,24 @@
+@model Escuela.Models.CategoriaNoticia
+
+@{
+    ViewData["Title"] = "Eliminar Categoría Noticia";
+}
+
+<h3>¿Desea eliminar la siguiente categor&iacute;a de Noticia?</h3>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Nombre)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Nombre)
+        </dd>
+    </dl>
+    
+    <form asp-action="Eliminar">
+        <input type="hidden" asp-for="IdCategoriaNoticia" />
+        <input type="submit" value="Eliminar" asp-route-id="@Model.IdCategoriaNoticia" class="btn btn-danger mb-3" /><br>
+        <a class="btn btn-primary" asp-action="Inicio">Volver a la lista</a>
+    </form>
+</div>
