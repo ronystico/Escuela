@@ -1,0 +1,67 @@
+@model IEnumerable<Escuela.Models.Noticia>
+
+@{
+    ViewData["Title"] = "Lista de Noticias";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>
+    <a class="btn btn-primary" asp-action="Agregar">Agregar</a>
+</p>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Titulo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cuerpo)
+            </th>
+            <th>
+                Categor&iacute;a
+            </th>
+            <th>
+                Autor
+            </th>
+            <th>
+                Fecha de Publicaci&oacute;n
+            </th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @item.Titulo
+            </td>
+            <td>
+                <p class="texto-truncado-5">@item.Cuerpo</p>
+            </td>
+            <td>
+                @item.CategoriaNoticia.Nombre
+            </td>
+            <td>
+                @(item.ApplicationUser.Nombres + " " +
+                item.ApplicationUser.PrimerApellido + " " +
+                item.ApplicationUser.SegundoApellido)
+            </td>
+            <td>
+                @item.FechaPublicacion
+            </td>
+            <td>
+                <a class="btn-group" target="_blank" asp-action="Detalles" asp-route-id="@item.IdNoticia">Detalles <i class="fas fa-external-link-alt"></i></a>
+                <br>
+                <a asp-action="Editar" asp-route-id="@item.IdNoticia">Editar</a><br>
+                <a asp-action="Eliminar" asp-route-id="@item.IdNoticia">Eliminar</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+@section css{
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link href="~/css/all.css" rel="stylesheet" />
+}

@@ -10,7 +10,8 @@
         }
         @foreach (var indicador in Model)
         {
-            <li data-target="#carouselIndicators" data-slide-to="@indicador.IdImagen" class="@(primerIndicador ? Html.Raw("active") : Html.Raw(""))"></li>
+            <li data-target="#carouselIndicators" data-slide-to="@indicador.IdImagen"
+            class="@(primerIndicador ? Html.Raw("active") : Html.Raw(""))"></li>
             primerIndicador = false;
         }
     </ol>
@@ -21,9 +22,10 @@
         @foreach (var imagen in Model)
         {
             <div class="carousel-item @(primerImagen ? Html.Raw("active") : Html.Raw(""))">
-            <img class="d-block w-100" src="data:image/jpg;base64,@Convert.ToBase64String(imagen.Imagen)" alt="Diapositiva @imagen.IdImagen">
-        </div>
-        primerImagen = false;
+                <img class="d-block w-100" src="data:image/jpg;base64,@Convert.ToBase64String(imagen.Imagen)"
+                alt="Diapositiva @imagen.IdImagen">
+            </div>
+            primerImagen = false;
         }
     </div>
     <a class="carousel-control-prev" href="#carouselIndicators" role="button" data-slide="prev">
@@ -35,3 +37,53 @@
         <span class="sr-only">Siguiente</span>
     </a>
 </div>
+
+<p class="h1 mt-3 mb-2"><strong>&Uacute;ltimas Noticias <i class="far fa-newspaper"></i></strong></p>
+<hr>
+<div class="row">
+    @foreach (var noticia in ViewBag.noticias)
+    {
+        <div class="col-md-4 mb-3">
+            <a asp-action="Noticias" asp-route-id="@noticia.IdNoticia" class="text-dark h2">
+                @noticia.Titulo
+                </a>
+            <div class="texto-truncado-5 mb-2">
+                @noticia.Cuerpo
+            </div>
+            <small class="text-muted">Categor&iacute;a: @noticia.CategoriaNoticia.Nombre <br>
+                Autor: @(noticia.ApplicationUser.Nombres + " " +
+                noticia.ApplicationUser.PrimerApellido + " " +
+                noticia.ApplicationUser.SegundoApellido) <br>
+                Fecha de Publicaci&oacute;n: @noticia.FechaPublicacion</small>
+        </div>
+    }
+</div>
+
+<p class="h1 mt-3 mb-2"><strong>Caracter&iacute;sticas del sitio</strong></p>
+<hr>
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <p class="h2">Revisa tus Calificaciones <i class="fas fa-school"></i></p>
+        <p>
+            Revisa r&aacute;pidamente tu situaci&oacute;n acad&eacute;mica con las
+            observaciones incluidas junto a las calificaciones. Se acabaron los
+            largos viajes hacia la escuela para conocer esa informaci&oacute;n.
+            Puedes consultar esa informaci&oacute;n desde tus dispositivos.
+        </p>
+    </div>
+    <div class="col-md-6 mb-3">
+        <p class="h2">Ent&eacute;rate de Noticias <i class="fas fa-newspaper"></i></p>
+        <p>
+            ¿Cansado(a) de leer papeles con notificaciones de la escuela? ¿Tienes
+            estr&eacute;s por escuchar un rumor y no saber si es cierto? ¡Revisa la
+            secci&oacute;n &uacute;ltimas noticias de esta p&aacute;gina de inicio
+            o ve al enlace <a asp-action="Noticias">noticias</a> de la barra de
+            navegaci&oacute;n.
+        </p>
+    </div>
+</div>
+
+@section css{
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/all.css" />
+}

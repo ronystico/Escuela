@@ -4,6 +4,7 @@ using Escuela.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -32,6 +33,14 @@ namespace Escuela.Controllers
         public IActionResult Inicio()
         {
             var imagenesActuales = _data.Carousel.OrderBy(s => s.IdImagen).ToList();
+            ViewBag.noticias = _data.Noticia
+            .Include(s => s.CategoriaNoticia)
+            .Include(s => s.ApplicationUser)
+            .AsNoTracking()
+            .OrderByDescending(s => s.FechaPublicacion)
+            .Take(3)
+            .ToList();
+            
             ViewBag.idnuevo = imagenesActuales.Count + 1;
             var imagenesActualesModelo = new List<InicioCarouselViewModel>();
             foreach (var imagenActual in imagenesActuales)
@@ -40,7 +49,7 @@ namespace Escuela.Controllers
                 {
                     IdCarousel = imagenActual.IdCarousel,
                     IdImagen = imagenActual.IdImagen,
-                    Imagen = imagenActual.Imagen
+                    Imagen = imagenActual.Imagen,
                 });
             }
             return View(imagenesActualesModelo);

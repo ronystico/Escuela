@@ -1,0 +1,61 @@
+@model Escuela.Models.Noticia
+
+@{
+    ViewData["Title"] = "Eliminar Noticia";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<span class="text-danger">¿Desea eliminar la siguiente noticia?</span>
+
+<div class="row">
+    <div class="col-md-6">
+        <dl class="row">
+            <dt class="col-sm-4">
+                Categor&iacute;a
+            </dt>
+            <dd class="col-sm-8">
+                @Model.CategoriaNoticia.Nombre
+            </dd>
+            <dt class="col-sm-4">
+                T&iacute;tulo
+            </dt>
+            <dd class="col-sm-8">
+                @Model.Titulo
+            </dd>
+            <dt class="col-sm-4">
+                Cuerpo
+            </dt>
+            <dd class="col-sm-8">
+                @Model.Cuerpo
+            </dd>
+            <dt class="col-sm-4">
+                Autor
+            </dt>
+            <dd class="col-sm-8">
+                @(Model.ApplicationUser.Nombres + " " +
+                Model.ApplicationUser.PrimerApellido + " " +
+                Model.ApplicationUser.SegundoApellido)
+            </dd>
+            <dt class="col-sm-4">
+                Fecha de Publicaci&oacute;n
+            </dt>
+            <dd class="col-sm-8">
+                @Model.FechaPublicacion
+            </dd>
+        </dl>
+
+<form asp-action="Editar" method="post">
+    <div class="form-group">
+        <input asp-for="IdNoticia" value="@Model.IdNoticia" hidden />
+        <input type="submit" class="btn btn-danger" value="Eliminar" asp-route-id="@Model.IdNoticia">
+    </div>
+</form>
+
+<div>
+    <a class="btn btn-primary" asp-action="Inicio">Volver a la lista</a>
+</div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}
