@@ -38,7 +38,6 @@
             <th>Calificaci&oacute;n</th>
             <th>Observaci&oacute;n</th>
             <th>Fecha Asignada</th>
-            <th>Fecha Editada</th>
             <th>Acciones</th>
         </tr>
     </thead>
@@ -56,7 +55,6 @@
                         <td>@calificacionRevisar.CalificacionTotal</td>
                         <td>@calificacionRevisar.Observacion</td>
                         <td>@calificacionRevisar.FechaAsignada</td>
-                        <td>@calificacionRevisar.FechaEditada</td>
                         <td>
                             <a class="disabled">Agregar</a><br />
                             <a asp-action="EditarCalificacion" asp-route-id="@ViewBag.id" asp-route-id2="@calificacionRevisar.IdEstudiante"
@@ -79,7 +77,6 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td></td>
                     <td>
                         <a asp-action="AgregarCalificacion" asp-route-id="@ViewBag.id" asp-route-id2="@estudiante.UserId"
                     asp-area="Profesor">Agregar</a><br />
@@ -91,7 +88,6 @@
                     <td>@calificacion.CalificacionTotal</td>
                     <td>@calificacion.Observacion</td>
                     <td>@calificacion.FechaAsignada</td>
-                    <td>@calificacion.FechaEditada</td>
                     <td>
                         <a class="disabled">Agregar</a><br />
                         <a asp-action="EditarCalificacion" asp-route-id="@ViewBag.id" asp-route-id2="@estudiante.UserId"
