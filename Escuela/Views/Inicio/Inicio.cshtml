@@ -44,7 +44,7 @@
     @foreach (var noticia in ViewBag.noticias)
     {
         <div class="col-md-4 mb-3">
-            <a asp-action="Noticias" asp-route-id="@noticia.IdNoticia" class="text-dark h2">
+            <a asp-controller="Noticias" asp-action="Detalles" asp-route-id="@noticia.IdNoticia" class="text-dark h2">
                 @noticia.Titulo
                 </a>
             <div class="texto-truncado-5 mb-2">
@@ -68,7 +68,7 @@
             Revisa r&aacute;pidamente tu situaci&oacute;n acad&eacute;mica con las
             observaciones incluidas junto a las calificaciones. Se acabaron los
             largos viajes hacia la escuela para conocer esa informaci&oacute;n.
-            Puedes consultar esa informaci&oacute;n desde tus dispositivos.
+            Puedes consultarla desde tus dispositivos en cualquier lugar.
         </p>
     </div>
     <div class="col-md-6 mb-3">
@@ -77,8 +77,8 @@
             ¿Cansado(a) de leer papeles con notificaciones de la escuela? ¿Tienes
             estr&eacute;s por escuchar un rumor y no saber si es cierto? ¡Revisa la
             secci&oacute;n &uacute;ltimas noticias de esta p&aacute;gina de inicio
-            o ve al enlace <a asp-action="Noticias">noticias</a> de la barra de
-            navegaci&oacute;n.
+            o ve al enlace <a asp-controller="Noticias" asp-action="Inicio">noticias</a> 
+            de la barra de navegaci&oacute;n.
         </p>
     </div>
 </div>

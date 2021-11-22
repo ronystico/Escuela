@@ -56,7 +56,13 @@ namespace Escuela.Controllers
         }
 
         [AllowAnonymous]
-        public IActionResult Acercade()
+        public IActionResult PreguntasFrecuentes()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        public IActionResult SobreNosotros()
         {
             return View();
         }
