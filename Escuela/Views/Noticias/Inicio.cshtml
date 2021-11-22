@@ -1,0 +1,48 @@
+@model IEnumerable<Noticia>
+
+@{
+    ViewData["Title"] = "Noticias";
+}
+
+<h1>@ViewData["Title"] <i class="far fa-newspaper"></i></h1>
+<hr>
+
+<div class="row">
+    <div class="col-md-6">
+        @foreach(var noticia in Model.Where(s => s.IdNoticia % 2 != 0)){
+            <a asp-action="Detalles" asp-route-id="@noticia.IdNoticia" class="text-dark h2">
+                @noticia.Titulo
+                </a>
+            <div class="texto-truncado-5 mb-2">
+                @noticia.Cuerpo
+            </div>
+            <small class="text-muted">Categor&iacute;a: @noticia.CategoriaNoticia.Nombre <br>
+                Autor: @(noticia.ApplicationUser.Nombres + " " +
+                noticia.ApplicationUser.PrimerApellido + " " +
+                noticia.ApplicationUser.SegundoApellido) <br>
+                Fecha de Publicaci&oacute;n: @noticia.FechaPublicacion</small>
+                <br class="mb-3">
+        }
+    </div>
+    <div class="col-md-6">
+        @foreach(var noticia in Model.Where(s => s.IdNoticia % 2 == 0)){
+            <a asp-action="Detalles" asp-route-id="@noticia.IdNoticia" class="text-dark h2">
+                @noticia.Titulo
+                </a>
+            <div class="texto-truncado-5 mb-2">
+                @noticia.Cuerpo
+            </div>
+            <small class="text-muted">Categor&iacute;a: @noticia.CategoriaNoticia.Nombre <br>
+                Autor: @(noticia.ApplicationUser.Nombres + " " +
+                noticia.ApplicationUser.PrimerApellido + " " +
+                noticia.ApplicationUser.SegundoApellido) <br>
+                Fecha de Publicaci&oacute;n: @noticia.FechaPublicacion</small>
+                <br class="mb-3">
+        }
+    </div>
+</div>
+
+@section css{
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/all.css" />
+}

@@ -1,0 +1,26 @@
+@model Noticia
+@{
+    ViewData["Title"] = @Model.Titulo;
+}
+
+<div class="row">
+    <div class="col-md-3">
+
+    </div>
+    <div class="col-md-6">
+        <p class="text-dark h2">
+            @Model.Titulo
+        </p>
+        <small class="text-muted">Categor&iacute;a: @Model.CategoriaNoticia.Nombre <br>
+            Autor: @(Model.ApplicationUser.Nombres + " " +
+            Model.ApplicationUser.PrimerApellido + " " +
+            Model.ApplicationUser.SegundoApellido) <br>
+            Fecha de Publicaci&oacute;n: @Model.FechaPublicacion</small>
+        <div class="mb-2 mt-3">
+            @Model.Cuerpo
+        </div>
+    </div>
+    <div class="col-md-3">
+        
+    </div>
+</div>
