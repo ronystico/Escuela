@@ -30,7 +30,7 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Inicio" asp-action="PreguntasFrecuentes">Preguntas Frecuentes</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Inicio" asp-action="Acercade">Acerca de la Escuela</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Inicio" asp-action="SobreNosotros">Sobre Nosotros</a>
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />
@@ -39,7 +39,7 @@
         </nav>
     </header>
     <div class="container">
-        <main role="main" class="pb-3">
+        <main role="main" class="pb-3" id="contenido">
             @RenderBody()
         </main>
     </div>
