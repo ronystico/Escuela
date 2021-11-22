@@ -1,0 +1,84 @@
+﻿@model List<DetalleCursoperiodoAsignatura>
+@{
+    ViewData["Title"] = "Calificaciones";
+}
+
+<h1 class="mb-3">@ViewData["Title"]</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <p><strong>Periodo: </strong>@Model[0].DetalleCursoPeriodo.Periodo.Nombre</p>
+        <p><strong>Subperiodo: </strong>@Model[0].DetalleCursoPeriodo.Periodo.Subperiodo</p>
+        <p><strong>Curso: </strong>@Model[0].DetalleCursoPeriodo.Curso.Nombre</p>
+    </div>
+    <div class="col-md-6">
+        <p><strong>Secci&oacute;n: </strong>@Model[0].DetalleCursoPeriodo.Curso.Seccion</p>
+        <p><strong>Asignatura: </strong>@Model[0].Asignatura.Nombre</p>
+    </div>
+</div>
+
+<div class="row">
+    
+    <div class="col-md-3 mb-2">
+        <a class="btn btn-primary" asp-area="Administracion" asp-controller="VerCalificaciones" asp-action="Inicio">Volver a
+            Asignaturas</a>
+    </div>
+</div>
+
+<table class="table table-striped mt-3">
+    <thead>
+        <tr>
+            <th># <br /> de orden</th>
+            <th>Nombre Completo</th>
+            <th>Calificaci&oacute;n</th>
+            <th>Observaci&oacute;n</th>
+            <th>Fecha Asignada</th>
+            <th>Fecha Editada</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var calificacionRevisar in Model[0].Calificacion)
+            {
+                if (!Model[0].DetalleCursoPeriodo.DetalleEstudiante.Any(s => s.UserId == calificacionRevisar.IdEstudiante))
+                {
+                    <tr>
+                        <td>@calificacionRevisar.ApplicationUserEstudiante.DetalleEstudiante.NumerodeOrden</td>
+                        <td>@(calificacionRevisar.ApplicationUserEstudiante.Nombres + " " +
+                calificacionRevisar.ApplicationUserEstudiante.PrimerApellido + " " +
+                calificacionRevisar.ApplicationUserEstudiante.SegundoApellido)</td>
+
+                        <td>@calificacionRevisar.CalificacionTotal</td>
+                        <td>@calificacionRevisar.Observacion</td>
+                        <td>@calificacionRevisar.FechaAsignada</td>
+                        <td>@calificacionRevisar.FechaEditada</td>
+                    </tr>
+                }
+            }
+
+        @foreach (var estudiante in Model[0].DetalleCursoPeriodo.DetalleEstudiante.OrderBy(s => s.NumerodeOrden))
+        {
+            
+
+            <tr>
+                <td>@estudiante.NumerodeOrden</td>
+                <td>@(estudiante.ApplicationUser.Nombres + " " + estudiante.ApplicationUser.PrimerApellido + " " +
+                estudiante.ApplicationUser.SegundoApellido)</td>
+                @if (!Model[0].Calificacion.Where(s => s.IdEstudiante == estudiante.UserId).Any())
+                {
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                }
+                @foreach (var calificacion in Model[0].Calificacion.Where(s => s.IdEstudiante == estudiante.UserId))
+                {
+                    <td>@calificacion.CalificacionTotal</td>
+                    <td>@calificacion.Observacion</td>
+                    <td>@calificacion.FechaAsignada</td>
+                    <td>@calificacion.FechaEditada</td>
+                }
+            </tr>
+        }
+
+    </tbody>
+</table>
