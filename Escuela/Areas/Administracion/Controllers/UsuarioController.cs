@@ -155,6 +155,7 @@ namespace Escuela.Areas.Administracion.Controllers
                 await _data.SaveChangesAsync();
                 return RedirectToAction("Inicio", "Usuario", new { area = "Administracion" });
             }
+            ObtenerCursosPeriodos();
             return View(estudiante);
         }
 
