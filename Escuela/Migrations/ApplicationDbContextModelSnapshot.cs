@@ -4,22 +4,23 @@ using Escuela.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Escuela.Data.Migrations
+#nullable disable
+
+namespace Escuela.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20211104163651_DataAnnotationsFechas")]
-    partial class DataAnnotationsFechas
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.11")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "6.0.0")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
             modelBuilder.Entity("Escuela.Models.ApplicationUser", b =>
                 {
@@ -111,24 +112,24 @@ namespace Escuela.Data.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.ToTable("AspNetUsers");
+                    b.ToTable("AspNetUsers", (string)null);
 
                     b.HasData(
                         new
                         {
                             Id = "29ce004f-6192-496b-a359-56bbbfd90ca1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a6a2eb33-3cac-448d-81d2-6af4ef468660",
+                            ConcurrencyStamp = "20f132ed-68a9-42cd-9a9f-2a1722659765",
                             EmailConfirmed = false,
                             Estado = "Inscrito",
-                            FechaAgregado = new DateTime(2021, 11, 4, 12, 36, 49, 664, DateTimeKind.Local).AddTicks(9682),
+                            FechaAgregado = new DateTime(2021, 11, 27, 3, 14, 47, 252, DateTimeKind.Local).AddTicks(9759),
                             LockoutEnabled = false,
                             Nombres = "Administrador",
                             NormalizedUserName = "ADMINISTRADOR",
-                            PasswordHash = "AQAAAAEAACcQAAAAEJTqXs83M5nto44xqRZ4vbDTwEbklhicYZVYUSxigeqv8McOxCZ6sJz3tz6qvwEYig==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEF3N7YoOQtNUlrZHIKnPq/r+5UbtB53/j2zR3Cf1K21bmY2c/qKZ3ZULVqznyixL8A==",
                             PhoneNumberConfirmed = false,
                             PrimerApellido = "Administrando",
-                            SecurityStamp = "8eb6091f-ccca-47e9-8e23-4b52949238b8",
+                            SecurityStamp = "f2aa3eb2-841c-48af-a23f-043cc9df6178",
                             SegundoApellido = "Administración",
                             TwoFactorEnabled = false,
                             UserName = "administrador"
@@ -141,7 +142,9 @@ namespace Escuela.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("id_asignatura")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnOrder(0);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdAsignatura"), 1L, 1);
 
                     b.Property<string>("Nombre")
                         .IsRequired()
@@ -159,8 +162,9 @@ namespace Escuela.Data.Migrations
                     b.Property<int>("IdCalificacion")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("id_calificacion")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("id_calificacion");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCalificacion"), 1L, 1);
 
                     b.Property<int>("CalificacionTotal")
                         .HasColumnType("int")
@@ -202,13 +206,64 @@ namespace Escuela.Data.Migrations
                     b.ToTable("calificacion");
                 });
 
+            modelBuilder.Entity("Escuela.Models.Carousel", b =>
+                {
+                    b.Property<int>("IdCarousel")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id_carousel");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCarousel"), 1L, 1);
+
+                    b.Property<int>("IdImagen")
+                        .HasColumnType("int")
+                        .HasColumnName("id_imagen");
+
+                    b.Property<byte[]>("Imagen")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)")
+                        .HasColumnName("imagen");
+
+                    b.HasKey("IdCarousel");
+
+                    b.ToTable("carousel");
+                });
+
+            modelBuilder.Entity("Escuela.Models.CategoriaNoticia", b =>
+                {
+                    b.Property<int>("IdCategoriaNoticia")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id_categoria_noticia");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCategoriaNoticia"), 1L, 1);
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("IdCategoriaNoticia");
+
+                    b.ToTable("categoria_noticia");
+
+                    b.HasData(
+                        new
+                        {
+                            IdCategoriaNoticia = 1,
+                            Nombre = "General"
+                        });
+                });
+
             modelBuilder.Entity("Escuela.Models.Curso", b =>
                 {
                     b.Property<int>("IdCurso")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("id_curso")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnOrder(0);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCurso"), 1L, 1);
 
                     b.Property<string>("Nombre")
                         .IsRequired()
@@ -232,8 +287,9 @@ namespace Escuela.Data.Migrations
                     b.Property<int>("IdDetalleCursoPeriodo")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("id_detalle_curso_periodo")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("id_detalle_curso_periodo");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdDetalleCursoPeriodo"), 1L, 1);
 
                     b.Property<int>("IdCurso")
                         .HasColumnType("int")
@@ -258,7 +314,9 @@ namespace Escuela.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("id_detalle_cursoperiodo_asignatura")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnOrder(0);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdDetalleCursoperiodoAsignatura"), 1L, 1);
 
                     b.Property<int>("IdAsignatura")
                         .HasColumnType("int")
@@ -313,8 +371,9 @@ namespace Escuela.Data.Migrations
                     b.Property<int>("IdDetalleProfesorCursoperiodoAsignatura")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("id_detalle_profesor_cursoperiodo_asignatura")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("id_detalle_profesor_cursoperiodo_asignatura");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdDetalleProfesorCursoperiodoAsignatura"), 1L, 1);
 
                     b.Property<int>("IdDetalleCursoperiodoAsignatura")
                         .HasColumnType("int")
@@ -333,13 +392,56 @@ namespace Escuela.Data.Migrations
                     b.ToTable("detalle_profesor_cursoperiodo_asignatura");
                 });
 
+            modelBuilder.Entity("Escuela.Models.Noticia", b =>
+                {
+                    b.Property<int>("IdNoticia")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id_noticia");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdNoticia"), 1L, 1);
+
+                    b.Property<string>("Cuerpo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("cuerpo");
+
+                    b.Property<DateTime>("FechaPublicacion")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("fecha_publicacion");
+
+                    b.Property<string>("IdAutor")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("id_autor");
+
+                    b.Property<int>("IdCategoriaNoticia")
+                        .HasColumnType("int")
+                        .HasColumnName("id_categoria_noticia");
+
+                    b.Property<string>("Titulo")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("titulo");
+
+                    b.HasKey("IdNoticia");
+
+                    b.HasIndex("IdAutor");
+
+                    b.HasIndex("IdCategoriaNoticia");
+
+                    b.ToTable("noticia");
+                });
+
             modelBuilder.Entity("Escuela.Models.Padres", b =>
                 {
                     b.Property<int>("IdPadres")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("id_padres")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnOrder(0);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdPadres"), 1L, 1);
 
                     b.Property<string>("NombresMadre")
                         .HasMaxLength(50)
@@ -391,8 +493,9 @@ namespace Escuela.Data.Migrations
                     b.Property<int>("IdPeriodo")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("id_periodo")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("id_periodo");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdPeriodo"), 1L, 1);
 
                     b.Property<DateTime>("FechaFin")
                         .HasColumnType("datetime2")
@@ -443,27 +546,27 @@ namespace Escuela.Data.Migrations
                         .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
-                    b.ToTable("AspNetRoles");
+                    b.ToTable("AspNetRoles", (string)null);
 
                     b.HasData(
                         new
                         {
                             Id = "4671823f-f30c-445c-8433-c9edb7d7caa8",
-                            ConcurrencyStamp = "3bdf9e17-143b-456c-ab6a-4ae2a48fbb8d",
+                            ConcurrencyStamp = "f7a1e7da-a2c0-4a38-b65e-4ec6513f82a2",
                             Name = "Administracion",
                             NormalizedName = "ADMINISTRACION"
                         },
                         new
                         {
                             Id = "1ae745c4-32de-4d4b-b941-39315e76c62b",
-                            ConcurrencyStamp = "10d1e6ff-dcd5-4fbe-9fab-d2543b09f4a9",
+                            ConcurrencyStamp = "04f19dcd-45ae-4d43-bf31-62db29b69ad8",
                             Name = "Profesor",
                             NormalizedName = "PROFESOR"
                         },
                         new
                         {
                             Id = "b5042ce0-f40d-483e-8514-e014b145b4d9",
-                            ConcurrencyStamp = "9749c088-e2c5-4e2d-b11d-710944427838",
+                            ConcurrencyStamp = "93b8ce24-0161-4ce1-8194-e01557b38109",
                             Name = "Estudiante",
                             NormalizedName = "ESTUDIANTE"
                         });
@@ -473,8 +576,9 @@ namespace Escuela.Data.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -490,15 +594,16 @@ namespace Escuela.Data.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetRoleClaims");
+                    b.ToTable("AspNetRoleClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -514,7 +619,7 @@ namespace Escuela.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserClaims");
+                    b.ToTable("AspNetUserClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -538,7 +643,7 @@ namespace Escuela.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserLogins");
+                    b.ToTable("AspNetUserLogins", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
@@ -553,7 +658,7 @@ namespace Escuela.Data.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetUserRoles");
+                    b.ToTable("AspNetUserRoles", (string)null);
 
                     b.HasData(
                         new
@@ -581,7 +686,7 @@ namespace Escuela.Data.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserTokens");
+                    b.ToTable("AspNetUserTokens", (string)null);
                 });
 
             modelBuilder.Entity("Escuela.Models.Calificacion", b =>
@@ -687,6 +792,23 @@ namespace Escuela.Data.Migrations
                     b.Navigation("DetalleCursoperiodoAsignatura");
                 });
 
+            modelBuilder.Entity("Escuela.Models.Noticia", b =>
+                {
+                    b.HasOne("Escuela.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("IdAutor");
+
+                    b.HasOne("Escuela.Models.CategoriaNoticia", "CategoriaNoticia")
+                        .WithMany("Noticia")
+                        .HasForeignKey("IdCategoriaNoticia")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("CategoriaNoticia");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -748,6 +870,11 @@ namespace Escuela.Data.Migrations
             modelBuilder.Entity("Escuela.Models.Asignatura", b =>
                 {
                     b.Navigation("DetalleCursoperiodoAsignatura");
+                });
+
+            modelBuilder.Entity("Escuela.Models.CategoriaNoticia", b =>
+                {
+                    b.Navigation("Noticia");
                 });
 
             modelBuilder.Entity("Escuela.Models.Curso", b =>
