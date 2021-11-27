@@ -1,4 +1,4 @@
-@model IEnumerable<UsuarioViewModel>
+@model PaginatedList<UsuarioViewModel>
 @{
     ViewData["Title"] = "Lista de Usuarios";
 }
@@ -6,30 +6,34 @@
 <h1>@ViewData["Title"]</h1>
 
 <a class="btn btn-primary mb-3" asp-action="Agregar">Agregar</a>
+<form asp-action="Inicio" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Buscar: <input type="text" name="cadenaDeBusqueda" value="@ViewData["FiltroActual"]" />
+            <input type="submit" value="Buscar" class="btn btn-outline-primary" />
+            <a asp-action="Inicio" class="btn btn-outline-primary">Reestablecer Filtros</a>
+        </p>
+    </div>
+</form>
 
 <div class="row">
     <div class="col-md-12">
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Nombres</th>
-                    <th scope="col">Primer<br /> Apellido</th>
-                    <th scope="col">Segundo<br /> Apellido</th>
+                    <th scope="col"><a asp-action="Inicio" asp-route-ordenarPor="@ViewData["NombresOrdenar"]" asp-route-filtroActual="@ViewData["FiltroActual"]">Nombres</a></th>
+                    <th scope="col"><a asp-action="Inicio" asp-route-ordenarPor="@ViewData["PrimerApellidoOrdenar"]" asp-route-filtroActual="@ViewData["FiltroActual"]">Primer Apellido</a></th>
+                    <th scope="col"><a asp-action="Inicio" asp-route-ordenarPor="@ViewData["SegundoApellidoOrdenar"]" asp-route-filtroActual="@ViewData["FiltroActual"]">Segundo Apellido</a></th>
                     <th scope="col">Usuario</th>
                     <th scope="col">Rol</th>
-                    <th scope="col">Estado</th>
+                    <th scope="col"><a asp-action="Inicio" asp-route-ordenarPor="@ViewData["EstadoOrdenar"]" asp-route-filtroActual="@ViewData["FiltroActual"]">Estado</a></th>
                     <th scope="col">Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                @{
-                    int i = 1;
-                }
-                @foreach (var usuario in Model.ToList())
+                @foreach (var usuario in Model)
                 {
                     <tr>
-                        <th scope="row">@i</th>
                         <td>@usuario.Nombres</td>
                         <td>@usuario.PrimerApellido</td>
                         <td>@usuario.SegundoApellido</td>
@@ -42,9 +46,27 @@
                             <a asp-action="ReestablecerClave" asp-route-id="@usuario.Id">Reestablecer Clave</a>
                         </td>
                     </tr>
-                    i++;
                 }
             </tbody>
         </table>
+        @{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Inicio"
+   asp-route-ordenarPor="@ViewData["OrdenarActual"]"
+   asp-route-numeroDePagina="@(Model.PageIndex - 1)"
+   asp-route-filtroActual="@ViewData["FiltroActual"]"
+   class="btn btn-outline-primary @prevDisabled">
+    Anterior
+</a>
+<a asp-action="Inicio"
+   asp-route-ordenarPor="@ViewData["OrdenarActual"]"
+   asp-route-numeroDePagina="@(Model.PageIndex + 1)"
+   asp-route-filtroActual="@ViewData["FiltroActual"]"
+   class="btn btn-outline-primary @nextDisabled">
+    Siguiente
+</a>
     </div>
 </div>

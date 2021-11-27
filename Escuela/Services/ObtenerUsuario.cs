@@ -13,10 +13,10 @@ namespace Escuela.Services
         {
             _data = data;
         }
-        public List<UsuarioViewModel> ObtenerTodosLosUsuariosConRol(){
-            return (from usuario in _data.Users.ToList()
-                            join asociacionrol in _data.UserRoles.ToList() on usuario.Id equals asociacionrol.UserId
-                            join nombrerol in _data.Roles.ToList() on asociacionrol.RoleId equals nombrerol.Id
+        public IQueryable<UsuarioViewModel> ObtenerTodosLosUsuariosConRol(){
+            return (from usuario in _data.Users
+                            join asociacionrol in _data.UserRoles on usuario.Id equals asociacionrol.UserId
+                            join nombrerol in _data.Roles on asociacionrol.RoleId equals nombrerol.Id
                             select new UsuarioViewModel
                             {
                                 Id = usuario.Id,
@@ -26,7 +26,7 @@ namespace Escuela.Services
                                 UserName = usuario.UserName,
                                 IdentityRole = nombrerol,
                                 Estado = usuario.Estado
-                            }).OrderBy(s => s.Nombres).ToList();
+                            });
         } 
     }
 }

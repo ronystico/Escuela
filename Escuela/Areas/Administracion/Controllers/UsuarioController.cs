@@ -29,12 +29,61 @@ namespace Escuela.Areas.Administracion.Controllers
             _userManager = userManager;
         }
 
-        public IActionResult Inicio()
+        public async Task<IActionResult> Inicio(string ordenarPor,string cadenaDeBusqueda,
+        string filtroActual, int? numeroDePagina)
         {
             ObtenerUsuario usuarios = new ObtenerUsuario(_data);
             var listaUsuarios = usuarios.ObtenerTodosLosUsuariosConRol();
 
-            return View(listaUsuarios);
+            ViewData["NombresOrdenar"] = string.IsNullOrEmpty(ordenarPor) ? "NombreDescendiente" : "";
+            ViewData["PrimerApellidoOrdenar"] = ordenarPor == "PrimerApellido" ? "PrimerApellidoDescendiente" : "PrimerApellido";
+            ViewData["SegundoApellidoOrdenar"] = ordenarPor == "SegundoApellido" ? "SegundoApellidoDescendiente" : "SegundoApellido";
+            ViewData["EstadoOrdenar"] = ordenarPor == "Estado" ? "EstadoDescendiente" : "Estado";
+            ViewData["FiltroActual"] = cadenaDeBusqueda;
+            ViewData["OrdenarActual"] = filtroActual;
+
+            if(cadenaDeBusqueda != null){
+                numeroDePagina = 1;
+            }
+            else{
+                cadenaDeBusqueda = filtroActual;
+            }
+
+            if(!string.IsNullOrEmpty(cadenaDeBusqueda)){
+                listaUsuarios = listaUsuarios.Where(s => s.Nombres.Contains(cadenaDeBusqueda) ||
+                s.PrimerApellido.Contains(cadenaDeBusqueda) || s.SegundoApellido.Contains(cadenaDeBusqueda) ||
+                s.UserName.Contains(cadenaDeBusqueda));
+            }
+
+            switch(ordenarPor){
+                case "NombreDescendiente":
+                listaUsuarios = listaUsuarios.OrderByDescending(s => s.Nombres);
+                break;
+                case "PrimerApellido":
+                listaUsuarios = listaUsuarios.OrderBy(s => s.PrimerApellido);
+                break;
+                case "PrimerApellidoDescendiente":
+                listaUsuarios = listaUsuarios.OrderByDescending(s => s.PrimerApellido);
+                break;
+                case "SegundoApellido":
+                listaUsuarios = listaUsuarios.OrderBy(s => s.SegundoApellido);
+                break;
+                case "SegundoApellidoDescendiente":
+                listaUsuarios = listaUsuarios.OrderByDescending(s => s.SegundoApellido);
+                break;
+                case "Estado":
+                listaUsuarios = listaUsuarios.OrderBy(s => s.Estado);
+                break;
+                case "EstadoDescendiente":
+                listaUsuarios = listaUsuarios.OrderByDescending(s => s.Estado);
+                break;
+                default:
+                listaUsuarios = listaUsuarios.OrderBy(s => s.Nombres);
+                break;
+            }
+
+            int cantidadPorPagina = 3;
+            return View(await PaginatedList<UsuarioViewModel>.CreateAsync(listaUsuarios.AsNoTracking(),numeroDePagina ?? 1,cantidadPorPagina));
         }
 
         public IActionResult Agregar()
