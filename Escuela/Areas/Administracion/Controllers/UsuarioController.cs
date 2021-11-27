@@ -82,7 +82,7 @@ namespace Escuela.Areas.Administracion.Controllers
                 break;
             }
 
-            int cantidadPorPagina = 3;
+            int cantidadPorPagina = 10;
             return View(await PaginatedList<UsuarioViewModel>.CreateAsync(listaUsuarios.AsNoTracking(),numeroDePagina ?? 1,cantidadPorPagina));
         }
 
