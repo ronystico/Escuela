@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Escuela.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -21,6 +22,7 @@ namespace Escuela.Controllers
             _logger = logger;
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> Inicio()
         {
             var noticias = await _data.Noticia
@@ -32,6 +34,7 @@ namespace Escuela.Controllers
             return View(noticias);
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> Detalles(int? id){
             if(id == null){
                 return NotFound();
