@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Escuela.Data;
+using Escuela.Models;
+using Escuela.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -23,19 +25,22 @@ namespace Escuela.Controllers
         }
 
         [AllowAnonymous]
-        public async Task<IActionResult> Inicio()
+        public async Task<IActionResult> Inicio(int? numeroDePagina)
         {
-            var noticias = await _data.Noticia
+            var noticias = _data.Noticia
             .Include(s => s.CategoriaNoticia)
             .Include(s => s.ApplicationUser)
             .AsNoTracking()
-            .OrderByDescending(s => s.FechaPublicacion)
-            .ToListAsync();
-            return View(noticias);
+            .OrderByDescending(s => s.FechaPublicacion);
+
+            int cantidadPorPagina = 4;
+
+            return View(await PaginatedList<Noticia>.CreateAsync(noticias.AsNoTracking(), numeroDePagina ?? 1, cantidadPorPagina));
         }
 
         [AllowAnonymous]
-        public async Task<IActionResult> Detalles(int? id){
+        public async Task<IActionResult> Detalles(int? id, int? numeroDePagina)
+        {
             if(id == null){
                 return NotFound();
             }
@@ -48,6 +53,8 @@ namespace Escuela.Controllers
             if(noticia == null){
                 return NotFound();
             }
+
+            ViewBag.numerodepagina = numeroDePagina;
 
             return View(noticia);
         }

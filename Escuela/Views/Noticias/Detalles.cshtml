@@ -10,7 +10,7 @@
     <div class="col-md-6">
         <div>
             <p>
-            Estás en: <a asp-controller="Noticias" asp-action="Inicio">Noticias</a> > 
+            Est&aacute;s en: <a asp-controller="Noticias" asp-action="Inicio">Noticias</a> > 
             @Model.CategoriaNoticia.Nombre > @Model.Titulo
         </p>
         </div>
@@ -25,6 +25,9 @@
             Fecha de Publicaci&oacute;n: @Model.FechaPublicacion</small>
         <div class="mb-2 mt-3">
             @Model.Cuerpo
+        </div>
+        <div class="mt-3">
+            <a asp-action="Inicio" asp-route-numeroDePagina="@ViewBag.numerodepagina" class="btn btn-outline-primary">Volver atr&aacute;s</a>
         </div>
     </div>
     <div class="col-md-3">

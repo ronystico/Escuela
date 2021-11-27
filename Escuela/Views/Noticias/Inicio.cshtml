@@ -1,4 +1,4 @@
-@model IEnumerable<Noticia>
+@model PaginatedList<Noticia>
 
 @{
     ViewData["Title"] = "Noticias";
@@ -7,42 +7,66 @@
 <h1>@ViewData["Title"] <i class="far fa-newspaper"></i></h1>
 <hr>
 
-<div class="row">
-    <div class="col-md-6">
-        @foreach(var noticia in Model.Where(s => s.IdNoticia % 2 != 0)){
-            <a asp-action="Detalles" asp-route-id="@noticia.IdNoticia" class="text-dark h2">
-                @noticia.Titulo
-                </a>
+
+@for (int i = 0; i < Model.Count; i+=2)
+{
+    <div class="row">
+        <div class="col-md-6">
+            <a asp-action="Detalles" asp-route-id="@Model[i].IdNoticia" asp-route-numeroDePagina="@Model.PageIndex" class="text-dark h2">
+                @Model[i].Titulo
+            </a>
             <div class="texto-truncado-5 mb-2">
-                @noticia.Cuerpo
+                @Model[i].Cuerpo
             </div>
-            <small class="text-muted">Categor&iacute;a: @noticia.CategoriaNoticia.Nombre <br>
-                Autor: @(noticia.ApplicationUser.Nombres + " " +
-                noticia.ApplicationUser.PrimerApellido + " " +
-                noticia.ApplicationUser.SegundoApellido) <br>
-                Fecha de Publicaci&oacute;n: @noticia.FechaPublicacion</small>
-                <br class="mb-3">
-        }
-    </div>
-    <div class="col-md-6">
-        @foreach(var noticia in Model.Where(s => s.IdNoticia % 2 == 0)){
-            <a asp-action="Detalles" asp-route-id="@noticia.IdNoticia" class="text-dark h2">
-                @noticia.Titulo
+            <small class="text-muted">
+                Categor&iacute;a: @Model[i].CategoriaNoticia.Nombre <br>
+                Autor: @(Model[i].ApplicationUser.Nombres + " " +
+            Model[i].ApplicationUser.PrimerApellido + " " +
+            Model[i].ApplicationUser.SegundoApellido) <br>
+                Fecha de Publicaci&oacute;n: @Model[i].FechaPublicacion
+            </small>
+            <br class="mb-3">
+        </div>
+
+        <div class="col-md-6">
+            @if ((i + 1) != Model.Count)
+            {
+                <a asp-action="Detalles" asp-route-id="@Model[i+1].IdNoticia" asp-route-numeroDePagina="@Model.PageIndex" class="text-dark h2">
+                    @Model[i+1].Titulo
                 </a>
-            <div class="texto-truncado-5 mb-2">
-                @noticia.Cuerpo
-            </div>
-            <small class="text-muted">Categor&iacute;a: @noticia.CategoriaNoticia.Nombre <br>
-                Autor: @(noticia.ApplicationUser.Nombres + " " +
-                noticia.ApplicationUser.PrimerApellido + " " +
-                noticia.ApplicationUser.SegundoApellido) <br>
-                Fecha de Publicaci&oacute;n: @noticia.FechaPublicacion</small>
+                <div class="texto-truncado-5 mb-2">
+                    @Model[i+1].Cuerpo
+                </div>
+                <small class="text-muted">
+                    Categor&iacute;a: @Model[i+1].CategoriaNoticia.Nombre <br>
+                    Autor: @(Model[i+1].ApplicationUser.Nombres + " " +
+            Model[i+1].ApplicationUser.PrimerApellido + " " +
+            Model[i+1].ApplicationUser.SegundoApellido) <br>
+                    Fecha de Publicaci&oacute;n: @Model[i+1].FechaPublicacion
+                </small>
                 <br class="mb-3">
-        }
+            }
+        </div>
     </div>
-</div>
+}
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Inicio"
+   asp-route-numeroDePagina="@(Model.PageIndex - 1)"
+   class="btn btn-outline-primary @prevDisabled">
+    Anterior
+</a>
+<a asp-action="Inicio"
+   asp-route-numeroDePagina="@(Model.PageIndex + 1)"
+   class="btn btn-outline-primary @nextDisabled">
+    Siguiente
+</a>
 
 @section css{
-    <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" href="~/css/all.css" />
+<link rel="stylesheet" href="~/css/site.css" />
+<link rel="stylesheet" href="~/css/all.css" />
 }
