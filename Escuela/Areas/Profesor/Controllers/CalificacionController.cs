@@ -31,8 +31,7 @@ namespace Escuela.Controllers
 
         public async Task<IActionResult> Inicio()
         {
-            var usuario = _signInManager.Context.User.Identity.Name;
-            var profesor = await _userManager.FindByNameAsync(usuario);
+            var profesor = await ObtenerProfesor();
             _data.Entry(profesor).Collection(s => s.DetalleProfesorCursoperiodoAsignatura).Load();
 
             var asignaturas = new HashSet<int>(profesor.DetalleProfesorCursoperiodoAsignatura.Select(s => s.IdDetalleCursoperiodoAsignatura));
@@ -69,9 +68,19 @@ namespace Escuela.Controllers
 
         public async Task<IActionResult> CalificacionesAsignatura(int id)
         {
+            if(id == 0){
+                return NotFound();
+            }
             ViewBag.id = id;
 
+            if(!await ValidarAccesoProfesor(id)){
+                return Forbid();
+            }
+
             var detalleAsignaturas = await detalleCursoperiodoAsignaturasAsync(id);
+            if(detalleAsignaturas[0].DetalleCursoPeriodo == null){
+                return NotFound();
+            }
 
             return View(detalleAsignaturas);
         }
@@ -81,6 +90,9 @@ namespace Escuela.Controllers
             if (id == 0 || id2 == null)
             {
                 return NotFound();
+            }
+            if(!await ValidarAccesoProfesor(id)){
+                return Forbid();
             }
 
             ViewBag.id = id;
@@ -108,6 +120,10 @@ namespace Escuela.Controllers
             {
                 return NotFound();
             }
+            if(!await ValidarAccesoProfesor(id)){
+                return Forbid();
+            }
+
             ViewBag.id = id;
             ViewBag.id2 = id2;
 
@@ -120,8 +136,7 @@ namespace Escuela.Controllers
                 }
                 else
                 {
-                    var usuario = _signInManager.Context.User.Identity.Name;
-                    var profesor = await _userManager.FindByNameAsync(usuario);
+                    var profesor = await ObtenerProfesor();
 
                     var calificacionNueva = new Calificacion
                     {
@@ -156,6 +171,9 @@ namespace Escuela.Controllers
             {
                 return NotFound();
             }
+            if(!await ValidarAccesoProfesor(id)){
+                return Forbid();
+            }
 
             if (!_data.Calificacion.Any(s => s.IdDetalleCursoPeriodoAsignatura == id
              && s.IdEstudiante == id2))
@@ -183,6 +201,10 @@ namespace Escuela.Controllers
             {
                 return NotFound();
             }
+            if(!await ValidarAccesoProfesor(id)){
+                return Forbid();
+            }
+
             ViewBag.id = id;
             ViewBag.id2 = id2;
 
@@ -194,8 +216,7 @@ namespace Escuela.Controllers
                     var calificacionActual = await _data.Calificacion.Where(s => s.IdDetalleCursoPeriodoAsignatura == id
                 && s.IdEstudiante == calificacion.IdEstudiante).FirstOrDefaultAsync();
 
-                    var usuario = _signInManager.Context.User.Identity.Name;
-                    var profesor = await _userManager.FindByNameAsync(usuario);
+                    var profesor = await ObtenerProfesor();
 
                     calificacionActual.IdProfesor = profesor.Id;
                     calificacionActual.CalificacionTotal = calificacion.CalificacionTotal;
@@ -228,6 +249,10 @@ namespace Escuela.Controllers
             {
                 return NotFound();
             }
+            if(!await ValidarAccesoProfesor(id)){
+                return Forbid();
+            }
+
             ViewBag.id = id;
 
             var detalleAsignaturas = await agregarEditarCalificacionesAsync(id);
@@ -256,6 +281,9 @@ namespace Escuela.Controllers
             {
                 return NotFound();
             }
+            if(!await ValidarAccesoProfesor(id)){
+                return Forbid();
+            }
 
             ViewBag.id = id;
 
@@ -265,8 +293,7 @@ namespace Escuela.Controllers
             {
                 var calificacionesNuevasModelo = new List<Calificacion>();
 
-                var usuario = _signInManager.Context.User.Identity.Name;
-                var profesor = await _userManager.FindByNameAsync(usuario);
+                var profesor = await ObtenerProfesor();
 
                 // comienzo calificaciones nuevas
                 if (calificaciones.CalificacionNueva != null)
@@ -407,6 +434,16 @@ namespace Escuela.Controllers
                 .ThenInclude(s => s.ApplicationUserProfesor)
                 .Where(s => s.IdDetalleCursoperiodoAsignatura == id)
                 .ToListAsync();
+        }
+
+        private async Task<ApplicationUser> ObtenerProfesor(){
+            var usuario = _signInManager.Context.User.Identity.Name;
+            return await _userManager.FindByNameAsync(usuario);
+        }
+
+        private async Task<bool> ValidarAccesoProfesor(int asignatura){
+            var profesor = await ObtenerProfesor();
+            return _data.DetalleProfesorCursoperiodoAsignatura.Any(s => s.IdDetalleCursoperiodoAsignatura == asignatura);
         }
     }
 }

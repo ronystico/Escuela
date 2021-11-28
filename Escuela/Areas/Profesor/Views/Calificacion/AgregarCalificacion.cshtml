@@ -4,6 +4,7 @@
 }
 
 <h1>@ViewData["Title"]</h1>
+<hr>
 
 <div class="row">
     <div class="col-md-6">
@@ -17,26 +18,26 @@
     </div>
 </div>
 
-<h2>Estudiante</h2>
-
-<dl class="row">
+<p class="h2">Estudiante</p>
+<hr>
+<div class="row">
     @foreach (var estudiante in Model.DetalleCursoperiodoAsignatura[0].DetalleCursoPeriodo.DetalleEstudiante.OrderBy(s => s.NumerodeOrden))
     {
-        <dt class="col-sm-2 mb-3">
-            N&uacute;mero de orden
-        </dt>
-        <dd class="col-sm-10 mb-3">
-            @estudiante.NumerodeOrden
-        </dd>
-        <dt class="col-sm-2 mb-3">
-            Nombre Completo
-        </dt>
-        <dd class="col-sm-10 mb-3">
-            @(estudiante.ApplicationUser.Nombres + " " + estudiante.ApplicationUser.PrimerApellido + " " + estudiante.ApplicationUser.SegundoApellido)
-        </dd>
+        <div class="col-md-6">
+        <p>
+            <strong>N&uacute;mero de orden:</strong> @estudiante.NumerodeOrden
+        </p>
+        </div>
+        <div class="col-md-6">
+        <p>
+            <strong>Nombre Completo:</strong> @(estudiante.ApplicationUser.Nombres + " " + estudiante.ApplicationUser.PrimerApellido + " " + estudiante.ApplicationUser.SegundoApellido)
+        </p>
+        </div>
     }
-</dl>
+</div>
 
+<p class="h2">Calificaci&oacute;n</p>
+<hr>
 <form class="row" asp-action="AgregarEditarCalificacionAsignatura" method="post">
     @foreach (var estudiante in Model.DetalleCursoperiodoAsignatura[0].DetalleCursoPeriodo.DetalleEstudiante.OrderBy(s => s.NumerodeOrden))
     {
