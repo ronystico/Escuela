@@ -154,6 +154,9 @@ namespace Escuela.Areas.Administracion.Controllers
 
         public async Task<IActionResult> AgregarEstudiante(string id, int id2)
         {
+            if(string.IsNullOrEmpty(id)){
+                return NotFound();
+            }
             ViewBag.user = await _userManager.FindByIdAsync(id);
             ViewBag.id = id;
             if (id2 != 0)
@@ -174,8 +177,14 @@ namespace Escuela.Areas.Administracion.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AgregarEstudiante(AgregarEstudianteViewModel estudiante)
+        public async Task<IActionResult> AgregarEstudiante(string id, AgregarEstudianteViewModel estudiante)
         {
+            if(string.IsNullOrEmpty(id)){
+                return UnprocessableEntity();
+            }
+            if(estudiante.DetalleEstudiante.IdDetalleCursoPeriodo == 0){
+                    ModelState.AddModelError("DetalleEstudiante.IdDetalleCursoPeriodo","Por favor, agrega algún Periodo/Curso para asignarlo al estudiante");
+                }
             if (ModelState.IsValid)
             {
                 DetalleEstudiante detalles = new DetalleEstudiante();
@@ -183,7 +192,7 @@ namespace Escuela.Areas.Administracion.Controllers
                 {
                     detalles = new DetalleEstudiante()
                     {
-                        UserId = estudiante.DetalleEstudiante.ApplicationUser.Id,
+                        UserId = id,
                         IdDetalleCursoPeriodo = estudiante.DetalleEstudiante.IdDetalleCursoPeriodo,
                         NumerodeOrden = estudiante.DetalleEstudiante.NumerodeOrden,
                         IdoRNE = estudiante.DetalleEstudiante.IdoRNE
@@ -193,7 +202,7 @@ namespace Escuela.Areas.Administracion.Controllers
                 {
                     detalles = new DetalleEstudiante()
                     {
-                        UserId = estudiante.DetalleEstudiante.ApplicationUser.Id,
+                        UserId = id,
                         IdDetalleCursoPeriodo = estudiante.DetalleEstudiante.IdDetalleCursoPeriodo,
                         NumerodeOrden = estudiante.DetalleEstudiante.NumerodeOrden,
                         IdPadres = estudiante.DetalleEstudiante.IdPadres,
@@ -203,6 +212,26 @@ namespace Escuela.Areas.Administracion.Controllers
                 var resultado = await _data.DetalleEstudiante.AddAsync(detalles);
                 await _data.SaveChangesAsync();
                 return RedirectToAction("Inicio", "Usuario", new { area = "Administracion" });
+            }
+
+            if(string.IsNullOrEmpty(id)){
+                return NotFound();
+            }
+            ViewBag.user = await _userManager.FindByIdAsync(id);
+            ViewBag.id = id;
+            int? id2 = estudiante.DetalleEstudiante.IdPadres ?? 0;
+            if (id2 != 0)
+            {
+                var padres = await _data.Padres.FindAsync(id2);
+                if (padres != null)
+                {
+                    ViewBag.padres = padres;
+                }
+            }
+            else
+            {
+                Padres padrevacio = new Padres();
+                ViewBag.padres = padrevacio;
             }
             ObtenerCursosPeriodos();
             return View(estudiante);
