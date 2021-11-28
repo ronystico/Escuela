@@ -1,0 +1,40 @@
+@model DetalleCursoPeriodo
+@{
+    ViewData["Title"] = "Lista de Estudiantes";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<a class="btn btn-primary mb-3" asp-action="Inicio">Volver a la lista</a><br>
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th># de orden</th>
+                    <th>Nombre Completo</th>
+                    <th>Usuario</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.DetalleEstudiante.OrderBy(s => s.NumerodeOrden))
+                {
+                    <tr>
+                        <td>@item.NumerodeOrden</td>
+                        <td>@(item.ApplicationUser.Nombres + " " +
+                        item.ApplicationUser.PrimerApellido + " " +
+                        item.ApplicationUser.SegundoApellido)
+                        </td>
+                        <td>@item.ApplicationUser.UserName</td>
+                        <td>
+                            <a class="link-primary" asp-controller="Usuario" asp-action="DetalleEstudiante"
+                            asp-route-id="@item.ApplicationUser.Id">Detalles</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

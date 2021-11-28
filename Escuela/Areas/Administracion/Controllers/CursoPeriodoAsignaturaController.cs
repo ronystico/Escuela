@@ -50,9 +50,9 @@ namespace Escuela.Controllers
         {
             if (ModelState.IsValid)
             {
-                if(_data.DetalleCursoPeriodo.Any(s => s.IdCurso == cursoPeriodo.IdCurso && s.IdPeriodo == cursoPeriodo.IdPeriodo))
+                if (_data.DetalleCursoPeriodo.Any(s => s.IdCurso == cursoPeriodo.IdCurso && s.IdPeriodo == cursoPeriodo.IdPeriodo))
                 {
-                    ModelState.AddModelError(string.Empty, "Esta combinación de Periodo/Curso ya existe, debes editarla");
+                    ModelState.AddModelError(string.Empty, "Esta combinaciï¿½n de Periodo/Curso ya existe, debes editarla");
                     ObtenerCursosySecciones();
                     ObtenerPeriodosySubperiodos();
                     ObtenerAsignaturas();
@@ -90,7 +90,7 @@ namespace Escuela.Controllers
 
             return View(cursoPeriodo);
         }
-        // TODO: EditarCursoPeriodo
+
         [HttpGet]
         public async Task<IActionResult> Editar(int? id)
         {
@@ -102,7 +102,7 @@ namespace Escuela.Controllers
             var cursoPeriodo = await _data.DetalleCursoPeriodo.Include(s => s.Curso).Include(s => s.Periodo)
                 .Include(s => s.DetalleCursoperiodoAsignatura).ThenInclude(s => s.Asignatura).AsNoTracking()
                 .FirstOrDefaultAsync(s => s.IdDetalleCursoPeriodo == id);
-            if(cursoPeriodo == null)
+            if (cursoPeriodo == null)
             {
                 return NotFound();
             }
@@ -112,7 +112,7 @@ namespace Escuela.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Editar(int id,CursoPeriodoAsignaturaViewModel cursoPeriodoAsignatura)
+        public async Task<IActionResult> Editar(int id, CursoPeriodoAsignaturaViewModel cursoPeriodoAsignatura)
         {
             if (ModelState.IsValid)
             {
@@ -122,7 +122,7 @@ namespace Escuela.Controllers
 
                 var asignaturas = new List<DetalleCursoperiodoAsignatura>();
 
-                if(cursoPeriodoAsignatura.AsignaturasSeleccionadas != null)
+                if (cursoPeriodoAsignatura.AsignaturasSeleccionadas != null)
                 {
                     foreach (var asignaturacurso in cursoPeriodoAsignatura.AsignaturasSeleccionadas)
                     {
@@ -144,7 +144,7 @@ namespace Escuela.Controllers
         public IActionResult Eliminar(int id)
         {
             var cursoPeriodo = _data.DetalleCursoPeriodo.Single(s => s.IdDetalleCursoPeriodo == id);
-            if(cursoPeriodo == null)
+            if (cursoPeriodo == null)
             {
                 return NotFound();
             }
@@ -156,10 +156,116 @@ namespace Escuela.Controllers
         [HttpPost, ActionName("Eliminar")]
         public async Task<IActionResult> EliminarConfirmado(int id)
         {
+            if (id == 0)
+            {
+                return NotFound();
+            }
             var detalleCursoPeriodo = await _data.DetalleCursoPeriodo.FindAsync(id);
+            if (detalleCursoPeriodo == null)
+            {
+                return NotFound();
+            }
             _data.DetalleCursoPeriodo.Remove(detalleCursoPeriodo);
             _data.SaveChanges();
             return RedirectToAction("Inicio");
+        }
+
+        public async Task<IActionResult> VerEstudiantes(int id)
+        {
+            if (id == 0)
+            {
+                return NotFound();
+            }
+            if (!_data.DetalleCursoPeriodo.Any(s => s.IdDetalleCursoPeriodo == id))
+            {
+                return NotFound();
+            }
+            var estudiantesCursoPeriodo = await _data.DetalleCursoPeriodo
+            .Include(s => s.DetalleEstudiante)
+            .ThenInclude(s => s.ApplicationUser)
+            .Where(s => s.IdDetalleCursoPeriodo == id)
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
+
+            return View(estudiantesCursoPeriodo);
+        }
+
+        public async Task<IActionResult> RevocarAsignaturas(int id)
+        {
+            if (id == 0)
+            {
+                return NotFound();
+            }
+            if (!_data.DetalleCursoPeriodo.Any(s => s.IdDetalleCursoPeriodo == id))
+            {
+                return NotFound();
+            }
+
+            var cursosasignatura = await _data.DetalleCursoPeriodo.Include(a => a.Curso)
+                .Include(a => a.Periodo)
+                .Include(s => s.DetalleCursoperiodoAsignatura)
+                .ThenInclude(s => s.Asignatura)
+                .Where(s => s.IdDetalleCursoPeriodo == id)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+
+            return View(cursosasignatura);
+        }
+
+        [HttpPost, ActionName("RevocarAsignaturas")]
+        public async Task<IActionResult> RevocarAsignaturasConfirmado(int id)
+        {
+            if (id == 0)
+            {
+                return NotFound();
+            }
+            var detalleCursoPeriodo = await _data.DetalleCursoPeriodo.FindAsync(id);
+            if (detalleCursoPeriodo == null)
+            {
+                return NotFound();
+            }
+
+            var cursosasignatura = await _data.DetalleCursoPeriodo
+                .Include(s => s.DetalleCursoperiodoAsignatura)
+                .Where(s => s.IdDetalleCursoPeriodo == id)
+                .FirstOrDefaultAsync();
+
+            HashSet<int> asignaturasEliminar;
+            if (cursosasignatura.DetalleCursoperiodoAsignatura.Count > 0)
+            {
+                asignaturasEliminar = new HashSet<int>(
+                    cursosasignatura.DetalleCursoperiodoAsignatura
+                    .Select(s => s.IdDetalleCursoperiodoAsignatura));
+            }
+            else
+            {
+                return RedirectToAction("Inicio");
+            }
+
+            List<DetalleProfesorCursoperiodoAsignatura> seleccionarAsignaturaProfesor =
+            new List<DetalleProfesorCursoperiodoAsignatura>();
+            foreach (var item in asignaturasEliminar)
+            {
+                if (_data.DetalleProfesorCursoperiodoAsignatura
+                    .Any(s => s.IdDetalleCursoperiodoAsignatura == item))
+                {
+                    seleccionarAsignaturaProfesor.Add(
+                await _data.DetalleProfesorCursoperiodoAsignatura
+                .Where(s => s.IdDetalleCursoperiodoAsignatura == item).FirstOrDefaultAsync());
+                }
+            }
+            if (seleccionarAsignaturaProfesor.Count > 0)
+            {
+                _data.DetalleProfesorCursoperiodoAsignatura.RemoveRange(seleccionarAsignaturaProfesor);
+                await _data.SaveChangesAsync();
+            }
+
+            return RedirectToAction("Inicio");
+        }
+
+        public IActionResult MoverEstudiantes(int id)
+        {
+            return View();
         }
 
         // Obtener Cursos y Secciones
@@ -182,7 +288,7 @@ namespace Escuela.Controllers
         private void ObtenerAsignaturas(object asignaturaSeleccionada = null)
         {
             var asignaturas = _data.Asignatura.OrderBy(s => s.Nombre)
-                .Select(s => new { ID = s.IdAsignatura,Nombre = s.Nombre});
+                .Select(s => new { ID = s.IdAsignatura, Nombre = s.Nombre });
             ViewBag.asignaturas = new SelectList(asignaturas, "ID", "Nombre", asignaturaSeleccionada);
         }
 
@@ -192,7 +298,7 @@ namespace Escuela.Controllers
             var asignaturasObtenidas = _data.Asignatura;
             var asignaturasPeriodo = new HashSet<int>(cursoPeriodo.DetalleCursoperiodoAsignatura.Select(s => s.IdAsignatura));
             var viewModel = new List<AgregarCursoPeriodoViewModel>();
-            foreach(var asignatura in asignaturasObtenidas)
+            foreach (var asignatura in asignaturasObtenidas)
             {
                 viewModel.Add(new AgregarCursoPeriodoViewModel
                 {

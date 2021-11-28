@@ -31,7 +31,10 @@
                 }
     </td>
     <td>
-        <a class="link-primary" asp-action="Editar" asp-route-id="@cursoPeriodo.IdDetalleCursoPeriodo">Editar</a>
+        <a class="link-primary" asp-action="Editar" asp-route-id="@cursoPeriodo.IdDetalleCursoPeriodo">Editar</a><br>
+        <a class="link-primary" asp-action="VerEstudiantes" asp-route-id="@cursoPeriodo.IdDetalleCursoPeriodo">Ver Estudiantes</a><br>
+        <a class="link-primary" asp-action="RevocarAsignaturas" asp-route-id="@cursoPeriodo.IdDetalleCursoPeriodo">Revocar Asignaturas</a><br>
+        <a class="link-primary" asp-action="MoverEstudiantes" asp-route-id="@cursoPeriodo.IdDetalleCursoPeriodo">Mover Estudiantes</a><br>
         <a class="link-primary" asp-action="Eliminar" asp-route-id="@cursoPeriodo.IdDetalleCursoPeriodo">Eliminar</a>
     </td>
 </tr>}
