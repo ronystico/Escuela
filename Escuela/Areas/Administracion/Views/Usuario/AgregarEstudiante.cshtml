@@ -9,8 +9,8 @@
 <p class="mb-3">La información principal ha sido añadida. Falta la siguiente información adicional</p>
 <hr />
 
-
 <form method="POST" asp-action="AgregarEstudiante">
+    <div asp-validation-summary="All" class="text-danger"></div>
     <div class="row">
         <div class="col-md-6">
             <input asp-for="DetalleEstudiante.ApplicationUser.Id" value="@ViewBag.user.Id" hidden />
@@ -45,7 +45,7 @@
                         <br />
                     }
                 </div>
-                <span asp-validation-for="DetalleEstudiante.DetalleCursoPeriodo" class="text-danger"></span>
+                <span asp-validation-for="DetalleEstudiante.IdDetalleCursoPeriodo" class="text-danger"></span>
             </div>
         </div>
         <div class="col-md-6">
@@ -63,7 +63,7 @@
         </div>
     </div>
     <div class="form-group">
-        <button type="submit" class="btn btn-primary">Agregar Detalles</button>
+        <button type="submit" asp-route-id="@ViewBag.user.Id" class="btn btn-primary">Agregar Detalles</button>
     </div>
 </form>
 
