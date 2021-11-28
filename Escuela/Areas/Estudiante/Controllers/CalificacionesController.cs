@@ -59,7 +59,9 @@ namespace Escuela.Controllers
             if(id == 0){
                 return NotFound();
             }
-
+            if(!_data.DetalleCursoPeriodo.Any(s => s.IdDetalleCursoPeriodo == id)){
+                return NotFound();
+            }
             ViewBag.id = id;
             
             var estudiante = _signInManager.Context.User.Identity.Name;
