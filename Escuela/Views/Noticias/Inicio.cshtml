@@ -55,6 +55,7 @@
     var nextDisabled = !Model.HasNextPage ? "disabled" : "";
 }
 
+<div class="mt-3">
 <a asp-action="Inicio"
    asp-route-numeroDePagina="@(Model.PageIndex - 1)"
    class="btn btn-outline-primary @prevDisabled">
@@ -65,6 +66,7 @@
    class="btn btn-outline-primary @nextDisabled">
     Siguiente
 </a>
+</div>
 
 @section css{
 <link rel="stylesheet" href="~/css/site.css" />
