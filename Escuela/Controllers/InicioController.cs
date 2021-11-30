@@ -21,12 +21,17 @@ namespace Escuela.Controllers
 
         private readonly ApplicationDbContext _data;
         private readonly UserManager<ApplicationUser> _user;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public InicioController(ILogger<InicioController> logger, ApplicationDbContext data, UserManager<ApplicationUser> user)
+        public InicioController(ILogger<InicioController> logger, 
+        ApplicationDbContext data, 
+        UserManager<ApplicationUser> user,
+        SignInManager<ApplicationUser> signInManager)
         {
             _logger = logger;
             _data = data;
             _user = user;
+            _signInManager = signInManager;
         }
 
         [AllowAnonymous]
@@ -40,6 +45,13 @@ namespace Escuela.Controllers
             .OrderByDescending(s => s.FechaPublicacion)
             .Take(3)
             .ToList();
+
+            ViewBag.mostrarbotonagregarnoticia = false;
+            if(_signInManager.IsSignedIn(User)){
+                if(User.IsInRole("Administracion")){
+                    ViewBag.mostrarbotonagregarnoticia = true;
+                }
+            }
             
             ViewBag.idnuevo = imagenesActuales.Count + 1;
             var imagenesActualesModelo = new List<InicioCarouselViewModel>();

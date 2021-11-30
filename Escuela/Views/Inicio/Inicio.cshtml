@@ -3,15 +3,15 @@
     ViewData["Title"] = "Inicio";
 }
 
-<div id="carouselIndicators" class="carousel slide" data-ride="carousel">
+<div id="carouselIndicators" class="carousel slide" data-bs-ride="carousel">
     <ol class="carousel-indicators">
         @{
             bool primerIndicador = true;
         }
         @foreach (var indicador in Model)
         {
-            <li data-target="#carouselIndicators" data-slide-to="@indicador.IdImagen"
-            class="@(primerIndicador ? Html.Raw("active") : Html.Raw(""))"></li>
+            <button type="button" data-bs-target="#carouselIndicators" data-bs-slide-to="@indicador.IdImagen"
+            class="@(primerIndicador ? Html.Raw("active") : Html.Raw(""))" @(primerIndicador ? Html.Raw("aria-current=\"true\"") : Html.Raw(""))></button>
             primerIndicador = false;
         }
     </ol>
@@ -28,23 +28,29 @@
             primerImagen = false;
         }
     </div>
-    <a class="carousel-control-prev" href="#carouselIndicators" role="button" data-slide="prev">
+    <a class="carousel-control-prev" href="#carouselIndicators" type="button" data-bs-target="#carouselIndicators" data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="sr-only">Anterior</span>
+        <span class="visually-hidden">Anterior</span>
     </a>
-    <a class="carousel-control-next" href="#carouselIndicators" role="button" data-slide="next">
+    <a class="carousel-control-next" href="#carouselIndicators" type="button" data-bs-target="#carouselIndicators" data-bs-slide="next">
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="sr-only">Siguiente</span>
+        <span class="visually-hidden">Siguiente</span>
     </a>
 </div>
 
-<p class="h1 mt-3 mb-2"><strong>&Uacute;ltimas Noticias <i class="far fa-newspaper"></i></strong></p>
+<p class="h1 mt-3 mb-2">
+    <strong>&Uacute;ltimas Noticias <i class="far fa-newspaper"></i>
+    </strong>
+    @if(ViewBag.mostrarbotonagregarnoticia){
+        <a asp-area="Administracion" asp-controller="Noticia" asp-action="Agregar" class="btn btn-outline-dark">Agregar</a>
+    }
+</p>
 <hr>
 <div class="row">
     @foreach (var noticia in ViewBag.noticias)
     {
         <div class="col-md-4 mb-3">
-            <a asp-controller="Noticias" asp-action="Detalles" asp-route-id="@noticia.IdNoticia" class="text-dark h2">
+            <a asp-controller="Noticias" asp-action="Detalles" asp-route-id="@noticia.IdNoticia" class="link-dark h3">
                 @noticia.Titulo
                 </a>
             <div class="texto-truncado-5 mb-2">
@@ -85,5 +91,5 @@
 
 @section css{
     <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" href="~/css/all.css" />
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.css" />
 }
