@@ -13,58 +13,58 @@
     <div class="row">
         <div class="col-md-6">
             <p class="h2">Madre</p>
-            <div class="form-group">
+            <div class="mb-3">
                 <input type="hidden" asp-for="IdPadres" />
             </div>
-            <div class="form-group">
-                <label asp-for="NombresMadre" class="control-label"></label>
+            <div class="mb-3">
+                <label asp-for="NombresMadre" class="form-label"></label>
                 <input asp-for="NombresMadre" class="form-control" />
                 <span asp-validation-for="NombresMadre" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="PrimerApellidoMadre" class="control-label"></label>
+            <div class="mb-3">
+                <label asp-for="PrimerApellidoMadre" class="form-label"></label>
                 <input asp-for="PrimerApellidoMadre" class="form-control" />
                 <span asp-validation-for="PrimerApellidoMadre" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="SegundoApellidoMadre" class="control-label"></label>
+            <div class="mb-3">
+                <label asp-for="SegundoApellidoMadre" class="form-label"></label>
                 <input asp-for="SegundoApellidoMadre" class="form-control" />
                 <span asp-validation-for="SegundoApellidoMadre" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="TelefonoMadre" class="control-label"></label>
+            <div class="mb-3">
+                <label asp-for="TelefonoMadre" class="form-label"></label>
                 <input asp-for="TelefonoMadre" class="form-control" />
                 <span asp-validation-for="TelefonoMadre" class="text-danger"></span>
             </div>
         </div>
         <div class="col-md-6">
             <p class="h2">Padre</p>
-            <div class="form-group">
-                <label asp-for="NombresPadre" class="control-label"></label>
+            <div class="mb-3">
+                <label asp-for="NombresPadre" class="form-label"></label>
                 <input asp-for="NombresPadre" class="form-control" />
                 <span asp-validation-for="NombresPadre" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="PrimerApellidoPadre" class="control-label"></label>
+            <div class="mb-3">
+                <label asp-for="PrimerApellidoPadre" class="form-label"></label>
                 <input asp-for="PrimerApellidoPadre" class="form-control" />
                 <span asp-validation-for="PrimerApellidoPadre" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="SegundoApellidoPadre" class="control-label"></label>
+            <div class="mb-3">
+                <label asp-for="SegundoApellidoPadre" class="form-label"></label>
                 <input asp-for="SegundoApellidoPadre" class="form-control" />
                 <span asp-validation-for="SegundoApellidoPadre" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="TelefonoPadre" class="control-label"></label>
+            <div class="mb-3">
+                <label asp-for="TelefonoPadre" class="form-label"></label>
                 <input asp-for="TelefonoPadre" class="form-control" />
                 <span asp-validation-for="TelefonoPadre" class="text-danger"></span>
             </div>
         </div>
     </div>
 
-    <div class="form-group">
+    <div class="mb-3">
         <input asp-route-id="@Model.IdPadres" type="submit" value="Editar padres" class="btn btn-warning" />
         
     </div>

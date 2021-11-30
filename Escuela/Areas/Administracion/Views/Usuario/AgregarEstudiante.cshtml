@@ -19,8 +19,8 @@
             <input asp-for="DetalleEstudiante.ApplicationUser.Nombres" value="@ViewBag.user.Nombres" hidden />
             <input asp-for="DetalleEstudiante.ApplicationUser.Estado" value="@ViewBag.user.Estado" hidden />
 
-            <div class="form-group">
-                <label asp-for="DetalleEstudiante.Padres"></label>
+            <div class="mb-3">
+                <label class="form-label" asp-for="DetalleEstudiante.Padres"></label>
                 <input type="text" asp-for="DetalleEstudiante.IdPadres" class="form-control" value="@ViewBag.padres.IdPadres" hidden>
                 <input type="text" asp-for="DetalleEstudiante.Padres" class="form-control" disabled value="@(
         ViewBag.padres.NombresMadre + " " + ViewBag.padres.PrimerApellidoMadre + " " +
@@ -30,8 +30,8 @@
                 <span asp-validation-for="DetalleEstudiante.IdPadres" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="DetalleEstudiante.IdDetalleCursoPeriodo" class="requerido"></label>
+            <div class="mb-3">
+                <label asp-for="DetalleEstudiante.IdDetalleCursoPeriodo" class="requerido form-label"></label>
                 <div class="form-check">
                     @foreach (var cursoperiodo in ViewBag.cursosperiodos)
                     {
@@ -49,20 +49,20 @@
             </div>
         </div>
         <div class="col-md-6">
-            <div class="form-group">
-                <label asp-for="DetalleEstudiante.NumerodeOrden" class="requerido"></label>
+            <div class="mb-3">
+                <label asp-for="DetalleEstudiante.NumerodeOrden" class="requerido form-label"></label>
                 <input asp-for="DetalleEstudiante.NumerodeOrden" class="form-control">
                 <span asp-validation-for="DetalleEstudiante.NumerodeOrden" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="DetalleEstudiante.IdoRNE"></label>
+            <div class="mb-3">
+                <label class="form-label" asp-for="DetalleEstudiante.IdoRNE"></label>
                 <input asp-for="DetalleEstudiante.IdoRNE" class="form-control" />
                 <span asp-validation-for="DetalleEstudiante.IdoRNE" class="text-danger"></span>
             </div>
         </div>
     </div>
-    <div class="form-group">
+    <div class="mb-3">
         <button type="submit" asp-route-id="@ViewBag.user.Id" class="btn btn-primary">Agregar Detalles</button>
     </div>
 </form>

@@ -8,39 +8,39 @@
     <div asp-validation-summary="All" class="text-danger"></div>
     <div class="row">
         <div class="col-md-6">
-            <div class="form-group">
-                <label asp-for="Nombres"></label>
+            <div class="mb-3">
+                <label class="form-label" asp-for="Nombres"></label>
                 <input asp-for="Nombres" class="form-control" onchange="ponerUsuario()" />
                 <span asp-validation-for="Nombres" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="PrimerApellido"></label>
+            <div class="mb-3">
+                <label class="form-label" asp-for="PrimerApellido"></label>
                 <input asp-for="PrimerApellido" class="form-control" onchange="ponerUsuario()" />
                 <span asp-validation-for="PrimerApellido" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="SegundoApellido"></label>
+            <div class="mb-3">
+                <label class="form-label" asp-for="SegundoApellido"></label>
                 <input asp-for="SegundoApellido" class="form-control" onchange="ponerUsuario()" />
                 <span asp-validation-for="SegundoApellido" class="text-danger"></span>
             </div>
         </div>
         <div class="col-md-6">
             @* Rol *@
-            <div class="form-group">
-                <label for="Rol">Rol</label>
-                <select id="rol" name="rol" class="form-control" disabled>
+            <div class="mb-3">
+                <label class="form-label" for="Rol">Rol</label>
+                <select id="rol" name="rol" class="form-select" disabled>
                     <option value="Administracion">Administracion</option>
                 </select>
             </div>
 
-            <div class="form-group">
-                <label for="Nombre de Usuario">Nombre de Usuario</label>
+            <div class="mb-3">
+                <label class="form-label" for="Nombre de Usuario">Nombre de Usuario</label>
                 <input asp-for="UserName" class="form-control" />
                 <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Estado"></label>
-                <select asp-for="Estado" class="form-control">
+            <div class="mb-3">
+                <label class="form-label" asp-for="Estado"></label>
+                <select asp-for="Estado" class="form-select">
                     <option value="Inscrito">Inscrito</option>
                     <option value="Retirado">Retirado</option>
                 </select>
@@ -48,7 +48,7 @@
             </div>
         </div>
     </div>
-    <div class="form-group">
+    <div class="mb-3">
         <input asp-for="Id" value="@Model.Id" hidden />
         <input type="submit" class="btn btn-warning" value="Editar" />
     </div>

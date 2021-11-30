@@ -16,12 +16,12 @@
 
 <form enctype="multipart/form-data" method="post">
 <div asp-validation-summary="All" class="text-danger"></div>
-    <div class="form-group">
-        <label asp-for="Imagen"></label>
+    <div class="mb-3">
+        <label class="form-label" asp-for="Imagen"></label>
         <input type="file" asp-for="ImagenParaSubir" class="form-control-file" />
         <span asp-validation-for="ImagenParaSubir" class="text-danger"></span>
     </div>
-    <div class="form-group">
+    <div class="mb-3">
         <input asp-page-handler="Editar" asp-route-id="@ViewBag.imagenactual" type="submit" value="Editar" class="btn btn-warning" />
     </div>
 </form>

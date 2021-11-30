@@ -57,7 +57,7 @@
                         <td>@calificacionRevisar.Observacion</td>
                         <td>@calificacionRevisar.FechaAsignada</td>
                         <td>
-                            <a class="disabled">Agregar</a><br />
+                            <a class="disabled text-decoration-none link-dark" aria-disabled="true" tabindex="-1">Agregar</a><br />
                             <a asp-action="EditarCalificacion" asp-route-id="@ViewBag.id" asp-route-id2="@calificacionRevisar.IdEstudiante"
                     asp-area="Profesor">Editar</a>
                         </td>
@@ -81,7 +81,7 @@
                     <td>
                         <a asp-action="AgregarCalificacion" asp-route-id="@ViewBag.id" asp-route-id2="@estudiante.UserId"
                     asp-area="Profesor">Agregar</a><br />
-                        <a class="disabled">Editar</a>
+                        <a class="disabled text-decoration-none link-dark" aria-disabled="true" tabindex="-1">Editar</a>
                     </td>
                 }
                 @foreach (var calificacion in Model[0].Calificacion.Where(s => s.IdEstudiante == estudiante.UserId))
@@ -90,7 +90,7 @@
                     <td>@calificacion.Observacion</td>
                     <td>@calificacion.FechaAsignada</td>
                     <td>
-                        <a class="disabled">Agregar</a><br />
+                        <a class="disabled text-decoration-none link-dark" aria-disabled="true" tabindex="-1">Agregar</a><br />
                         <a asp-action="EditarCalificacion" asp-route-id="@ViewBag.id" asp-route-id2="@estudiante.UserId"
                     asp-area="Profesor">Editar</a>
                     </td>

@@ -17,8 +17,8 @@
 
             <div asp-validation-summary="All" class="text-danger"></div>
 
-            <div class="form-group">
-                <label asp-for="UserName"></label>
+            <div class="mb-3">
+                <label class="form-label" asp-for="UserName"></label>
                 <div class="input-group">
                     <input asp-for="UserName" class="form-control" value="@Model.UserName" readonly />
                     <button type="button" class="btn btn-primary" onclick="usuarioComoClave();">Usar como Clave</button>
@@ -26,8 +26,8 @@
                 <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="Password"></label>
+            <div class="mb-3">
+                <label class="form-label" asp-for="Password"></label>
                 <div class="input-group">
                     <input asp-for="Password" class="form-control" />
                     <button type="button" class="btn btn-outline-primary" onmouseover="mouseoverClave();" onmouseout="mouseoutClave();">
@@ -37,14 +37,14 @@
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="ConfirmPassword"></label>
+            <div class="mb-3">
+                <label class="form-label" asp-for="ConfirmPassword"></label>
                 <input asp-for="ConfirmPassword" class="form-control" />
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
         </div>
     </div>
-    <div class="form-group">
+    <div class="mb-3">
         <input type="submit" class="btn btn-danger" value="Reestablecer" />
     </div>
 </form>
@@ -74,5 +74,5 @@
     </script>
 }
 @section css {
-    <link href="~/css/all.css" rel="stylesheet" />
+    <link href="~/lib/font-awesome/css/all.css" rel="stylesheet" />
 }

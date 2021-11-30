@@ -45,28 +45,28 @@
             <input asp-for="@Model.Calificacion.IdDetalleCursoPeriodoAsignatura" value="@ViewBag.id" hidden />
             <input asp-for="@Model.Calificacion.IdEstudiante" value="@ViewBag.id2" hidden />
             <div class="col-md-6">
-                <div class="form-group">
-                    <label for="Calificación">Calificaci&oacute;n</label>
+                <div class="mb-3">
+                    <label class="form-label" for="Calificación">Calificaci&oacute;n</label>
                     <input type="text" asp-for="@Model.Calificacion.CalificacionTotal" value="" class="form-control" />
                     <span asp-validation-for="@Model.Calificacion.CalificacionTotal" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="form-group">
-                    <label for="Observación">Observaci&oacute;n</label>
+                <div class="mb-3">
+                    <label class="form-label" for="Observación">Observaci&oacute;n</label>
                     <textarea asp-for="@Model.Calificacion.Observacion" class="form-control"></textarea>
                     <span asp-validation-for="@Model.Calificacion.Observacion" class="text-danger"></span>
                 </div>
             </div>
             }
     }
-<div class="form-group">
+<div class="mb-3">
     <input type="submit" class="btn btn-primary" value="Agregar" asp-route-id="@ViewBag.id" asp-route-id2="@ViewBag.id2" />
 </div>
     
 </form>
 
-<div class="row">
+<div>
     <a class="btn btn-primary" asp-action="CalificacionesAsignatura" asp-route-id="@ViewBag.id">Volver a la lista</a>
 </div>
 
