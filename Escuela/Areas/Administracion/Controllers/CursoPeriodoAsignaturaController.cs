@@ -265,6 +265,8 @@ namespace Escuela.Controllers
 
         public IActionResult MoverEstudiantes(int id)
         {
+            ObtenerCursosySecciones();
+            ObtenerPeriodosySubperiodos();
             return View();
         }
 
