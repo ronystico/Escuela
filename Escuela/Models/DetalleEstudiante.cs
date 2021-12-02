@@ -23,10 +23,15 @@ namespace Escuela.Models
         [Column("id_padres")]
         public int? IdPadres { get; set; }
 
-        [Column("id_o_rne")]
-        [DisplayName("ID o RNE")]
+        [Column("id_estudiante")]
+        [DisplayName("ID Estudiante")]
+        [StringLength(50)]
+        public string IdEstudiante { get; set; }
+
+        [Column("rne")]
+        [DisplayName("RNE")]
         [StringLength(13)]
-        public string IdoRNE { get; set; }
+        public string RNE { get; set; }
         
         public virtual ApplicationUser ApplicationUser { get; set; }
 

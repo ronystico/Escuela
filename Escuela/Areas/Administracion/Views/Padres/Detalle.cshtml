@@ -76,7 +76,8 @@
             <th>Estado</th>
             <th>Periodo/Subperiodo<br /> - <br /> Curso/Sección</th>
             <th>Número<br /> de<br /> Orden</th>
-            <th>ID o RNE</th>
+            <th>ID Estudiante</th>
+            <th>RNE</th>
             <th>Acciones</th>
         </tr>
     </thead>
@@ -88,7 +89,8 @@
                     <td>@estudiante.ApplicationUser.Estado</td>
                     <td>@(estudiante.DetalleCursoPeriodo.Periodo.Nombre + " / " + estudiante.DetalleCursoPeriodo.Periodo.Subperiodo + " - " + estudiante.DetalleCursoPeriodo.Curso.Nombre + " / " + estudiante.DetalleCursoPeriodo.Curso.Seccion)</td>
                     <td>@estudiante.NumerodeOrden</td>
-                    <td>@estudiante.IdoRNE</td>
+                    <td>@estudiante.IdEstudiante</td>
+                    <td>@estudiante.RNE</td>
                     <td>
                         <a asp-controller="Usuario" asp-action="DetalleEstudiante" asp-route-id="@estudiante.ApplicationUser.Id">Más Detalles</a>
                     </td>

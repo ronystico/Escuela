@@ -195,7 +195,8 @@ namespace Escuela.Areas.Administracion.Controllers
                         UserId = id,
                         IdDetalleCursoPeriodo = estudiante.DetalleEstudiante.IdDetalleCursoPeriodo,
                         NumerodeOrden = estudiante.DetalleEstudiante.NumerodeOrden,
-                        IdoRNE = estudiante.DetalleEstudiante.IdoRNE
+                        IdEstudiante = estudiante.DetalleEstudiante.IdEstudiante,
+                        RNE = estudiante.DetalleEstudiante.RNE
                     };
                 }
                 else
@@ -206,7 +207,8 @@ namespace Escuela.Areas.Administracion.Controllers
                         IdDetalleCursoPeriodo = estudiante.DetalleEstudiante.IdDetalleCursoPeriodo,
                         NumerodeOrden = estudiante.DetalleEstudiante.NumerodeOrden,
                         IdPadres = estudiante.DetalleEstudiante.IdPadres,
-                        IdoRNE = estudiante.DetalleEstudiante.IdoRNE
+                        IdEstudiante = estudiante.DetalleEstudiante.IdEstudiante,
+                        RNE = estudiante.DetalleEstudiante.RNE
                     };
                 }
                 var resultado = await _data.DetalleEstudiante.AddAsync(detalles);
@@ -517,7 +519,9 @@ namespace Escuela.Areas.Administracion.Controllers
                 usuario.Estado = estudiante.Estado;
 
                 detalleEstudiante.IdDetalleCursoPeriodo = estudiante.DetalleEstudiante.IdDetalleCursoPeriodo;
-                detalleEstudiante.IdoRNE = estudiante.DetalleEstudiante.IdoRNE;
+                detalleEstudiante.IdEstudiante = estudiante.DetalleEstudiante.IdEstudiante;
+                detalleEstudiante.RNE = estudiante.DetalleEstudiante.RNE;
+
                 if(estudiante.DetalleEstudiante.Padres.IdPadres != 0)
                 {
                     detalleEstudiante.IdPadres = estudiante.DetalleEstudiante.Padres.IdPadres;
