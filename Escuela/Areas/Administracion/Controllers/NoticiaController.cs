@@ -61,6 +61,7 @@ namespace Escuela.Areas.Administracion.Controllers
 
                 noticia.IdAutor = administrador.Id;
                 noticia.FechaPublicacion = DateTime.Now;
+                noticia.FechaEdicion = DateTime.Now;
 
                 await _data.Noticia.AddAsync(noticia);
                 await _data.SaveChangesAsync();
@@ -103,6 +104,7 @@ namespace Escuela.Areas.Administracion.Controllers
                 noticia.IdCategoriaNoticia = noticiaRecibida.IdCategoriaNoticia;
                 noticia.Titulo = noticiaRecibida.Titulo;
                 noticia.Cuerpo = noticiaRecibida.Cuerpo;
+                noticia.FechaEdicion = DateTime.Now;
                 
                 _data.Noticia.Update(noticia);
                 await _data.SaveChangesAsync();

@@ -35,6 +35,9 @@ namespace Escuela.Models
         [Column("fecha_publicacion")]
         public DateTime FechaPublicacion { get; set; }
 
+        [Column("fecha_edicion")]
+        public DateTime FechaEdicion { get; set; }
+
         [ForeignKey("IdCategoriaNoticia")]
         public CategoriaNoticia CategoriaNoticia { get; set; }
 

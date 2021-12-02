@@ -11,8 +11,8 @@
 @for (int i = 0; i < Model.Count; i+=2)
 {
     <div class="row">
-        <div class="col-md-6">
-            <a asp-action="Detalles" asp-route-id="@Model[i].IdNoticia" asp-route-numeroDePagina="@Model.PageIndex" class="text-dark h2">
+        <div class="col-md-6 mb-3">
+            <a asp-action="Detalles" asp-route-id="@Model[i].IdNoticia" asp-route-numeroDePagina="@Model.PageIndex" class="link-dark h3">
                 @Model[i].Titulo
             </a>
             <div class="texto-truncado-5 mb-2">
@@ -23,7 +23,10 @@
                 Autor: @(Model[i].ApplicationUser.Nombres + " " +
             Model[i].ApplicationUser.PrimerApellido + " " +
             Model[i].ApplicationUser.SegundoApellido) <br>
-                Fecha de Publicaci&oacute;n: @Model[i].FechaPublicacion
+                Publicado: @Model[i].FechaPublicacion <br>
+                @if(Model[i].FechaPublicacion < Model[i].FechaEdicion){
+                    @:Editado: @Model[i].FechaEdicion
+                }
             </small>
             <br class="mb-3">
         </div>
@@ -31,7 +34,7 @@
         <div class="col-md-6">
             @if ((i + 1) != Model.Count)
             {
-                <a asp-action="Detalles" asp-route-id="@Model[i+1].IdNoticia" asp-route-numeroDePagina="@Model.PageIndex" class="text-dark h2">
+                <a asp-action="Detalles" asp-route-id="@Model[i+1].IdNoticia" asp-route-numeroDePagina="@Model.PageIndex" class="link-dark h3">
                     @Model[i+1].Titulo
                 </a>
                 <div class="texto-truncado-5 mb-2">
@@ -42,7 +45,10 @@
                     Autor: @(Model[i+1].ApplicationUser.Nombres + " " +
             Model[i+1].ApplicationUser.PrimerApellido + " " +
             Model[i+1].ApplicationUser.SegundoApellido) <br>
-                    Fecha de Publicaci&oacute;n: @Model[i+1].FechaPublicacion
+                    Publicado: @Model[i+1].FechaPublicacion <br>
+                    @if(Model[i+1].FechaPublicacion < Model[i+1].FechaEdicion){
+                    @:Editado: @Model[i+1].FechaEdicion
+                }
                 </small>
                 <br class="mb-3">
             }

@@ -7,6 +7,7 @@ using Escuela.Data;
 using Escuela.Models;
 using Escuela.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -17,11 +18,14 @@ namespace Escuela.Controllers
     {
         private readonly ILogger<NoticiasController> _logger;
         private readonly ApplicationDbContext _data;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public NoticiasController(ApplicationDbContext data, ILogger<NoticiasController> logger)
+        public NoticiasController(ILogger<NoticiasController> logger,
+        ApplicationDbContext data, SignInManager<ApplicationUser> signInManager)
         {
-            _data = data;
             _logger = logger;
+            _data = data;
+            _signInManager = signInManager;
         }
 
         [AllowAnonymous]
@@ -55,6 +59,13 @@ namespace Escuela.Controllers
             }
 
             ViewBag.numerodepagina = numeroDePagina;
+
+            ViewBag.mostrarbotoneditarnoticia = false;
+            if(_signInManager.IsSignedIn(User)){
+                if(User.IsInRole("Administracion")){
+                    ViewBag.mostrarbotoneditarnoticia = true;
+                }
+            }
 
             return View(noticia);
         }

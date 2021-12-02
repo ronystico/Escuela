@@ -25,7 +25,10 @@
                 Autor
             </th>
             <th>
-                Fecha de Publicaci&oacute;n
+                Publicado
+            </th>
+            <th>
+                Editado
             </th>
             <th>Acciones</th>
         </tr>
@@ -49,6 +52,11 @@
             </td>
             <td>
                 @item.FechaPublicacion
+            </td>
+            <td>
+                @if(item.FechaPublicacion < item.FechaEdicion){
+                    @item.FechaEdicion
+                }
             </td>
             <td>
                 <a class="btn-group" target="_blank" asp-area="" asp-controller="Noticias" asp-action="Detalles" asp-route-id="@item.IdNoticia">Detalles <i class="fas fa-external-link-alt"></i></a>

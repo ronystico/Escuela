@@ -60,7 +60,10 @@
                 Autor: @(noticia.ApplicationUser.Nombres + " " +
                 noticia.ApplicationUser.PrimerApellido + " " +
                 noticia.ApplicationUser.SegundoApellido) <br>
-                Fecha de Publicaci&oacute;n: @noticia.FechaPublicacion</small>
+                Publicado: @noticia.FechaPublicacion<br>
+                @if(noticia.FechaPublicacion < noticia.FechaEdicion){
+                    @:Editado: @noticia.FechaEdicion
+                }</small>
         </div>
     }
 </div>

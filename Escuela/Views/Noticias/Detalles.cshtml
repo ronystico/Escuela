@@ -22,12 +22,19 @@
             Autor: @(Model.ApplicationUser.Nombres + " " +
             Model.ApplicationUser.PrimerApellido + " " +
             Model.ApplicationUser.SegundoApellido) <br>
-            Fecha de Publicaci&oacute;n: @Model.FechaPublicacion</small>
+            Publicado: @Model.FechaPublicacion<br>
+            @if(Model.FechaPublicacion < Model.FechaEdicion){
+                    @:Editado: @Model.FechaEdicion
+                }
+            </small>
         <div class="mb-2 mt-3">
             @Model.Cuerpo
         </div>
         <div class="mt-3">
             <a asp-action="Inicio" asp-route-numeroDePagina="@ViewBag.numerodepagina" class="btn btn-outline-primary">Volver atr&aacute;s</a>
+            @if(ViewBag.mostrarbotoneditarnoticia){
+                <a asp-area="Administracion" asp-controller="Noticia" asp-action="Editar" asp-route-id="@Model.IdNoticia" class="btn btn-outline-warning">Editar</a>
+            }
         </div>
     </div>
     <div class="col-md-3">
