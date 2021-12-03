@@ -270,6 +270,11 @@ namespace Escuela.Controllers
             return View();
         }
 
+        public IActionResult VerDocentes(int id)
+        {
+            return View();
+        }
+
         // Obtener Cursos y Secciones
         private void ObtenerCursosySecciones(object cursoSeleccionado = null)
         {
