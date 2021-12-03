@@ -15,7 +15,7 @@
             <a asp-action="Detalles" asp-route-id="@Model[i].IdNoticia" asp-route-numeroDePagina="@Model.PageIndex" class="link-dark h3">
                 @Model[i].Titulo
             </a>
-            <div class="texto-truncado-5 mb-2">
+            <div class="texto-truncado-5 mb-2 mt-2">
                 @Model[i].Cuerpo
             </div>
             <small class="text-muted">
@@ -37,7 +37,7 @@
                 <a asp-action="Detalles" asp-route-id="@Model[i+1].IdNoticia" asp-route-numeroDePagina="@Model.PageIndex" class="link-dark h3">
                     @Model[i+1].Titulo
                 </a>
-                <div class="texto-truncado-5 mb-2">
+                <div class="texto-truncado-5 mb-2 mt-2">
                     @Model[i+1].Cuerpo
                 </div>
                 <small class="text-muted">
