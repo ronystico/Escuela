@@ -1,0 +1,13 @@
+@model DetalleCursoPeriodo
+
+@{
+    ViewData["Title"] = "Mover Estudiantes";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>Mueve estudiantes del mismo curso a otro (sub)periodo</p>
+
+<form asp-action="MoverEstudiantes" method="post" class="row">
+    <select asp-for="IdDetalleCursoPeriodo" asp-items="@ViewBag.periodoscursos" class="form-select"></select>
+</form>

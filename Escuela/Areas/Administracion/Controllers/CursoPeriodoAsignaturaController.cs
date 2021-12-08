@@ -31,6 +31,7 @@ namespace Escuela.Controllers
                 .Include(a => a.Periodo)
                 .Include(s => s.DetalleCursoperiodoAsignatura)
                 .ThenInclude(s => s.Asignatura)
+                .OrderBy(s => s.IdPeriodo)
                 .ToList();
             return View(cursosasignatura);
         }
@@ -265,8 +266,14 @@ namespace Escuela.Controllers
 
         public IActionResult MoverEstudiantes(int id)
         {
-            ObtenerCursosySecciones();
-            ObtenerPeriodosySubperiodos();
+            if(id == 0){
+                return NotFound();
+            }
+            var periodoActual = _data.DetalleCursoPeriodo.Find(id);
+            if(periodoActual == null){
+                return NotFound();
+            }
+            ObtenerPeriodosCursos(id);
             return View();
         }
 
@@ -296,7 +303,22 @@ namespace Escuela.Controllers
         {
             var asignaturas = _data.Asignatura.OrderBy(s => s.Nombre)
                 .Select(s => new { ID = s.IdAsignatura, Nombre = s.Nombre });
-            ViewBag.asignaturas = new SelectList(asignaturas, "ID", "Nombre", asignaturaSeleccionada);
+            ViewBag.asignaturas = new SelectList(asignaturas.AsNoTracking(), "ID", "Nombre", asignaturaSeleccionada);
+        }
+
+        // Obtener CursoPeriodo
+        private void ObtenerPeriodosCursos(int id, object periodoCurso = null)
+        {
+            var periodosCursos = _data.DetalleCursoPeriodo
+            .Where(s => s.IdCurso == id)
+            .OrderBy(s => s.IdPeriodo)
+            .Select(s => new
+            {
+                ID = s.IdPeriodo,
+                Nombre = s.Periodo.Nombre + " / " + s.Periodo.Subperiodo + " - "
+                + s.Curso.Nombre + " / " + s.Curso.Seccion
+            });
+            ViewBag.periodoscursos = new SelectList(periodosCursos.AsNoTracking(), "ID", "Nombre", periodoCurso);
         }
 
         // Editar Asignaturas
