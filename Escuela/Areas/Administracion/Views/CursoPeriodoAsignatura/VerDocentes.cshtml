@@ -1,0 +1,66 @@
+@model DetalleCursoPeriodo
+
+@{
+    ViewData["Title"] = "Ver Docentes";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="row mb-1 mt-2">
+    <div class="col-md-6">
+        <p><strong>Periodo: </strong>@Model.Periodo.Nombre</p>
+        <p><strong>Subperiodo: </strong>@Model.Periodo.Subperiodo</p>
+    </div>
+    <div class="col-md-6">
+        <p><strong>Curso: </strong>@Model.Curso.Nombre</p>
+        <p><strong>Secci&oacute;n: </strong>@Model.Curso.Seccion</p>
+    </div>
+</div>
+
+<a class="btn btn-primary mb-3" asp-action="Inicio">Volver a la lista</a>
+<a class="btn btn-primary mb-3" asp-action="RevocarAsignaturas" asp-route-id="@Model.IdDetalleCursoPeriodo">Revocar Asignaturas</a>
+<hr />
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Asignatura</th>
+                    <th>Nombre Completo</th>
+                    <th>Usuario</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.DetalleCursoperiodoAsignatura)
+                {
+                    <tr>
+                        <td>@item.Asignatura.Nombre</td>
+                        @if(item.DetalleProfesorCursoperiodoAsignatura.Count == 0)
+                        {
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        }
+                        else
+                        {
+                            @foreach(var profesor in item.DetalleProfesorCursoperiodoAsignatura)
+                        {
+                            <td>@(profesor.ApplicationUser.Nombres + " " +
+                        profesor.ApplicationUser.PrimerApellido + " " +
+                        profesor.ApplicationUser.SegundoApellido)
+                        </td>
+                        <td>@profesor.ApplicationUser.UserName</td>
+                        <td>
+                            <a class="link-primary" asp-controller="Usuario" asp-action="DetalleProfesor"
+                            asp-route-id="@profesor.ApplicationUser.Id">Detalles</a>
+                        </td>
+                        }
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

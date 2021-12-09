@@ -32,6 +32,7 @@ namespace Escuela.Controllers
                 .Include(s => s.DetalleCursoperiodoAsignatura)
                 .ThenInclude(s => s.Asignatura)
                 .OrderBy(s => s.IdPeriodo)
+                .AsNoTracking()
                 .ToList();
             return View(cursosasignatura);
         }
@@ -182,6 +183,8 @@ namespace Escuela.Controllers
                 return NotFound();
             }
             var estudiantesCursoPeriodo = await _data.DetalleCursoPeriodo
+                .Include(s => s.Periodo)
+                .Include(s => s.Curso)
             .Include(s => s.DetalleEstudiante)
             .ThenInclude(s => s.ApplicationUser)
             .Where(s => s.IdDetalleCursoPeriodo == id)
@@ -272,8 +275,6 @@ namespace Escuela.Controllers
             var periodoActual = await _data.DetalleCursoPeriodo
                 .Include(s => s.Periodo)
                 .Include(s => s.Curso)
-                .Include(s => s.DetalleEstudiante)
-                .ThenInclude(s => s.ApplicationUser)
                 .Where(s => s.IdDetalleCursoPeriodo == id)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
@@ -281,6 +282,12 @@ namespace Escuela.Controllers
                 return NotFound();
             }
             ObtenerPeriodosCursos(periodoActual.IdCurso);
+            ViewBag.estudiantes = await _data.DetalleEstudiante
+                .Include(s => s.ApplicationUser)
+                .Where(s => s.IdDetalleCursoPeriodo == id)
+                .AsNoTracking()
+                .OrderBy(s => s.NumerodeOrden)
+                .ToListAsync();
             return View(periodoActual);
         }
 
@@ -303,6 +310,14 @@ namespace Escuela.Controllers
             {
                 return NotFound();
             }
+            HashSet<int> numerosDeOrdenDe = new HashSet<int>(periodoActual.DetalleEstudiante.Select(s => s.NumerodeOrden));
+            HashSet<int> numerosDeOrdenDestino = new HashSet<int>(_data.DetalleEstudiante
+                .Where(s => s.IdDetalleCursoPeriodo == periodoRecibido.IdDetalleCursoPeriodo)
+                .Select(s => s.NumerodeOrden));
+            if (numerosDeOrdenDestino.Overlaps(numerosDeOrdenDe))
+            {
+                ModelState.AddModelError("IdDetalleCursoPeriodo", "Al menos un estudiante tiene un número de orden ya existente en el Periodo/Curso de destino. Se ha cancelado la movida");
+            }
             if (ModelState.IsValid)
             {
                 List<DetalleEstudiante> estudiantes = periodoActual.DetalleEstudiante.ToList();
@@ -315,12 +330,30 @@ namespace Escuela.Controllers
                 return RedirectToAction("Inicio");
             }
             ObtenerPeriodosCursos(periodoActual.IdCurso);
+            ViewBag.estudiantes = await _data.DetalleEstudiante
+                .Include(s => s.ApplicationUser)
+                .Where(s => s.IdDetalleCursoPeriodo == id)
+                .AsNoTracking()
+                .OrderBy(s => s.NumerodeOrden)
+                .ToListAsync();
             return View(periodoRecibido);
         }
 
-        public IActionResult VerDocentes(int id)
+        public async Task<IActionResult> VerDocentes(int id)
         {
-            return View();
+            var asignaturasCurso = await _data.DetalleCursoPeriodo
+                .Include(s => s.Periodo)
+                .Include(s => s.Curso)
+                .Include(s => s.DetalleCursoperiodoAsignatura)
+                .ThenInclude(s => s.Asignatura)
+                .Include(s => s.DetalleCursoperiodoAsignatura)
+                .ThenInclude(s => s.DetalleProfesorCursoperiodoAsignatura)
+                .ThenInclude(s => s.ApplicationUser)
+                .Where(s => s.IdDetalleCursoPeriodo == id)
+                .AsNoTracking()
+                .OrderBy(s => s.IdPeriodo)
+                .FirstOrDefaultAsync();
+            return View(asignaturasCurso);
         }
 
         // Obtener Cursos y Secciones

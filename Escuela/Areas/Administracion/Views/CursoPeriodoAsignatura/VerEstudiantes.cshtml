@@ -5,7 +5,20 @@
 
 <h1>@ViewData["Title"]</h1>
 
-<a class="btn btn-primary mb-3" asp-action="Inicio">Volver a la lista</a><br>
+<div class="row mb-1 mt-2">
+    <div class="col-md-6">
+        <p><strong>Periodo: </strong>@Model.Periodo.Nombre</p>
+        <p><strong>Subperiodo: </strong>@Model.Periodo.Subperiodo</p>
+    </div>
+    <div class="col-md-6">
+        <p><strong>Curso: </strong>@Model.Curso.Nombre</p>
+        <p><strong>Secci&oacute;n: </strong>@Model.Curso.Seccion</p>
+    </div>
+</div>
+
+<a class="btn btn-primary" asp-action="Inicio">Volver a la lista</a>
+<a class="btn btn-primary" asp-action="MoverEstudiantes" asp-route-id="@Model.IdDetalleCursoPeriodo">Mover Estudiantes</a>
+<hr />
 
 <div class="row">
     <div class="col-md-12">

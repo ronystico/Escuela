@@ -5,9 +5,11 @@
 }
 
 <form asp-action="MoverEstudiantes" method="post" class="row">
+    
     <div class="col-md-6">
         <h1>@ViewData["Title"]</h1>
         <p>Mueve estudiantes del mismo curso a otro (sub)periodo</p>
+        <div asp-validation-summary="All" class="text-danger"></div>
         <div class="mb-3">
             <label for="periodoseleccionado" class="form-label">Periodo Seleccionado</label>
             <select id="periodoseleccionado" name="periodoseleccionado" class="form-select" disabled>
@@ -34,7 +36,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model.DetalleEstudiante.OrderBy(s => s.NumerodeOrden))
+                @foreach (var item in ViewBag.estudiantes)
                 {
                     <tr>
                         <td>@item.NumerodeOrden</td>
@@ -54,6 +56,10 @@
         </table>
     </div>
     <div class="mb-3">
+        <input asp-for="Periodo.Nombre" value="@Model.Periodo.Nombre" hidden />
+        <input asp-for="Periodo.Subperiodo" value="@Model.Periodo.Subperiodo" hidden />
+        <input asp-for="Curso.Nombre" value="@Model.Curso.Nombre" hidden />
+        <input asp-for="Curso.Seccion" value="@Model.Curso.Seccion" hidden />
             <input asp-route-id="@Model.IdDetalleCursoPeriodo" type="submit" value="Mover" class="btn btn-warning" />
         </div>
 </form>
