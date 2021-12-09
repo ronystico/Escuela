@@ -185,6 +185,11 @@ namespace Escuela.Areas.Administracion.Controllers
             if(estudiante.DetalleEstudiante.IdDetalleCursoPeriodo == 0){
                     ModelState.AddModelError("DetalleEstudiante.IdDetalleCursoPeriodo","Por favor, agrega algún Periodo/Curso para asignarlo al estudiante");
                 }
+            if(await _data.DetalleEstudiante.AnyAsync(s => s.NumerodeOrden == estudiante.DetalleEstudiante.NumerodeOrden &&
+            s.IdDetalleCursoPeriodo == estudiante.DetalleEstudiante.IdDetalleCursoPeriodo))
+            {
+                ModelState.AddModelError("DetalleEstudiante.NumerodeOrden", "Este número de orden ya existe en el Periodo/Curso seleccionado. Por favor, vaya a Periodos/Cursos/Asignaturas y revise la lista de estudiantes");
+            }
             if (ModelState.IsValid)
             {
                 DetalleEstudiante detalles = new DetalleEstudiante();
@@ -507,6 +512,11 @@ namespace Escuela.Areas.Administracion.Controllers
         [HttpPost]
         public async Task<IActionResult> EditarEstudiante(ApplicationUser estudiante)
         {
+            if (await _data.DetalleEstudiante.AnyAsync(s => s.NumerodeOrden == estudiante.DetalleEstudiante.NumerodeOrden &&
+             s.IdDetalleCursoPeriodo == estudiante.DetalleEstudiante.IdDetalleCursoPeriodo))
+            {
+                ModelState.AddModelError("DetalleEstudiante.NumerodeOrden", "Este número de orden ya existe en el Periodo/Curso seleccionado. Por favor, vaya a Periodos/Cursos/Asignaturas y revise la lista de estudiantes");
+            }
             if (ModelState.IsValid && (estudiante.Estado.Equals("Inscrito") || estudiante.Estado.Equals("Retirado")))
             {
                 var usuario = await _userManager.FindByIdAsync(estudiante.Id);
