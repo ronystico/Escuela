@@ -1,0 +1,38 @@
+﻿@model Escuela.Models.PreguntaFrecuente
+
+@{
+    ViewData["Title"] = "Editar Pregunta";
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+
+<form asp-action="Editar" method="post" class="row">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <input type="hidden" asp-for="IdPreguntaFrecuente" />
+    <div class="col-md-6">
+        <div class="mb-3">
+            <label asp-for="Pregunta" class="form-label"></label>
+            <input asp-for="Pregunta" class="form-control" />
+            <span asp-validation-for="Pregunta" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="mb-3">
+            <label asp-for="Respuesta" class="form-label"></label>
+            <input asp-for="Respuesta" class="form-control" />
+            <span asp-validation-for="Respuesta" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="mb-3">
+        <input type="submit" value="Editar" class="btn btn-warning" asp-route-id="@Model.IdPreguntaFrecuente" />
+    </div>
+</form>
+
+<div>
+    <a asp-action="Inicio" class="btn btn-primary">Volver a la lista</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
