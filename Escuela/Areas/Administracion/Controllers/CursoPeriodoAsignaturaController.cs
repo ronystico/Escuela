@@ -264,17 +264,58 @@ namespace Escuela.Controllers
             return RedirectToAction("Inicio");
         }
 
-        public IActionResult MoverEstudiantes(int id)
+        public async Task<IActionResult> MoverEstudiantes(int id)
         {
             if(id == 0){
                 return NotFound();
             }
-            var periodoActual = _data.DetalleCursoPeriodo.Find(id);
+            var periodoActual = await _data.DetalleCursoPeriodo
+                .Include(s => s.Periodo)
+                .Include(s => s.Curso)
+                .Include(s => s.DetalleEstudiante)
+                .ThenInclude(s => s.ApplicationUser)
+                .Where(s => s.IdDetalleCursoPeriodo == id)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
             if(periodoActual == null){
                 return NotFound();
             }
-            ObtenerPeriodosCursos(id);
-            return View();
+            ObtenerPeriodosCursos(periodoActual.IdCurso);
+            return View(periodoActual);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> MoverEstudiantes(int id, DetalleCursoPeriodo periodoRecibido)
+        {
+            if (id == 0)
+            {
+                return NotFound();
+            }
+            if(id == periodoRecibido.IdDetalleCursoPeriodo)
+            {
+                return RedirectToAction("Inicio");
+            }
+            var periodoActual = await _data.DetalleCursoPeriodo
+                .Include(s => s.DetalleEstudiante)
+                .Where(s => s.IdDetalleCursoPeriodo == id)
+                .FirstOrDefaultAsync();
+            if(periodoActual == null)
+            {
+                return NotFound();
+            }
+            if (ModelState.IsValid)
+            {
+                List<DetalleEstudiante> estudiantes = periodoActual.DetalleEstudiante.ToList();
+                if(estudiantes.Count > 0)
+                {
+                    estudiantes.ForEach(s => s.IdDetalleCursoPeriodo = periodoRecibido.IdDetalleCursoPeriodo);
+                    _data.UpdateRange(estudiantes);
+                    await _data.SaveChangesAsync();
+                }
+                return RedirectToAction("Inicio");
+            }
+            ObtenerPeriodosCursos(periodoActual.IdCurso);
+            return View(periodoRecibido);
         }
 
         public IActionResult VerDocentes(int id)

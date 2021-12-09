@@ -4,10 +4,60 @@
     ViewData["Title"] = "Mover Estudiantes";
 }
 
-<h1>@ViewData["Title"]</h1>
-
-<p>Mueve estudiantes del mismo curso a otro (sub)periodo</p>
-
 <form asp-action="MoverEstudiantes" method="post" class="row">
-    <select asp-for="IdDetalleCursoPeriodo" asp-items="@ViewBag.periodoscursos" class="form-select"></select>
+    <div class="col-md-6">
+        <h1>@ViewData["Title"]</h1>
+        <p>Mueve estudiantes del mismo curso a otro (sub)periodo</p>
+        <div class="mb-3">
+            <label for="periodoseleccionado" class="form-label">Periodo Seleccionado</label>
+            <select id="periodoseleccionado" name="periodoseleccionado" class="form-select" disabled>
+                <option value="@Model.IdDetalleCursoPeriodo">
+                    @(Model.Periodo.Nombre + " / " + Model.Periodo.Subperiodo + " - " + Model.Curso.Nombre + " / " + Model.Curso.Seccion)
+                </option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="moveraperiodo" class="form-label">Mover a:</label>
+            <select asp-for="IdDetalleCursoPeriodo" asp-items="@ViewBag.periodoscursos" class="form-select"></select>
+            <span asp-validation-for="IdDetalleCursoPeriodo" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <h2>Lista de Estudiantes a mover</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th># de orden</th>
+                    <th>Nombre Completo</th>
+                    <th>Usuario</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.DetalleEstudiante.OrderBy(s => s.NumerodeOrden))
+                {
+                    <tr>
+                        <td>@item.NumerodeOrden</td>
+                        <td>
+                            @(item.ApplicationUser.Nombres + " " +
+                        item.ApplicationUser.PrimerApellido + " " +
+                        item.ApplicationUser.SegundoApellido)
+                        </td>
+                        <td>@item.ApplicationUser.UserName</td>
+                        <td>
+                            <a class="link-primary" asp-controller="Usuario" asp-action="DetalleEstudiante"
+                           asp-route-id="@item.ApplicationUser.Id">Detalles</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="mb-3">
+            <input asp-route-id="@Model.IdDetalleCursoPeriodo" type="submit" value="Mover" class="btn btn-warning" />
+        </div>
 </form>
+
+<div>
+    <a asp-action="Inicio" class="btn btn-primary">Volver a la lista</a>
+</div>
