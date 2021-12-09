@@ -45,7 +45,7 @@
             </dd>
         </dl>
 
-<form asp-action="Editar" method="post">
+<form asp-action="Eliminar" method="post">
     <div class="mb-3">
         <input asp-for="IdNoticia" value="@Model.IdNoticia" hidden />
         <input type="submit" class="btn btn-danger" value="Eliminar" asp-route-id="@Model.IdNoticia">
