@@ -45,7 +45,7 @@ namespace Escuela.Views
             {
                 _context.Add(periodo);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Inicio"); ;
+                return RedirectToAction(nameof(Inicio)); ;
             }
             return View(periodo);
         }
@@ -96,7 +96,7 @@ namespace Escuela.Views
                         throw;
                     }
                 }
-                return RedirectToAction("Inicio");
+                return RedirectToAction(nameof(Inicio));
             }
             return View(periodo);
         }
@@ -127,7 +127,7 @@ namespace Escuela.Views
             var periodo = await _context.Periodo.FindAsync(id);
             _context.Periodo.Remove(periodo);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Inicio");
+            return RedirectToAction(nameof(Inicio));
         }
 
         private bool PeriodoExiste(int id)

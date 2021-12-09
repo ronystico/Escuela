@@ -65,7 +65,7 @@ namespace Escuela.Areas.Administracion.Controllers
 
                 await _data.Noticia.AddAsync(noticia);
                 await _data.SaveChangesAsync();
-                return RedirectToAction("Inicio");
+                return RedirectToAction(nameof(Inicio));
             }
 
             ObtenerCategorias();
@@ -108,7 +108,7 @@ namespace Escuela.Areas.Administracion.Controllers
                 
                 _data.Noticia.Update(noticia);
                 await _data.SaveChangesAsync();
-                return RedirectToAction("Inicio");
+                return RedirectToAction(nameof(Inicio));
             }
 
             ObtenerCategorias();
@@ -145,7 +145,7 @@ namespace Escuela.Areas.Administracion.Controllers
             }
             _data.Noticia.Remove(noticia);
             await _data.SaveChangesAsync();
-            return RedirectToAction("Inicio");
+            return RedirectToAction(nameof(Inicio));
         }
 
         private void ObtenerCategorias(object categoriaSeleccionada = null)

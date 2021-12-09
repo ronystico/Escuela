@@ -72,7 +72,7 @@ namespace Escuela.Controllers
             {
                 await _data.Carousel.AddAsync(imagenValidada);
                 await _data.SaveChangesAsync();
-                return RedirectToAction("Inicio");
+                return RedirectToAction(nameof(Inicio));
             }
 
             ViewBag.cantidadexistente = _data.Carousel.Count();
@@ -120,7 +120,7 @@ namespace Escuela.Controllers
                 imagenaEditar.Imagen = imagenValidada.Imagen;
                 _data.Carousel.Update(imagenaEditar);
                 await _data.SaveChangesAsync();
-                return RedirectToAction("Inicio");
+                return RedirectToAction(nameof(Inicio));
             }
 
             ViewBag.imagenactual = id;
@@ -178,7 +178,7 @@ namespace Escuela.Controllers
 
                 await _data.SaveChangesAsync();
 
-                return RedirectToAction("Inicio");
+                return RedirectToAction(nameof(Inicio));
             }
         }
 

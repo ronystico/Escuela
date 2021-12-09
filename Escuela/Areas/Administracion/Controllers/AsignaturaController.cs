@@ -39,7 +39,7 @@ namespace Escuela.Controllers
             {
                 await _data.AddAsync(asignatura);
                 _data.SaveChanges();
-                return RedirectToAction("Inicio");
+                return RedirectToAction(nameof(Inicio));
             }
             return View(asignatura);
         }
@@ -58,7 +58,7 @@ namespace Escuela.Controllers
             {
                 _data.Asignatura.Update(asignatura);
                 _data.SaveChanges();
-                return RedirectToAction("Inicio");
+                return RedirectToAction(nameof(Inicio));
             }
             return View(asignatura);
         }
@@ -76,7 +76,7 @@ namespace Escuela.Controllers
             var Asignatura = await _data.Asignatura.FindAsync(id);
             _data.Asignatura.Remove(Asignatura);
             _data.SaveChanges();
-            return RedirectToAction("Inicio");
+            return RedirectToAction(nameof(Inicio));
             
         }
     }

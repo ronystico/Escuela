@@ -45,7 +45,7 @@ namespace Escuela.Controllers
             {
                 _context.Add(categoriaNoticia);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Inicio");
+                return RedirectToAction(nameof(Inicio));
             }
             return View(categoriaNoticia);
         }
@@ -96,7 +96,7 @@ namespace Escuela.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("Inicio");
+                return RedirectToAction(nameof(Inicio));
             }
             return View(categoriaNoticia);
         }
@@ -127,7 +127,7 @@ namespace Escuela.Controllers
             var categoriaNoticia = await _context.CategoriaNoticia.FindAsync(id);
             _context.CategoriaNoticia.Remove(categoriaNoticia);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Inicio");
+            return RedirectToAction(nameof(Inicio));
         }
 
         private bool CategoriaNoticiaExiste(int id)

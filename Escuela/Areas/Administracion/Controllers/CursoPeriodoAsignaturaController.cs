@@ -84,7 +84,7 @@ namespace Escuela.Controllers
                     _data.AddRange(asignaturas);
                     await _data.SaveChangesAsync();
                 }
-                return RedirectToAction("Inicio");
+                return RedirectToAction(nameof(Inicio));
             }
             ObtenerCursosySecciones();
             ObtenerPeriodosySubperiodos();
@@ -137,7 +137,7 @@ namespace Escuela.Controllers
                     await _data.AddRangeAsync(asignaturas);
                 }
                 await _data.SaveChangesAsync();
-                return RedirectToAction("Inicio");
+                return RedirectToAction(nameof(Inicio));
             }
             return View(cursoPeriodoAsignatura);
         }
@@ -169,7 +169,7 @@ namespace Escuela.Controllers
             }
             _data.DetalleCursoPeriodo.Remove(detalleCursoPeriodo);
             _data.SaveChanges();
-            return RedirectToAction("Inicio");
+            return RedirectToAction(nameof(Inicio));
         }
 
         public async Task<IActionResult> VerEstudiantes(int id)
@@ -243,7 +243,7 @@ namespace Escuela.Controllers
             }
             else
             {
-                return RedirectToAction("Inicio");
+                return RedirectToAction(nameof(Inicio));
             }
 
             List<DetalleProfesorCursoperiodoAsignatura> seleccionarAsignaturaProfesor =
@@ -264,7 +264,7 @@ namespace Escuela.Controllers
                 await _data.SaveChangesAsync();
             }
 
-            return RedirectToAction("Inicio");
+            return RedirectToAction(nameof(Inicio));
         }
 
         public async Task<IActionResult> MoverEstudiantes(int id)
@@ -300,7 +300,7 @@ namespace Escuela.Controllers
             }
             if(id == periodoRecibido.IdDetalleCursoPeriodo)
             {
-                return RedirectToAction("Inicio");
+                return RedirectToAction(nameof(Inicio));
             }
             var periodoActual = await _data.DetalleCursoPeriodo
                 .Include(s => s.DetalleEstudiante)
@@ -327,7 +327,7 @@ namespace Escuela.Controllers
                     _data.UpdateRange(estudiantes);
                     await _data.SaveChangesAsync();
                 }
-                return RedirectToAction("Inicio");
+                return RedirectToAction(nameof(Inicio));
             }
             ObtenerPeriodosCursos(periodoActual.IdCurso);
             ViewBag.estudiantes = await _data.DetalleEstudiante

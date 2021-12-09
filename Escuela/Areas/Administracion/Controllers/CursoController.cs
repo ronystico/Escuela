@@ -45,7 +45,7 @@ namespace Escuela.Views
             {
                 _context.Add(curso);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Inicio");
+                return RedirectToAction(nameof(Inicio));
             }
             return View(curso);
         }
@@ -96,7 +96,7 @@ namespace Escuela.Views
                         throw;
                     }
                 }
-                return RedirectToAction("Inicio");
+                return RedirectToAction(nameof(Inicio));
             }
             return View(curso);
         }
@@ -127,7 +127,7 @@ namespace Escuela.Views
             var curso = await _context.Curso.FindAsync(id);
             _context.Curso.Remove(curso);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Inicio");
+            return RedirectToAction(nameof(Inicio));
         }
 
         private bool CursoExiste(int id)
