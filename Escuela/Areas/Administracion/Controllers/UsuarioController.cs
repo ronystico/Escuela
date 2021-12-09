@@ -680,8 +680,6 @@ namespace Escuela.Areas.Administracion.Controllers
             ViewBag.cursosperiodos = new SelectList(cursosPeriodos.AsNoTracking(), "ID", "Nombre", cursoPeriodo);
         }
 
-        // TODO: editar estudiante guardar y profesores
-
         // Obtener Cursos y Periodos de estudiante
         private void CursoPeriodoEstudiante(ApplicationUser estudiante)
         {

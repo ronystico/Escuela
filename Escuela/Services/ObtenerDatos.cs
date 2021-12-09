@@ -58,7 +58,7 @@ namespace Escuela.Services
             }).ToList();
         }
 
-        // TODO: Obtiene el Curso/Periodo actual del estudiante en EditarEstudiante
+        // Obtiene el Curso/Periodo actual del estudiante en EditarEstudiante
         public List<SelectListItem> ObtenerCursoPeriodoEstudiante(string id)
         {
             var estudiante = _data.DetalleEstudiante.Where(s => s.UserId == id).FirstOrDefault();
