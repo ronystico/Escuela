@@ -113,27 +113,6 @@ namespace Escuela.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "29ce004f-6192-496b-a359-56bbbfd90ca1",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "a4119a38-ba7b-4ca2-a1b3-8312571f1e13",
-                            EmailConfirmed = false,
-                            Estado = "Inscrito",
-                            FechaAgregado = new DateTime(2021, 12, 2, 0, 48, 32, 725, DateTimeKind.Local).AddTicks(1682),
-                            LockoutEnabled = false,
-                            Nombres = "Administrador",
-                            NormalizedUserName = "ADMINISTRADOR",
-                            PasswordHash = "AQAAAAEAACcQAAAAEAmuub9YZlMbxOtNqlYEqyDwiCI1SB9bn8WfZXaFMx4GCo+wYNIjgBh8heir013ZIQ==",
-                            PhoneNumberConfirmed = false,
-                            PrimerApellido = "Administrando",
-                            SecurityStamp = "89469764-b6be-4301-aee4-03f78dcf90df",
-                            SegundoApellido = "Administración",
-                            TwoFactorEnabled = false,
-                            UserName = "administrador"
-                        });
                 });
 
             modelBuilder.Entity("Escuela.Models.Asignatura", b =>
@@ -587,21 +566,21 @@ namespace Escuela.Migrations
                         new
                         {
                             Id = "4671823f-f30c-445c-8433-c9edb7d7caa8",
-                            ConcurrencyStamp = "c9ad2d33-2a82-4273-9dc3-5f7e076a6987",
+                            ConcurrencyStamp = "fc3ec87b-f49a-4ed5-933d-487a4118520d",
                             Name = "Administracion",
                             NormalizedName = "ADMINISTRACION"
                         },
                         new
                         {
                             Id = "1ae745c4-32de-4d4b-b941-39315e76c62b",
-                            ConcurrencyStamp = "7b282ba8-fad3-4160-b229-db357d8f2f92",
+                            ConcurrencyStamp = "9baf8a7b-1951-490f-9af1-d27219385e18",
                             Name = "Profesor",
                             NormalizedName = "PROFESOR"
                         },
                         new
                         {
                             Id = "b5042ce0-f40d-483e-8514-e014b145b4d9",
-                            ConcurrencyStamp = "052970aa-03e6-48a4-b528-b4096777d4a3",
+                            ConcurrencyStamp = "7528f8eb-c734-4412-ba8b-693a328d0ab1",
                             Name = "Estudiante",
                             NormalizedName = "ESTUDIANTE"
                         });
@@ -694,13 +673,6 @@ namespace Escuela.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "29ce004f-6192-496b-a359-56bbbfd90ca1",
-                            RoleId = "4671823f-f30c-445c-8433-c9edb7d7caa8"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>

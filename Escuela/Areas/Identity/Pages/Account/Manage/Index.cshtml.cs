@@ -53,6 +53,8 @@ namespace Escuela.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnGetAsync()
         {
+            return Redirect("/Identity/Account/Manage/ChangePassword");
+
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {

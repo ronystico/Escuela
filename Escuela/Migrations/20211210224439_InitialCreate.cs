@@ -144,6 +144,20 @@ namespace Escuela.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "pregunta_frecuente",
+                columns: table => new
+                {
+                    id_pregunta_frecuente = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    pregunta = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    respuesta = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_pregunta_frecuente", x => x.id_pregunta_frecuente);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -259,7 +273,8 @@ namespace Escuela.Migrations
                     id_autor = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     titulo = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     cuerpo = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    fecha_publicacion = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    fecha_publicacion = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    fecha_edicion = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -337,7 +352,8 @@ namespace Escuela.Migrations
                     id_detalle_curso_periodo = table.Column<int>(type: "int", nullable: false),
                     numero_de_orden = table.Column<int>(type: "int", nullable: false),
                     id_padres = table.Column<int>(type: "int", nullable: true),
-                    id_o_rne = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: true)
+                    id_estudiante = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    rne = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -426,25 +442,15 @@ namespace Escuela.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "1ae745c4-32de-4d4b-b941-39315e76c62b", "04f19dcd-45ae-4d43-bf31-62db29b69ad8", "Profesor", "PROFESOR" },
-                    { "4671823f-f30c-445c-8433-c9edb7d7caa8", "f7a1e7da-a2c0-4a38-b65e-4ec6513f82a2", "Administracion", "ADMINISTRACION" },
-                    { "b5042ce0-f40d-483e-8514-e014b145b4d9", "93b8ce24-0161-4ce1-8194-e01557b38109", "Estudiante", "ESTUDIANTE" }
+                    { "1ae745c4-32de-4d4b-b941-39315e76c62b", "9baf8a7b-1951-490f-9af1-d27219385e18", "Profesor", "PROFESOR" },
+                    { "4671823f-f30c-445c-8433-c9edb7d7caa8", "fc3ec87b-f49a-4ed5-933d-487a4118520d", "Administracion", "ADMINISTRACION" },
+                    { "b5042ce0-f40d-483e-8514-e014b145b4d9", "7528f8eb-c734-4412-ba8b-693a328d0ab1", "Estudiante", "ESTUDIANTE" }
                 });
-
-            migrationBuilder.InsertData(
-                table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "estado", "fecha_agregado", "LockoutEnabled", "LockoutEnd", "nombres", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "primer_apellido", "SecurityStamp", "segundo_apellido", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "29ce004f-6192-496b-a359-56bbbfd90ca1", 0, "20f132ed-68a9-42cd-9a9f-2a1722659765", null, false, "Inscrito", new DateTime(2021, 11, 27, 3, 14, 47, 252, DateTimeKind.Local).AddTicks(9759), false, null, "Administrador", null, "ADMINISTRADOR", "AQAAAAEAACcQAAAAEF3N7YoOQtNUlrZHIKnPq/r+5UbtB53/j2zR3Cf1K21bmY2c/qKZ3ZULVqznyixL8A==", null, false, "Administrando", "f2aa3eb2-841c-48af-a23f-043cc9df6178", "Administración", false, "administrador" });
 
             migrationBuilder.InsertData(
                 table: "categoria_noticia",
                 columns: new[] { "id_categoria_noticia", "Nombre" },
                 values: new object[] { 1, "General" });
-
-            migrationBuilder.InsertData(
-                table: "AspNetUserRoles",
-                columns: new[] { "RoleId", "UserId" },
-                values: new object[] { "4671823f-f30c-445c-8433-c9edb7d7caa8", "29ce004f-6192-496b-a359-56bbbfd90ca1" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -582,6 +588,9 @@ namespace Escuela.Migrations
 
             migrationBuilder.DropTable(
                 name: "noticia");
+
+            migrationBuilder.DropTable(
+                name: "pregunta_frecuente");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

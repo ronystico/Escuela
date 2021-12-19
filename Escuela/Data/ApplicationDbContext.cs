@@ -90,30 +90,30 @@ namespace Escuela.Data
                 }
             );
 
-            var hasher = new PasswordHasher<ApplicationUser>();
+            // var hasher = new PasswordHasher<ApplicationUser>();
 
-            modelBuilder.Entity<ApplicationUser>().HasData(
-                new ApplicationUser
-                {
-                    Id = "29ce004f-6192-496b-a359-56bbbfd90ca1",
-                    UserName = "administrador",
-                    NormalizedUserName = "ADMINISTRADOR",
-                    PasswordHash = hasher.HashPassword(null, "administrador1"),
-                    PrimerApellido = "Administrando",
-                    SegundoApellido = "Administración",
-                    Nombres = "Administrador",
-                    Estado = "Inscrito",
-                    FechaAgregado = DateTime.Now
-                }
-            );
+            // modelBuilder.Entity<ApplicationUser>().HasData(
+            //     new ApplicationUser
+            //     {
+            //         Id = "29ce004f-6192-496b-a359-56bbbfd90ca1",
+            //         UserName = "administrador",
+            //         NormalizedUserName = "ADMINISTRADOR",
+            //         PasswordHash = hasher.HashPassword(null, "administrador1"),
+            //         PrimerApellido = "Administrando",
+            //         SegundoApellido = "Administración",
+            //         Nombres = "Administrador",
+            //         Estado = "Inscrito",
+            //         FechaAgregado = DateTime.Now
+            //     }
+            // );
 
-            modelBuilder.Entity<IdentityUserRole<string>>().HasData(
-                new IdentityUserRole<string>
-                {
-                    RoleId = "4671823f-f30c-445c-8433-c9edb7d7caa8",
-                    UserId = "29ce004f-6192-496b-a359-56bbbfd90ca1"
-                }
-            );
+            // modelBuilder.Entity<IdentityUserRole<string>>().HasData(
+            //     new IdentityUserRole<string>
+            //     {
+            //         RoleId = "4671823f-f30c-445c-8433-c9edb7d7caa8",
+            //         UserId = "29ce004f-6192-496b-a359-56bbbfd90ca1"
+            //     }
+            // );
         }
     }
 }

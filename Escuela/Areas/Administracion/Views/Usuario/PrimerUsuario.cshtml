@@ -1,0 +1,119 @@
+@model UsuarioViewModel
+@{ 
+    ViewData["Title"] = "Agregar Primer Usuario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+ }
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+
+<form asp-action="PrimerUsuario" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label asp-for="Nombres" class="requerido form-label"></label>
+                <input asp-for="Nombres" class="form-control" onchange="ponerUsuario();" />
+                <span asp-validation-for="Nombres" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="PrimerApellido" class="requerido form-label"></label>
+                <input asp-for="PrimerApellido" class="form-control" onchange="ponerUsuario();" />
+                <span asp-validation-for="PrimerApellido" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="SegundoApellido" class="requerido form-label"></label>
+                <input asp-for="SegundoApellido" class="form-control" onchange="ponerUsuario();" />
+                <span asp-validation-for="SegundoApellido" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            @* Rol *@
+            <div class="mb-3">
+                <label for="Rol" class="requerido form-label">Rol</label>
+                <select asp-for="IdentityRole.Name" class="form-select">
+                    <option value="Administracion">Administracion</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="UserName" class="requerido form-label"></label>
+                <div class="input-group">
+                    <input asp-for="UserName" class="form-control" />
+                    <button type="button" class="btn btn-primary" onclick="usuarioComoClave();">Usar como Clave</button>
+                </div>
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Password" class="requerido form-label"></label>
+                <div class="input-group">
+                    <input asp-for="Password" class="form-control" />
+                    <button type="button" class="btn btn-outline-primary" onmouseover="mouseoverClave();" onmouseout="mouseoutClave();">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="ConfirmPassword" class="requerido form-label"></label>
+                <input asp-for="ConfirmPassword" class="form-control" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <input asp-for="Estado" value="Inscrito" class="form-control" hidden>
+                <input asp-for="FechaAgregado" value="@Model.FechaAgregado" class="form-control" hidden>
+            </div>
+        </div>
+    </div>
+    <div class="mb-3">
+        <input type="submit" class="btn btn-primary" value="Agregar" />
+    </div>
+</form>
+
+<div>
+    <a asp-action="Inicio" class="btn btn-primary">Volver atr&aacute;s</a>
+</div>
+
+        @section Scripts {
+            <partial name="_ValidationScriptsPartial" />
+            <script>
+
+                function ponerUsuario() {
+                    let texto = document.getElementById("UserName").value = document.getElementById("Nombres").value.charAt(0).toLowerCase()
+                        + document.getElementById("PrimerApellido").value.toLowerCase();
+
+                    function eliminarDiacriticos(texto) {
+                        return texto.normalize('NFD').replace(/[\u0300-\u036f]|[\s]/g, "");
+                    }
+
+                    let aleatorio = Math.floor(Math.random() * 99);
+                    document.getElementById("UserName").value = eliminarDiacriticos(texto) + aleatorio;
+                }
+
+            </script>
+            <script>
+                function mouseoverClave(obj) {
+                    var obj = document.getElementById('Password');
+                    obj.type = "text";
+                }
+                function mouseoutClave(obj) {
+                    var obj = document.getElementById('Password');
+                    obj.type = "password";
+                }
+            </script>
+            <script>
+                function usuarioComoClave() {
+                    var valor = document.getElementById('UserName').value;
+                    document.getElementById('Password').value = valor;
+                    document.getElementById('ConfirmPassword').value = valor;
+                }
+            </script>
+        }
+        @section css {
+            <link href="~/lib/font-awesome/css/all.css" rel="stylesheet" />
+            <link href="~/css/site.css" rel="stylesheet" />
+        }

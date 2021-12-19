@@ -667,6 +667,64 @@ namespace Escuela.Areas.Administracion.Controllers
             return View(user);
         }
 
+        [AllowAnonymous]
+        public async Task<IActionResult> PrimerUsuario(){
+            IList<ApplicationUser> usuariosEnRol = await _userManager.GetUsersInRoleAsync("Administracion");
+            if(usuariosEnRol.Count > 0){
+                return Forbid();
+            }
+            return View(new UsuarioViewModel());
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> PrimerUsuario(UsuarioViewModel usuario)
+        {
+            IList<ApplicationUser> usuariosEnRol = await _userManager.GetUsersInRoleAsync("Administracion");
+            if(usuariosEnRol.Count > 0){
+                return Forbid();
+            }
+            if (ModelState.IsValid && usuario.IdentityRole.Name.Equals("Administracion"))
+            {
+                var user = new ApplicationUser
+                {
+                    UserName = usuario.UserName,
+                    PrimerApellido = usuario.PrimerApellido,
+                    SegundoApellido = usuario.SegundoApellido,
+                    Nombres = usuario.Nombres,
+                    Estado = "Inscrito",
+                    FechaAgregado = System.DateTime.Now
+                };
+                var result = await _userManager.CreateAsync(user, usuario.Password);
+                if (result.Succeeded)
+                {
+                    var usuarioCreado = await _userManager.FindByNameAsync(user.UserName);
+                    var resultadoRol = await _userManager.AddToRoleAsync(usuarioCreado, "Administracion");
+                    if (resultadoRol.Succeeded)
+                    {
+                        return RedirectToAction("Inicio", "Usuario", new { area = "Administracion" });
+                    }
+                }
+                else
+                {
+                    
+                }
+                foreach (var error in result.Errors)
+                {
+                    if (error.Code.Equals("InvalidUserName"))
+                    {
+                        ModelState.AddModelError(string.Empty,
+                        "El nombre de usuario es inválido, solo puede contener letras o números.");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
+            }
+            return View(usuario);
+        }
+
         // Obtener Cursos y Periodos
         private void ObtenerCursosPeriodos(object cursoPeriodo = null)
         {
