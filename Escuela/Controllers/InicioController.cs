@@ -23,8 +23,8 @@ namespace Escuela.Controllers
         private readonly UserManager<ApplicationUser> _user;
         private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public InicioController(ILogger<InicioController> logger, 
-        ApplicationDbContext data, 
+        public InicioController(ILogger<InicioController> logger,
+        ApplicationDbContext data,
         UserManager<ApplicationUser> user,
         SignInManager<ApplicationUser> signInManager)
         {
@@ -47,12 +47,14 @@ namespace Escuela.Controllers
             .ToList();
 
             ViewBag.mostrarbotonagregarnoticia = false;
-            if(_signInManager.IsSignedIn(User)){
-                if(User.IsInRole("Administracion")){
+            if (_signInManager.IsSignedIn(User))
+            {
+                if (User.IsInRole("Administracion"))
+                {
                     ViewBag.mostrarbotonagregarnoticia = true;
                 }
             }
-            
+
             ViewBag.idnuevo = imagenesActuales.Count + 1;
             var imagenesActualesModelo = new List<InicioCarouselViewModel>();
             foreach (var imagenActual in imagenesActuales)
@@ -70,7 +72,15 @@ namespace Escuela.Controllers
         [AllowAnonymous]
         public IActionResult PreguntasFrecuentes()
         {
-            return View();
+            ViewBag.mostrarbotonagregarpregunta = false;
+            if (_signInManager.IsSignedIn(User))
+            {
+                if (User.IsInRole("Administracion"))
+                {
+                    ViewBag.mostrarbotonagregarpregunta = true;
+                }
+            }
+            return View(_data.PreguntaFrecuente.AsNoTracking().ToList());
         }
 
         [AllowAnonymous]
