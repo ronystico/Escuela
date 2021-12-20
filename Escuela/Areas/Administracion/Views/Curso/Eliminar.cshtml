@@ -24,7 +24,7 @@
 
         <form asp-action="Eliminar" class="mb-3">
             <input type="hidden" asp-for="IdCurso" />
-            <input type="submit" value="Eliminar" class="btn btn-danger" />
+            <input type="submit" value="Eliminar" class="btn btn-danger" asp-route-id="@Model.IdCurso" />
         </form>
     </div>
     </div>
