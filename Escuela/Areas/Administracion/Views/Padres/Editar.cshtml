@@ -66,14 +66,19 @@
 
     <div class="mb-3">
         <input asp-route-id="@Model.IdPadres" type="submit" value="Editar padres" class="btn btn-warning" />
-        
+
     </div>
 </form>
 
 <div>
     <a asp-action="Detalle" class="btn btn-primary" asp-route-id="@Model.IdPadres">Volver a detalle</a>
 </div>
-    
+
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+<script src="~/js/jquery.mask.js"></script>
+<script>
+    $('#TelefonoMadre').mask('000-000-0000');
+    $('#TelefonoPadre').mask('000-000-0000');
+</script>
 }

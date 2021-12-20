@@ -14,7 +14,7 @@
             <h2>Madre</h2>
 
             <div class="mb-3">
-                <label asp-for="NombresMadre" class="form-label"></label>
+                <label asp-for="NombresMadre" class="requerido form-label"></label>
                 <input asp-for="NombresMadre" class="form-control" />
                 <span asp-validation-for="NombresMadre" class="text-danger"></span>
             </div>
@@ -41,7 +41,7 @@
             <h2>Padre</h2>
 
             <div class="mb-3">
-                <label asp-for="NombresPadre" class="form-label"></label>
+                <label asp-for="NombresPadre" class="requerido form-label"></label>
                 <input asp-for="NombresPadre" class="form-control" />
                 <span asp-validation-for="NombresPadre" class="text-danger"></span>
             </div>
@@ -73,11 +73,15 @@
     <a asp-action="Inicio" class="btn btn-primary">Volver Atrás</a>
 </div>
 
+@section css{
+<link href="~/css/site.css" rel="stylesheet" />
+}
+
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="~/js/jquery.mask.js"></script>
-    <script>
-        $('#TelefonoMadre').mask('000-000-0000');
-        $('#TelefonoPadre').mask('000-000-0000');
-    </script>
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+<script src="~/js/jquery.mask.js"></script>
+<script>
+    $('#TelefonoMadre').mask('000-000-0000');
+    $('#TelefonoPadre').mask('000-000-0000');
+</script>
 }
