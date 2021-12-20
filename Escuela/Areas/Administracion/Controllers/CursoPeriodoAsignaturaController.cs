@@ -54,7 +54,7 @@ namespace Escuela.Controllers
             {
                 if (_data.DetalleCursoPeriodo.Any(s => s.IdCurso == cursoPeriodo.IdCurso && s.IdPeriodo == cursoPeriodo.IdPeriodo))
                 {
-                    ModelState.AddModelError(string.Empty, "Esta combinaci�n de Periodo/Curso ya existe, debes editarla");
+                    ModelState.AddModelError(string.Empty, "Esta combinación de Periodo/Curso ya existe, debes editarla");
                     ObtenerCursosySecciones();
                     ObtenerPeriodosySubperiodos();
                     ObtenerAsignaturas();

@@ -45,8 +45,11 @@ namespace Escuela.Areas.Administracion.Controllers
             return View(noticias);
         }
 
-        public IActionResult Agregar()
+        public async Task<IActionResult> Agregar()
         {
+            var usuario = _signInManager.Context.User.Identity.Name;
+            var administrador = await _userManager.FindByNameAsync(usuario);
+            ViewBag.idusuario = administrador.Id;
             ObtenerCategorias();
             return View();
         }
@@ -105,7 +108,7 @@ namespace Escuela.Areas.Administracion.Controllers
                 noticia.Titulo = noticiaRecibida.Titulo;
                 noticia.Cuerpo = noticiaRecibida.Cuerpo;
                 noticia.FechaEdicion = DateTime.Now;
-                
+
                 _data.Noticia.Update(noticia);
                 await _data.SaveChangesAsync();
                 return RedirectToAction(nameof(Inicio));
@@ -131,7 +134,7 @@ namespace Escuela.Areas.Administracion.Controllers
             return View(noticia);
         }
 
-        [HttpPost,ActionName("Eliminar")]
+        [HttpPost, ActionName("Eliminar")]
         public async Task<IActionResult> EliminarConfirmado(int id)
         {
             if (id == 0)
