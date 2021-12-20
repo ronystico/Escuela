@@ -33,36 +33,70 @@ namespace Escuela.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            // ONDELETE
+            // No eliminar CursoPeriodoAsignatura si tiene calificaciones
+            modelBuilder.Entity<Calificacion>()
+            .HasOne(s => s.DetalleCursoperiodoAsignatura)
+            .WithMany(s => s.Calificacion)
+            .HasForeignKey(s => s.IdDetalleCursoPeriodoAsignatura)
+            .OnDelete(DeleteBehavior.NoAction);
+
+            // No eliminar CursoPeriodo si tiene estudiantes
+            modelBuilder.Entity<DetalleEstudiante>()
+           .HasOne(s => s.DetalleCursoPeriodo)
+           .WithMany(s => s.DetalleEstudiante)
+           .HasForeignKey(s => s.IdDetalleCursoPeriodo)
+           .OnDelete(DeleteBehavior.NoAction);
+
+            // No eliminar CategoriaNoticia si tiene noticias
+            modelBuilder.Entity<Noticia>()
+            .HasOne(s => s.CategoriaNoticia)
+            .WithMany(s => s.Noticia)
+            .HasForeignKey(s => s.IdCategoriaNoticia)
+            .OnDelete(DeleteBehavior.NoAction);
+
+            // Relaciones muchos a muchos
+            // DetalleCursoPeriodo tiene un Curso, no eliminarlo
             modelBuilder.Entity<DetalleCursoPeriodo>()
                 .HasOne(c => c.Curso)
                 .WithMany(ca => ca.DetalleCursoPeriodo)
-                .HasForeignKey(ca => ca.IdCurso);
+                .HasForeignKey(ca => ca.IdCurso)
+                .OnDelete(DeleteBehavior.NoAction);
 
+            // DetalleCursoPeriodo tiene un Periodo, no eliminarlo
             modelBuilder.Entity<DetalleCursoPeriodo>()
                 .HasOne(a => a.Periodo)
                 .WithMany(ca => ca.DetalleCursoPeriodo)
-                .HasForeignKey(ca => ca.IdPeriodo);
+                .HasForeignKey(ca => ca.IdPeriodo)
+                .OnDelete(DeleteBehavior.NoAction);
 
+            // DetalleCursoperiodoAsignatura tiene un DetalleCursoPeriodo, no eliminarlo
             modelBuilder.Entity<DetalleCursoperiodoAsignatura>()
                 .HasOne(a => a.DetalleCursoPeriodo)
                 .WithMany(au => au.DetalleCursoperiodoAsignatura)
-                .HasForeignKey(au => au.IdDetalleCursoPeriodo);
+                .HasForeignKey(au => au.IdDetalleCursoPeriodo)
+                .OnDelete(DeleteBehavior.NoAction);
 
+            // DetalleCursoperiodoAsignatura tiene una Asignatura, no eliminarla
             modelBuilder.Entity<DetalleCursoperiodoAsignatura>()
                 .HasOne(p => p.Asignatura)
                 .WithMany(pa => pa.DetalleCursoperiodoAsignatura)
-                .HasForeignKey(pa => pa.IdAsignatura);
+                .HasForeignKey(pa => pa.IdAsignatura)
+                .OnDelete(DeleteBehavior.NoAction);
 
+            // DetalleProfesorCursoperiodoAsignatura tiene un ApplicationUser
             modelBuilder.Entity<DetalleProfesorCursoperiodoAsignatura>()
             .HasOne(s => s.ApplicationUser)
             .WithMany(s => s.DetalleProfesorCursoperiodoAsignatura)
             .HasForeignKey(s => s.UserId);
 
+            // DetalleProfesorCursoperiodoAsignatura tiene un DetalleCursoperiodoAsignatura
             modelBuilder.Entity<DetalleProfesorCursoperiodoAsignatura>()
             .HasOne(s => s.DetalleCursoperiodoAsignatura)
             .WithMany(s => s.DetalleProfesorCursoperiodoAsignatura)
             .HasForeignKey(s => s.IdDetalleCursoperiodoAsignatura);
 
+            // Roles
             modelBuilder.Entity<IdentityRole>().HasData(
                 new IdentityRole
                 {
@@ -83,37 +117,14 @@ namespace Escuela.Data
                     NormalizedName = "Estudiante".ToUpper()
                 });
 
+            // Categoría por defecto
             modelBuilder.Entity<CategoriaNoticia>().HasData(
-                new CategoriaNoticia{
+                new CategoriaNoticia
+                {
                     IdCategoriaNoticia = 1,
                     Nombre = "General"
                 }
             );
-
-            // var hasher = new PasswordHasher<ApplicationUser>();
-
-            // modelBuilder.Entity<ApplicationUser>().HasData(
-            //     new ApplicationUser
-            //     {
-            //         Id = "29ce004f-6192-496b-a359-56bbbfd90ca1",
-            //         UserName = "administrador",
-            //         NormalizedUserName = "ADMINISTRADOR",
-            //         PasswordHash = hasher.HashPassword(null, "administrador1"),
-            //         PrimerApellido = "Administrando",
-            //         SegundoApellido = "Administración",
-            //         Nombres = "Administrador",
-            //         Estado = "Inscrito",
-            //         FechaAgregado = DateTime.Now
-            //     }
-            // );
-
-            // modelBuilder.Entity<IdentityUserRole<string>>().HasData(
-            //     new IdentityUserRole<string>
-            //     {
-            //         RoleId = "4671823f-f30c-445c-8433-c9edb7d7caa8",
-            //         UserId = "29ce004f-6192-496b-a359-56bbbfd90ca1"
-            //     }
-            // );
         }
     }
 }

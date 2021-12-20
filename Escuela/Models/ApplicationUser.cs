@@ -20,7 +20,6 @@ namespace Escuela.Models
 
         // segundo apellido
         [Column("segundo_apellido")]
-        [Required(ErrorMessage = "Falta el campo: Segundo apellido")]
         [DisplayName("Segundo Apellido")]
         [StringLength(50)]
         public string SegundoApellido { get; set; }

@@ -24,6 +24,7 @@ namespace Escuela.Models
 
         [Column("nombres_madre")]
         [StringLength(50)]
+        [Required(ErrorMessage = "Falta el campo: Nombres de la Madre")]
         [DisplayName("Nombres de la Madre")]
         public string NombresMadre { get; set; }
 
@@ -45,6 +46,7 @@ namespace Escuela.Models
 
         [Column("nombres_padre")]
         [StringLength(50)]
+        [Required(ErrorMessage = "Falta el campo: Nombres del Padre")]
         [DisplayName("Nombres del Padre")]
         public string NombresPadre { get; set; }
 

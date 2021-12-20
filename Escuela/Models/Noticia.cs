@@ -16,9 +16,11 @@ namespace Escuela.Models
         public int IdNoticia { get; set; }
 
         [Column("id_categoria_noticia")]
+        [Required(ErrorMessage = "Falta el campo: IdCategoriaNoticia")]
         public int IdCategoriaNoticia { get; set; }
 
         [Column("id_autor")]
+        [Required(ErrorMessage = "Falta el campo: IdAutor")]
         public string IdAutor { get; set; }
 
         [Column("titulo")]

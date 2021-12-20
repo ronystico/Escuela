@@ -12,14 +12,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Escuela.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20211210224439_InitialCreate")]
+    [Migration("20211220023748_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.0")
+                .HasAnnotation("ProductVersion", "6.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -92,7 +92,6 @@ namespace Escuela.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SegundoApellido")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("segundo_apellido");
@@ -401,6 +400,7 @@ namespace Escuela.Migrations
                         .HasColumnName("fecha_publicacion");
 
                     b.Property<string>("IdAutor")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("id_autor");
 
@@ -434,11 +434,13 @@ namespace Escuela.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdPadres"), 1L, 1);
 
                     b.Property<string>("NombresMadre")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("nombres_madre");
 
                     b.Property<string>("NombresPadre")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("nombres_padre");
@@ -568,21 +570,21 @@ namespace Escuela.Migrations
                         new
                         {
                             Id = "4671823f-f30c-445c-8433-c9edb7d7caa8",
-                            ConcurrencyStamp = "fc3ec87b-f49a-4ed5-933d-487a4118520d",
+                            ConcurrencyStamp = "fde27ba7-7e5a-457d-b71f-5b9d02f6613a",
                             Name = "Administracion",
                             NormalizedName = "ADMINISTRACION"
                         },
                         new
                         {
                             Id = "1ae745c4-32de-4d4b-b941-39315e76c62b",
-                            ConcurrencyStamp = "9baf8a7b-1951-490f-9af1-d27219385e18",
+                            ConcurrencyStamp = "789ed261-496b-4355-8f75-c8cca2bb1f62",
                             Name = "Profesor",
                             NormalizedName = "PROFESOR"
                         },
                         new
                         {
                             Id = "b5042ce0-f40d-483e-8514-e014b145b4d9",
-                            ConcurrencyStamp = "7528f8eb-c734-4412-ba8b-693a328d0ab1",
+                            ConcurrencyStamp = "a7dfb010-c8ee-428b-a1f5-a4e4ecc7d17d",
                             Name = "Estudiante",
                             NormalizedName = "ESTUDIANTE"
                         });
@@ -703,7 +705,7 @@ namespace Escuela.Migrations
                     b.HasOne("Escuela.Models.DetalleCursoperiodoAsignatura", "DetalleCursoperiodoAsignatura")
                         .WithMany("Calificacion")
                         .HasForeignKey("IdDetalleCursoPeriodoAsignatura")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Escuela.Models.ApplicationUser", "ApplicationUserEstudiante")
@@ -726,13 +728,13 @@ namespace Escuela.Migrations
                     b.HasOne("Escuela.Models.Curso", "Curso")
                         .WithMany("DetalleCursoPeriodo")
                         .HasForeignKey("IdCurso")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Escuela.Models.Periodo", "Periodo")
                         .WithMany("DetalleCursoPeriodo")
                         .HasForeignKey("IdPeriodo")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Curso");
@@ -745,13 +747,13 @@ namespace Escuela.Migrations
                     b.HasOne("Escuela.Models.Asignatura", "Asignatura")
                         .WithMany("DetalleCursoperiodoAsignatura")
                         .HasForeignKey("IdAsignatura")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Escuela.Models.DetalleCursoPeriodo", "DetalleCursoPeriodo")
                         .WithMany("DetalleCursoperiodoAsignatura")
                         .HasForeignKey("IdDetalleCursoPeriodo")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Asignatura");
@@ -764,7 +766,7 @@ namespace Escuela.Migrations
                     b.HasOne("Escuela.Models.DetalleCursoPeriodo", "DetalleCursoPeriodo")
                         .WithMany("DetalleEstudiante")
                         .HasForeignKey("IdDetalleCursoPeriodo")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Escuela.Models.Padres", "Padres")
@@ -805,12 +807,14 @@ namespace Escuela.Migrations
                 {
                     b.HasOne("Escuela.Models.ApplicationUser", "ApplicationUser")
                         .WithMany()
-                        .HasForeignKey("IdAutor");
+                        .HasForeignKey("IdAutor")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Escuela.Models.CategoriaNoticia", "CategoriaNoticia")
                         .WithMany("Noticia")
                         .HasForeignKey("IdCategoriaNoticia")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("ApplicationUser");

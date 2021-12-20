@@ -42,7 +42,7 @@ namespace Escuela.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     primer_apellido = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    segundo_apellido = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    segundo_apellido = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     nombres = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     estado = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     fecha_agregado = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -115,11 +115,11 @@ namespace Escuela.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     primer_apellido_madre = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     segundo_apellido_madre = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    nombres_madre = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    nombres_madre = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     telefono_madre = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
                     primer_apellido_padre = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     segundo_apellido_padre = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    nombres_padre = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    nombres_padre = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     telefono_padre = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true)
                 },
                 constraints: table =>
@@ -270,7 +270,7 @@ namespace Escuela.Migrations
                     id_noticia = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     id_categoria_noticia = table.Column<int>(type: "int", nullable: false),
-                    id_autor = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    id_autor = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     titulo = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     cuerpo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     fecha_publicacion = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -283,13 +283,13 @@ namespace Escuela.Migrations
                         name: "FK_noticia_AspNetUsers_id_autor",
                         column: x => x.id_autor,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_noticia_categoria_noticia_id_categoria_noticia",
                         column: x => x.id_categoria_noticia,
                         principalTable: "categoria_noticia",
-                        principalColumn: "id_categoria_noticia",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id_categoria_noticia");
                 });
 
             migrationBuilder.CreateTable(
@@ -308,14 +308,12 @@ namespace Escuela.Migrations
                         name: "FK_detalle_curso_periodo_curso_id_curso",
                         column: x => x.id_curso,
                         principalTable: "curso",
-                        principalColumn: "id_curso",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id_curso");
                     table.ForeignKey(
                         name: "FK_detalle_curso_periodo_periodo_id_periodo",
                         column: x => x.id_periodo,
                         principalTable: "periodo",
-                        principalColumn: "id_periodo",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id_periodo");
                 });
 
             migrationBuilder.CreateTable(
@@ -334,14 +332,12 @@ namespace Escuela.Migrations
                         name: "FK_detalle_cursoperiodo_asignatura_asignatura_id_asignatura",
                         column: x => x.id_asignatura,
                         principalTable: "asignatura",
-                        principalColumn: "id_asignatura",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id_asignatura");
                     table.ForeignKey(
                         name: "FK_detalle_cursoperiodo_asignatura_detalle_curso_periodo_id_detalle_curso_periodo",
                         column: x => x.id_detalle_curso_periodo,
                         principalTable: "detalle_curso_periodo",
-                        principalColumn: "id_detalle_curso_periodo",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id_detalle_curso_periodo");
                 });
 
             migrationBuilder.CreateTable(
@@ -368,8 +364,7 @@ namespace Escuela.Migrations
                         name: "FK_detalle_estudiante_detalle_curso_periodo_id_detalle_curso_periodo",
                         column: x => x.id_detalle_curso_periodo,
                         principalTable: "detalle_curso_periodo",
-                        principalColumn: "id_detalle_curso_periodo",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id_detalle_curso_periodo");
                     table.ForeignKey(
                         name: "FK_detalle_estudiante_padres_id_padres",
                         column: x => x.id_padres,
@@ -408,8 +403,7 @@ namespace Escuela.Migrations
                         name: "FK_calificacion_detalle_cursoperiodo_asignatura_id_detallecursoperiodo_asignatura",
                         column: x => x.id_detallecursoperiodo_asignatura,
                         principalTable: "detalle_cursoperiodo_asignatura",
-                        principalColumn: "id_detalle_cursoperiodo_asignatura",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id_detalle_cursoperiodo_asignatura");
                 });
 
             migrationBuilder.CreateTable(
@@ -442,9 +436,9 @@ namespace Escuela.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "1ae745c4-32de-4d4b-b941-39315e76c62b", "9baf8a7b-1951-490f-9af1-d27219385e18", "Profesor", "PROFESOR" },
-                    { "4671823f-f30c-445c-8433-c9edb7d7caa8", "fc3ec87b-f49a-4ed5-933d-487a4118520d", "Administracion", "ADMINISTRACION" },
-                    { "b5042ce0-f40d-483e-8514-e014b145b4d9", "7528f8eb-c734-4412-ba8b-693a328d0ab1", "Estudiante", "ESTUDIANTE" }
+                    { "1ae745c4-32de-4d4b-b941-39315e76c62b", "789ed261-496b-4355-8f75-c8cca2bb1f62", "Profesor", "PROFESOR" },
+                    { "4671823f-f30c-445c-8433-c9edb7d7caa8", "fde27ba7-7e5a-457d-b71f-5b9d02f6613a", "Administracion", "ADMINISTRACION" },
+                    { "b5042ce0-f40d-483e-8514-e014b145b4d9", "a7dfb010-c8ee-428b-a1f5-a4e4ecc7d17d", "Estudiante", "ESTUDIANTE" }
                 });
 
             migrationBuilder.InsertData(

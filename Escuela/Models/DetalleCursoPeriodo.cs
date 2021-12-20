@@ -14,7 +14,7 @@ namespace Escuela.Models
 
         [Column("id_curso")]
         [Required(ErrorMessage = "Falta el campo: ID Curso")]
-        [DisplayName("Curso/Sección")]
+        [DisplayName("Curso/SecciÃ³n")]
         public int IdCurso { get; set; }
 
         [Column("id_periodo")]
