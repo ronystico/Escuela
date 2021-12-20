@@ -35,7 +35,7 @@
         </dl>
         <form asp-action="Eliminar" class="mb-3">
             <input type="hidden" asp-for="IdPeriodo" />
-            <input type="submit" value="Eliminar" class="btn btn-danger" />
+            <input type="submit" value="Eliminar" class="btn btn-danger" asp-route-id="@Model.IdPeriodo" />
         </form>
     </div>
 </div>
