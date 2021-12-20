@@ -8,6 +8,7 @@
 
 <form asp-action="Agregar" method="post">
     <div asp-validation-summary="All" class="text-danger"></div>
+    <input asp-for="IdAutor" value="@ViewBag.idusuario" hidden />
     <div class="row">
     <div class="col-md-6">
         <div class="mb-3">
