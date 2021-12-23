@@ -78,42 +78,40 @@
     <a asp-action="Inicio" class="btn btn-primary">Volver atr&aacute;s</a>
 </div>
 
-        @section Scripts {
-            <partial name="_ValidationScriptsPartial" />
-            <script>
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+<script>
+    function ponerUsuario() {
+        let texto = document.getElementById("UserName").value = document.getElementById("Nombres").value.charAt(0).toLowerCase()
+            + document.getElementById("PrimerApellido").value.toLowerCase();
 
-                function ponerUsuario() {
-                    let texto = document.getElementById("UserName").value = document.getElementById("Nombres").value.charAt(0).toLowerCase()
-                        + document.getElementById("PrimerApellido").value.toLowerCase();
-
-                    function eliminarDiacriticos(texto) {
-                        return texto.normalize('NFD').replace(/[\u0300-\u036f]|[\s]/g, "");
-                    }
-
-                    let aleatorio = Math.floor(Math.random() * 99);
-                    document.getElementById("UserName").value = eliminarDiacriticos(texto) + aleatorio;
-                }
-
-            </script>
-            <script>
-                function mouseoverClave(obj) {
-                    var obj = document.getElementById('Password');
-                    obj.type = "text";
-                }
-                function mouseoutClave(obj) {
-                    var obj = document.getElementById('Password');
-                    obj.type = "password";
-                }
-            </script>
-            <script>
-                function usuarioComoClave() {
-                    var valor = document.getElementById('UserName').value;
-                    document.getElementById('Password').value = valor;
-                    document.getElementById('ConfirmPassword').value = valor;
-                }
-            </script>
+        function eliminarDiacriticos(texto) {
+            return texto.normalize('NFD').replace(/[\u0300-\u036f]|[\s]/g, "");
         }
-        @section css {
-            <link href="~/lib/font-awesome/css/all.css" rel="stylesheet" />
-            <link href="~/css/site.css" rel="stylesheet" />
-        }
+        let aleatorio = Math.floor(Math.random() * 99);
+        document.getElementById("UserName").value = eliminarDiacriticos(texto) + aleatorio;
+    }
+</script>
+<script>
+    function mouseoverClave(obj) {
+        var obj = document.getElementById('Password');
+        obj.type = "text";
+    }
+    function mouseoutClave(obj) {
+        var obj = document.getElementById('Password');
+        obj.type = "password";
+    }
+</script>
+<script>
+    function usuarioComoClave() {
+        var valor = document.getElementById('UserName').value;
+        document.getElementById('Password').value = valor;
+        document.getElementById('ConfirmPassword').value = valor;
+    }
+</script>
+}
+@section css {
+<link href="~/lib/font-awesome/css/all.css" rel="stylesheet" />
+<link href="~/css/site.css" rel="stylesheet" />
+}
+

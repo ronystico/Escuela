@@ -1,5 +1,7 @@
 @model ApplicationUser
-@{ ViewData["Title"] = "Editar Profesor"; }
+@{
+    ViewData["Title"] = "Editar Profesor";
+}
 
 <h1>@ViewData["Title"]</h1>
 <hr />
@@ -20,7 +22,7 @@
             </div>
             <div class="mb-3">
                 <label class="form-label" asp-for="SegundoApellido"></label>
-                <input asp-for="SegundoApellido" class="form-control" onchange="ponerUsuario()" />
+                <input asp-for="SegundoApellido" class="form-control" />
                 <span asp-validation-for="SegundoApellido" class="text-danger"></span>
             </div>
 
@@ -48,14 +50,14 @@
             </div>
             <div class="mb-3">
                 <label class="form-label" for="Asignaturas">Periodo/Subperiodo - Curso/Seccion - Asignatura</label>
-                @foreach (var periodoSubperiodoCursoSeccionAsignatura in ViewData["Asignaturas"] as List<AgregarProfesorViewModel>)
+                @foreach (var periodoSubperiodoCursoSeccionAsignatura in ViewData["Asignaturas"] as
+                List<AgregarProfesorViewModel>)
                 {
                     <div class="form-check">
-                        <input type="checkbox"
-                               name="IdDetalleCursoperiodoAsignatura"
-                               value="@periodoSubperiodoCursoSeccionAsignatura.IDAsignatura"
-                               @Html.Raw(periodoSubperiodoCursoSeccionAsignatura.Seleccionado ? "checked" : "")
-                               class="form-check-input" />
+                        <input type="checkbox" name="IdDetalleCursoperiodoAsignatura"
+                        value="@periodoSubperiodoCursoSeccionAsignatura.IDAsignatura"
+                        @Html.Raw(periodoSubperiodoCursoSeccionAsignatura.Seleccionado ? "checked" : "")
+                        class="form-check-input" />
                         <label class="form-check-label">@periodoSubperiodoCursoSeccionAsignatura.Nombre</label>
                     </div>
                 }
@@ -73,22 +75,18 @@
     <a asp-action="DetalleProfesor" asp-route-id="@ViewBag.id" class="btn btn-primary">Volver atr&aacute;s</a>
 </div>
 
-@section Scripts{
-    @{
-        <partial name="_ValidationScriptsPartial" />
-    }
-    <script>
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+<script>
+    function ponerUsuario() {
+        let texto = document.getElementById("UserName").value = document.getElementById("Nombres").value.charAt(0).toLowerCase()
+            + document.getElementById("PrimerApellido").value.toLowerCase();
 
-        function ponerUsuario() {
-            let texto = document.getElementById("UserName").value = document.getElementById("Nombres").value.charAt(0).toLowerCase()
-                + document.getElementById("PrimerApellido").value.toLowerCase();
-
-            function eliminarDiacriticos(texto) {
-                return texto.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
-            }
-
-            let aleatorio = Math.floor(Math.random() * 99);
-            document.getElementById("UserName").value = eliminarDiacriticos(texto) + aleatorio;
+        function eliminarDiacriticos(texto) {
+            return texto.normalize('NFD').replace(/[\u0300-\u036f]|[\s]/g, "");
         }
-    </script>
+        let aleatorio = Math.floor(Math.random() * 99);
+        document.getElementById("UserName").value = eliminarDiacriticos(texto) + aleatorio;
+    }
+</script>
 }

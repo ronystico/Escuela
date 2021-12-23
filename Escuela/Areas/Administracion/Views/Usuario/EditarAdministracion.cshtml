@@ -1,5 +1,7 @@
 @model ApplicationUser
-@{ ViewData["Title"] = "Editar"; }
+@{
+    ViewData["Title"] = "Editar"; 
+}
 
 <h1>Editar Administraci&oacute;n</h1>
 <hr />
@@ -20,7 +22,7 @@
             </div>
             <div class="mb-3">
                 <label class="form-label" asp-for="SegundoApellido"></label>
-                <input asp-for="SegundoApellido" class="form-control" onchange="ponerUsuario()" />
+                <input asp-for="SegundoApellido" class="form-control" />
                 <span asp-validation-for="SegundoApellido" class="text-danger"></span>
             </div>
         </div>
@@ -59,25 +61,17 @@
 </div>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-    <script>
-
+<partial name="_ValidationScriptsPartial" />
+<script>
     function ponerUsuario() {
-        let texto = document.getElementById("UserName").value = document.getElementById("Nombres").value.toLowerCase()
-            + document.getElementById("PrimerApellido").value.toLowerCase() +
-            document.getElementById("SegundoApellido").value.toLowerCase();
+        let texto = document.getElementById("UserName").value = document.getElementById("Nombres").value.charAt(0).toLowerCase()
+            + document.getElementById("PrimerApellido").value.toLowerCase();
 
         function eliminarDiacriticos(texto) {
-            return texto.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+            return texto.normalize('NFD').replace(/[\u0300-\u036f]|[\s]/g, "");
         }
-
         let aleatorio = Math.floor(Math.random() * 99);
         document.getElementById("UserName").value = eliminarDiacriticos(texto) + aleatorio;
     }
-
-    </script>
-
-}
-@section css {
-
+</script>
 }
