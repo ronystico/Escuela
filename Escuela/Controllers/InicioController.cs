@@ -89,34 +89,6 @@ namespace Escuela.Controllers
             return View();
         }
 
-        public IActionResult VermiInformacion()
-        {
-            var roles = ((ClaimsIdentity)User.Identity).Claims
-                .Where(c => c.Type == ClaimTypes.Role)
-                .Select(c => c.Value);
-
-            var rol = roles.FirstOrDefault();
-
-            if (rol != null)
-            {
-                return rol switch
-                {
-                    "Estudiante" =>
-                        RedirectToAction("Inicio", "Calificaciones",
-                        new { area = "Estudiante" }),
-                    "Administracion" =>
-                       RedirectToAction("Inicio", "Usuario",
-                       new { area = "Administracion" }),
-                    "Profesor" =>
-                       RedirectToAction("Inicio", "Calificacion",
-                       new { area = "Profesor" }),
-                    _ =>
-                    View()
-                };
-            }
-            return View();
-        }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

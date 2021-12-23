@@ -10,13 +10,13 @@
         </li>
         <li class="nav-item">
             @if(User.IsInRole("Administracion")){
-                <a class="nav-link text-dark" asp-controller="Inicio" asp-action="VermiInformacion">Administraci&oacute;n</a>
+                <a class="nav-link text-dark" asp-controller="Usuario" asp-action="Inicio" asp-area="Administracion">Administraci&oacute;n</a>
             }
             else if(User.IsInRole("Profesor")){
-                <a class="nav-link text-dark" asp-controller="Inicio" asp-action="VermiInformacion">Calificaciones</a>
+                <a class="nav-link text-dark" asp-controller="Calificacion" asp-action="Inicio" asp-area="Profesor">Calificaciones</a>
             }
             else if(User.IsInRole("Estudiante")){
-                <a class="nav-link text-dark" asp-controller="Inicio" asp-action="VermiInformacion">Mis Calificaciones</a>
+                <a class="nav-link text-dark" asp-controller="Calificaciones" asp-action="Inicio" asp-area="Estudiante">Mis Calificaciones</a>
             }
         </li>
         <li class="nav-item">
