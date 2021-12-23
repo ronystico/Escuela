@@ -270,25 +270,28 @@ namespace Escuela.Areas.Administracion.Controllers
         {
             if (ModelState.IsValid)
             {
-                var eliminarExistente = _data.DetalleProfesorCursoperiodoAsignatura.Where(a => a.UserId == id);
-                _data.RemoveRange(eliminarExistente);
-
-                List<DetalleProfesorCursoperiodoAsignatura> asignaturasProfesor = new List<DetalleProfesorCursoperiodoAsignatura>();
-                foreach (var cursoAsignaturaSeleccionada in profesor.IdDetalleCursoperiodoAsignatura)
+                if (profesor.IdDetalleCursoperiodoAsignatura != null)
                 {
-                    asignaturasProfesor.Add(new DetalleProfesorCursoperiodoAsignatura
+                    var eliminarExistente = _data.DetalleProfesorCursoperiodoAsignatura.Where(a => a.UserId == id);
+                    _data.RemoveRange(eliminarExistente);
+
+                    List<DetalleProfesorCursoperiodoAsignatura> asignaturasProfesor = new List<DetalleProfesorCursoperiodoAsignatura>();
+                    foreach (var cursoAsignaturaSeleccionada in profesor.IdDetalleCursoperiodoAsignatura)
                     {
-                        UserId = id,
-                        IdDetalleCursoperiodoAsignatura = cursoAsignaturaSeleccionada
-                    });
+                        asignaturasProfesor.Add(new DetalleProfesorCursoperiodoAsignatura
+                        {
+                            UserId = id,
+                            IdDetalleCursoperiodoAsignatura = cursoAsignaturaSeleccionada
+                        });
+                    }
+                    await _data.AddRangeAsync(asignaturasProfesor);
+                    await _data.SaveChangesAsync();
                 }
-                await _data.AddRangeAsync(asignaturasProfesor);
-                await _data.SaveChangesAsync();
                 return RedirectToAction("Inicio", "Usuario", new { area = "Administracion" });
             }
             return View(profesor);
         }
-        
+
         public IActionResult AgregarPadres(string id, string referencia)
         {
             ViewBag.id = id;
@@ -356,7 +359,7 @@ namespace Escuela.Areas.Administracion.Controllers
 
         public async Task<IActionResult> DetalleProfesor(string id)
         {
-            if(id == null)
+            if (id == null)
             {
                 return NotFound();
             }
@@ -381,7 +384,7 @@ namespace Escuela.Areas.Administracion.Controllers
 
         public async Task<IActionResult> DetalleEstudiante(string id, int? id2)
         {
-            if(id == null)
+            if (id == null)
             {
                 return NotFound();
             }
@@ -439,7 +442,7 @@ namespace Escuela.Areas.Administracion.Controllers
                     View()
                 };
             }
-                return View();
+            return View();
         }
 
         public async Task<IActionResult> EditarAdministracion(string id)
@@ -470,7 +473,7 @@ namespace Escuela.Areas.Administracion.Controllers
 
         public async Task<IActionResult> EditarEstudiante(string id, int? id2)
         {
-            if(id == null)
+            if (id == null)
             {
                 return NotFound();
             }
@@ -480,7 +483,7 @@ namespace Escuela.Areas.Administracion.Controllers
             if (id2 != null)
             {
                 await _data.Entry(estudiante).Reference(s => s.DetalleEstudiante).LoadAsync();
-                if(estudiante.DetalleEstudiante == null)
+                if (estudiante.DetalleEstudiante == null)
                 {
                     return RedirectToAction("AgregarEstudiante", "Usuario", new { area = "Administracion", id = id });
                 }
@@ -532,7 +535,7 @@ namespace Escuela.Areas.Administracion.Controllers
                 detalleEstudiante.IdEstudiante = estudiante.DetalleEstudiante.IdEstudiante;
                 detalleEstudiante.RNE = estudiante.DetalleEstudiante.RNE;
 
-                if(estudiante.DetalleEstudiante.Padres.IdPadres != 0)
+                if (estudiante.DetalleEstudiante.Padres.IdPadres != 0)
                 {
                     detalleEstudiante.IdPadres = estudiante.DetalleEstudiante.Padres.IdPadres;
                 }
@@ -553,7 +556,7 @@ namespace Escuela.Areas.Administracion.Controllers
 
         public async Task<IActionResult> EditarProfesor(string id)
         {
-            if(id == null)
+            if (id == null)
             {
                 return NotFound();
             }
@@ -571,14 +574,14 @@ namespace Escuela.Areas.Administracion.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditarProfesor(ApplicationUser profesor,AgregarProfesorViewModel asignaturas,string id)
+        public async Task<IActionResult> EditarProfesor(ApplicationUser profesor, AgregarProfesorViewModel asignaturas, string id)
         {
-            if(id == null)
+            if (id == null)
             {
                 return NotFound();
             }
             var profesorObtenido = await _userManager.FindByIdAsync(id);
-            if(profesorObtenido == null)
+            if (profesorObtenido == null)
             {
                 return NotFound();
             }
@@ -596,7 +599,7 @@ namespace Escuela.Areas.Administracion.Controllers
 
                 List<DetalleProfesorCursoperiodoAsignatura> asignaturasProfesor = new List<DetalleProfesorCursoperiodoAsignatura>();
 
-                if(asignaturas.IdDetalleCursoperiodoAsignatura != null)
+                if (asignaturas.IdDetalleCursoperiodoAsignatura != null)
                 {
                     foreach (var IdDetalleCursoperiodoAsignatura in asignaturas.IdDetalleCursoperiodoAsignatura)
                     {
@@ -649,7 +652,7 @@ namespace Escuela.Areas.Administracion.Controllers
                 }
                 else
                 {
-                    foreach(var error in resultado.Errors)
+                    foreach (var error in resultado.Errors)
                     {
                         if (error.Code.Equals("PasswordRequiresDigit"))
                         {
@@ -659,18 +662,20 @@ namespace Escuela.Areas.Administracion.Controllers
                         {
                             ModelState.AddModelError(string.Empty, error.Description);
                         }
-                        
+
                     }
                 }
-                
+
             }
             return View(user);
         }
 
         [AllowAnonymous]
-        public async Task<IActionResult> PrimerUsuario(){
+        public async Task<IActionResult> PrimerUsuario()
+        {
             IList<ApplicationUser> usuariosEnRol = await _userManager.GetUsersInRoleAsync("Administracion");
-            if(usuariosEnRol.Count > 0){
+            if (usuariosEnRol.Count > 0)
+            {
                 return Forbid();
             }
             return View(new UsuarioViewModel());
@@ -681,7 +686,8 @@ namespace Escuela.Areas.Administracion.Controllers
         public async Task<IActionResult> PrimerUsuario(UsuarioViewModel usuario)
         {
             IList<ApplicationUser> usuariosEnRol = await _userManager.GetUsersInRoleAsync("Administracion");
-            if(usuariosEnRol.Count > 0){
+            if (usuariosEnRol.Count > 0)
+            {
                 return Forbid();
             }
             if (ModelState.IsValid && usuario.IdentityRole.Name.Equals("Administracion"))
@@ -707,7 +713,7 @@ namespace Escuela.Areas.Administracion.Controllers
                 }
                 else
                 {
-                    
+
                 }
                 foreach (var error in result.Errors)
                 {
@@ -731,8 +737,9 @@ namespace Escuela.Areas.Administracion.Controllers
             var cursosPeriodos = _data.DetalleCursoPeriodo
                 .Include(s => s.Periodo)
                 .Include(s => s.Curso)
-                .Select(s => new { 
-                    ID = s.IdDetalleCursoPeriodo, 
+                .Select(s => new
+                {
+                    ID = s.IdDetalleCursoPeriodo,
                     Nombre = s.Periodo.Nombre + " / " + s.Periodo.Subperiodo + " - " + s.Curso.Nombre + " / " + s.Curso.Seccion
                 });
             ViewBag.cursosperiodos = new SelectList(cursosPeriodos.AsNoTracking(), "ID", "Nombre", cursoPeriodo);
@@ -744,7 +751,8 @@ namespace Escuela.Areas.Administracion.Controllers
             var cursosPeriodos = _data.DetalleCursoPeriodo
                 .Include(s => s.Periodo)
                 .Include(s => s.Curso)
-                .Select(s => new {
+                .Select(s => new
+                {
                     ID = s.IdDetalleCursoPeriodo,
                     Nombre = s.Periodo.Nombre + " / " + s.Periodo.Subperiodo + " - " + s.Curso.Nombre + " / " + s.Curso.Seccion
                 });
@@ -752,7 +760,7 @@ namespace Escuela.Areas.Administracion.Controllers
             var cursoPeriodoEstudiante = new HashSet<int> { estudiante.DetalleEstudiante.IdDetalleCursoPeriodo };
 
             var cursoPeriodoListo = new List<EditarEstudianteViewModel>();
-            foreach(var cursoPeriodo in cursosPeriodos)
+            foreach (var cursoPeriodo in cursosPeriodos)
             {
                 cursoPeriodoListo.Add(new EditarEstudianteViewModel
                 {
@@ -777,15 +785,16 @@ namespace Escuela.Areas.Administracion.Controllers
                 .ThenBy(s => s.DetalleCursoPeriodo.Curso.Nombre)
                 .ThenBy(s => s.DetalleCursoPeriodo.Curso.Seccion)
                 .ThenBy(s => s.Asignatura.Nombre)
-                .Select(s => new { 
-                ID = s.IdDetalleCursoperiodoAsignatura,
-                Nombre = s.DetalleCursoPeriodo.Periodo.Nombre + " / " + s.DetalleCursoPeriodo.Periodo.Subperiodo
+                .Select(s => new
+                {
+                    ID = s.IdDetalleCursoperiodoAsignatura,
+                    Nombre = s.DetalleCursoPeriodo.Periodo.Nombre + " / " + s.DetalleCursoPeriodo.Periodo.Subperiodo
                 + " - " +
                 s.DetalleCursoPeriodo.Curso.Nombre + " / " + s.DetalleCursoPeriodo.Curso.Seccion
                 + " - " +
                 s.Asignatura.Nombre
                 });
-            ViewBag.asignaturas = new SelectList(asignaturasObtenidas,"ID","Nombre",asignatura);
+            ViewBag.asignaturas = new SelectList(asignaturasObtenidas, "ID", "Nombre", asignatura);
         }
 
         // Asignaturas para editar de un profesor
@@ -801,7 +810,8 @@ namespace Escuela.Areas.Administracion.Controllers
                 .ThenBy(s => s.DetalleCursoPeriodo.Curso.Nombre)
                 .ThenBy(s => s.DetalleCursoPeriodo.Curso.Seccion)
                 .ThenBy(s => s.Asignatura.Nombre)
-                .Select(s => new {
+                .Select(s => new
+                {
                     ID = s.IdDetalleCursoperiodoAsignatura,
                     Nombre = s.DetalleCursoPeriodo.Periodo.Nombre + " / " + s.DetalleCursoPeriodo.Periodo.Subperiodo
                 + " - " +
@@ -812,7 +822,7 @@ namespace Escuela.Areas.Administracion.Controllers
 
             var asignaturasProfesor = new HashSet<int>(profesor.DetalleProfesorCursoperiodoAsignatura.Select(s => s.IdDetalleCursoperiodoAsignatura));
             var asignaturasListas = new List<AgregarProfesorViewModel>();
-            foreach(var asignatura in asignaturasObtenidas)
+            foreach (var asignatura in asignaturasObtenidas)
             {
                 asignaturasListas.Add(new AgregarProfesorViewModel
                 {
