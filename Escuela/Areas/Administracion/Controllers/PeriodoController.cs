@@ -25,7 +25,7 @@ namespace Escuela.Views
         // GET: Periodo
         public async Task<IActionResult> Inicio()
         {
-            return View(await _context.Periodo.ToListAsync());
+            return View(await _context.Periodo.AsNoTracking().ToListAsync());
         }
 
         // GET: Periodo/Agregar

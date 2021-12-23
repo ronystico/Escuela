@@ -25,7 +25,7 @@ namespace Escuela.Views
         // GET: Curso
         public async Task<IActionResult> Inicio()
         {
-            return View(await _context.Curso.ToListAsync());
+            return View(await _context.Curso.AsNoTracking().ToListAsync());
         }
 
         // GET: Curso/Agregar

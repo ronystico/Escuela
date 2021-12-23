@@ -25,7 +25,7 @@ namespace Escuela.Controllers
         // GET: CategoriaNoticia
         public async Task<IActionResult> Inicio()
         {
-            return View(await _context.CategoriaNoticia.ToListAsync());
+            return View(await _context.CategoriaNoticia.AsNoTracking().ToListAsync());
         }
 
         // GET: CategoriaNoticia/Agregar

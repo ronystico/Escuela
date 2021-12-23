@@ -2,6 +2,7 @@ using Escuela.Data;
 using Escuela.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,17 +19,14 @@ namespace Escuela.Controllers
             _data = data;
         }
 
-        [HttpGet]
         public IActionResult Inicio()
         {
-            var asignaturas = _data.Asignatura.ToList();
+            var asignaturas = _data.Asignatura.AsNoTracking().ToList();
             return View(asignaturas);
         }
 
-        [HttpGet]
         public IActionResult Agregar()
         {
-            
             return View();
         }
 
@@ -44,7 +42,6 @@ namespace Escuela.Controllers
             return View(asignatura);
         }
 
-        [HttpGet]
         public async Task<IActionResult> Editar(int id)
         {
             var asignatura = await _data.Asignatura.FindAsync(id);
@@ -63,7 +60,6 @@ namespace Escuela.Controllers
             return View(asignatura);
         }
 
-        [HttpGet]
         public async Task<IActionResult> Eliminar(int id)
         {
             var asignatura = await _data.Asignatura.FindAsync(id);
@@ -77,7 +73,6 @@ namespace Escuela.Controllers
             _data.Asignatura.Remove(Asignatura);
             _data.SaveChanges();
             return RedirectToAction(nameof(Inicio));
-            
         }
     }
 }

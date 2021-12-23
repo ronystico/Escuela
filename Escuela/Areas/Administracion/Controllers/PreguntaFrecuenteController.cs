@@ -22,7 +22,7 @@ namespace Escuela.Controllers
         // GET: PreguntaFrecuente
         public async Task<IActionResult> Inicio()
         {
-            return View(await _context.PreguntaFrecuente.ToListAsync());
+            return View(await _context.PreguntaFrecuente.AsNoTracking().ToListAsync());
         }
 
         // GET: PreguntaFrecuente/Agregar

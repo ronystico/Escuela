@@ -32,20 +32,24 @@ namespace Escuela.Controllers
 
             var calificaciones = _data.Calificacion
             .Include(s => s.DetalleCursoperiodoAsignatura)
-            .Where(s => s.IdEstudiante.Equals(estudianteDetalles.Id)).AsNoTracking()
+            .Where(s => s.IdEstudiante.Equals(estudianteDetalles.Id))
+            .AsNoTracking()
             .ToListAsync();
 
             var idCursoPeriodoSinRepetir = new HashSet<int>();
 
-            foreach(var calificacion in await calificaciones){
-                if(!idCursoPeriodoSinRepetir.Contains(calificacion.DetalleCursoperiodoAsignatura.IdDetalleCursoPeriodo)){
+            foreach (var calificacion in await calificaciones)
+            {
+                if (!idCursoPeriodoSinRepetir.Contains(calificacion.DetalleCursoperiodoAsignatura.IdDetalleCursoPeriodo))
+                {
                     idCursoPeriodoSinRepetir.Add(calificacion.DetalleCursoperiodoAsignatura.IdDetalleCursoPeriodo);
                 }
             }
 
             List<DetalleCursoPeriodo> detalles = new List<DetalleCursoPeriodo>();
 
-            foreach(var idCursoPeriodo in idCursoPeriodoSinRepetir){
+            foreach (var idCursoPeriodo in idCursoPeriodoSinRepetir)
+            {
                 var cursoPeriodo = await _data.DetalleCursoPeriodo.FindAsync(idCursoPeriodo);
                 _data.Entry(cursoPeriodo).Reference(s => s.Curso).Load();
                 _data.Entry(cursoPeriodo).Reference(s => s.Periodo).Load();
@@ -55,15 +59,18 @@ namespace Escuela.Controllers
             return View(detalles);
         }
 
-        public async Task<IActionResult> CalificacionPeriodoCurso(int id){
-            if(id == 0){
+        public async Task<IActionResult> CalificacionPeriodoCurso(int id)
+        {
+            if (id == 0)
+            {
                 return NotFound();
             }
-            if(!_data.DetalleCursoPeriodo.Any(s => s.IdDetalleCursoPeriodo == id)){
+            if (!_data.DetalleCursoPeriodo.Any(s => s.IdDetalleCursoPeriodo == id))
+            {
                 return NotFound();
             }
             ViewBag.id = id;
-            
+
             var estudiante = _signInManager.Context.User.Identity.Name;
             var estudianteDetalles = await _userManager.FindByNameAsync(estudiante);
 
@@ -86,7 +93,8 @@ namespace Escuela.Controllers
             .AsNoTracking()
             .ToListAsync();
 
-            CalificacionPeriodoCursoViewModel calificacionesAsignaturasListas = new CalificacionPeriodoCursoViewModel(){
+            CalificacionPeriodoCursoViewModel calificacionesAsignaturasListas = new CalificacionPeriodoCursoViewModel()
+            {
                 DetalleCursoperiodoAsignatura = asignaturasCursoPeriodo,
                 Calificacion = calificacionesEstudiante
             };

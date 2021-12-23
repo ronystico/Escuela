@@ -25,11 +25,11 @@ namespace Escuela.Controllers
         // GET: Administracion/Padres
         public async Task<IActionResult> Inicio()
         {
-            return View(await _context.Padres.ToListAsync());
+            return View(await _context.Padres.AsNoTracking().ToListAsync());
         }
 
         // GET: Administracion/Padres/Detalle/5
-        public async Task<IActionResult> Detalle(int? id,string id2)
+        public async Task<IActionResult> Detalle(int? id, string id2)
         {
             if (id == null)
             {

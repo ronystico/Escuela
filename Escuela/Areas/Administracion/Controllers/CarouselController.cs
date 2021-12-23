@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -43,7 +44,7 @@ namespace Escuela.Controllers
         }
         public IActionResult Inicio()
         {
-            var imagenesActuales = _data.Carousel.OrderBy(s => s.IdImagen).ToList();
+            var imagenesActuales = _data.Carousel.AsNoTracking().OrderBy(s => s.IdImagen).ToList();
             ViewBag.idnuevo = imagenesActuales.Count + 1;
             var imagenesActualesModelo = new List<InicioCarouselViewModel>();
             foreach (var imagenActual in imagenesActuales)

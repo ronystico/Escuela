@@ -269,7 +269,8 @@ namespace Escuela.Controllers
 
         public async Task<IActionResult> MoverEstudiantes(int id)
         {
-            if(id == 0){
+            if (id == 0)
+            {
                 return NotFound();
             }
             var periodoActual = await _data.DetalleCursoPeriodo
@@ -278,7 +279,8 @@ namespace Escuela.Controllers
                 .Where(s => s.IdDetalleCursoPeriodo == id)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
-            if(periodoActual == null){
+            if (periodoActual == null)
+            {
                 return NotFound();
             }
             ObtenerPeriodosCursos(periodoActual.IdCurso);
@@ -298,7 +300,7 @@ namespace Escuela.Controllers
             {
                 return NotFound();
             }
-            if(id == periodoRecibido.IdDetalleCursoPeriodo)
+            if (id == periodoRecibido.IdDetalleCursoPeriodo)
             {
                 return RedirectToAction(nameof(Inicio));
             }
@@ -306,7 +308,7 @@ namespace Escuela.Controllers
                 .Include(s => s.DetalleEstudiante)
                 .Where(s => s.IdDetalleCursoPeriodo == id)
                 .FirstOrDefaultAsync();
-            if(periodoActual == null)
+            if (periodoActual == null)
             {
                 return NotFound();
             }
@@ -321,7 +323,7 @@ namespace Escuela.Controllers
             if (ModelState.IsValid)
             {
                 List<DetalleEstudiante> estudiantes = periodoActual.DetalleEstudiante.ToList();
-                if(estudiantes.Count > 0)
+                if (estudiantes.Count > 0)
                 {
                     estudiantes.ForEach(s => s.IdDetalleCursoPeriodo = periodoRecibido.IdDetalleCursoPeriodo);
                     _data.UpdateRange(estudiantes);

@@ -33,6 +33,7 @@ namespace Escuela.Controllers
                 .ThenInclude(s => s.Periodo)
                 .Include(s => s.DetalleCursoPeriodo)
                 .ThenInclude(s => s.Curso)
+                .AsNoTracking()
                 .ToListAsync();
 
             return View(detalleAsignaturas);
