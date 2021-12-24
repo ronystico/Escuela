@@ -2,7 +2,9 @@ using Escuela.Data;
 using Escuela.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -70,8 +72,19 @@ namespace Escuela.Controllers
         public async Task<IActionResult> EliminarConfirmado(int id)
         {
             var Asignatura = await _data.Asignatura.FindAsync(id);
-            _data.Asignatura.Remove(Asignatura);
-            _data.SaveChanges();
+            try
+            {
+                _data.Asignatura.Remove(Asignatura);
+                _data.SaveChanges();
+            }
+            catch (DbUpdateException e)
+            {
+
+            }
+            catch (Exception e)
+            {
+
+            }
             return RedirectToAction(nameof(Inicio));
         }
     }
