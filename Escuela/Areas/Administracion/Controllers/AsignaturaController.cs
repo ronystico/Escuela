@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -23,6 +22,10 @@ namespace Escuela.Controllers
 
         public IActionResult Inicio()
         {
+            if (TempData.ContainsKey("Error"))
+            {
+                ViewBag.error = TempData["Error"].ToString();
+            }
             var asignaturas = _data.Asignatura.AsNoTracking().ToList();
             return View(asignaturas);
         }
@@ -77,13 +80,10 @@ namespace Escuela.Controllers
                 _data.Asignatura.Remove(Asignatura);
                 _data.SaveChanges();
             }
-            catch (DbUpdateException e)
+            catch (DbUpdateException)
             {
-
-            }
-            catch (Exception e)
-            {
-
+                TempData["Error"] = "Imposible eliminar asignatura en uso. Se ha cancelado la eliminación.";
+                return RedirectToAction(nameof(Inicio));
             }
             return RedirectToAction(nameof(Inicio));
         }

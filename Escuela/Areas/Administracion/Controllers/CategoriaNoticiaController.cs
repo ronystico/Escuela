@@ -25,6 +25,10 @@ namespace Escuela.Controllers
         // GET: CategoriaNoticia
         public async Task<IActionResult> Inicio()
         {
+            if (TempData.ContainsKey("Error"))
+            {
+                ViewBag.error = TempData["Error"].ToString();
+            }
             return View(await _context.CategoriaNoticia.AsNoTracking().ToListAsync());
         }
 
@@ -125,8 +129,16 @@ namespace Escuela.Controllers
         public async Task<IActionResult> EliminarConfirmado(int id)
         {
             var categoriaNoticia = await _context.CategoriaNoticia.FindAsync(id);
-            _context.CategoriaNoticia.Remove(categoriaNoticia);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.CategoriaNoticia.Remove(categoriaNoticia);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                TempData["Error"] = "Imposible eliminar categoría de noticia en uso. Se ha cancelado la eliminación.";
+                return RedirectToAction(nameof(Inicio));
+            }
             return RedirectToAction(nameof(Inicio));
         }
 

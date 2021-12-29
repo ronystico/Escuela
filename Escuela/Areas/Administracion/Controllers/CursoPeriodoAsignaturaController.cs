@@ -34,6 +34,10 @@ namespace Escuela.Controllers
                 .OrderBy(s => s.IdPeriodo)
                 .AsNoTracking()
                 .ToList();
+            if (TempData.ContainsKey("Error"))
+            {
+                ViewBag.error = TempData["Error"].ToString();
+            }
             return View(cursosasignatura);
         }
 
@@ -54,7 +58,7 @@ namespace Escuela.Controllers
             {
                 if (_data.DetalleCursoPeriodo.Any(s => s.IdCurso == cursoPeriodo.IdCurso && s.IdPeriodo == cursoPeriodo.IdPeriodo))
                 {
-                    ModelState.AddModelError(string.Empty, "Esta combinación de Periodo/Curso ya existe, debes editarla");
+                    ModelState.AddModelError(string.Empty, "Esta combinación de Periodo/Curso ya existe, debe editarla");
                     ObtenerCursosySecciones();
                     ObtenerPeriodosySubperiodos();
                     ObtenerAsignaturas();
@@ -158,17 +162,18 @@ namespace Escuela.Controllers
         [HttpPost, ActionName("Eliminar")]
         public async Task<IActionResult> EliminarConfirmado(int id)
         {
-            if (id == 0)
-            {
-                return NotFound();
-            }
             var detalleCursoPeriodo = await _data.DetalleCursoPeriodo.FindAsync(id);
-            if (detalleCursoPeriodo == null)
+            try
             {
-                return NotFound();
+                _data.DetalleCursoPeriodo.Remove(detalleCursoPeriodo);
+                _data.SaveChanges();
             }
-            _data.DetalleCursoPeriodo.Remove(detalleCursoPeriodo);
-            _data.SaveChanges();
+            catch (DbUpdateException)
+            {
+                TempData["Error"] = 
+                    "Imposible eliminar Periodo/Curso con asignatura(s). Se ha cancelado la eliminación.";
+                return RedirectToAction(nameof(Inicio));
+            }
             return RedirectToAction(nameof(Inicio));
         }
 

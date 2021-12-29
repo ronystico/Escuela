@@ -25,6 +25,10 @@ namespace Escuela.Views
         // GET: Curso
         public async Task<IActionResult> Inicio()
         {
+            if (TempData.ContainsKey("Error"))
+            {
+                ViewBag.error = TempData["Error"].ToString();
+            }
             return View(await _context.Curso.AsNoTracking().ToListAsync());
         }
 
@@ -125,8 +129,16 @@ namespace Escuela.Views
         public async Task<IActionResult> EliminarConfirmado(int id)
         {
             var curso = await _context.Curso.FindAsync(id);
-            _context.Curso.Remove(curso);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Curso.Remove(curso);
+                await _context.SaveChangesAsync();
+            }
+            catch(DbUpdateException)
+            {
+                TempData["Error"] = "Imposible eliminar curso en uso. Se ha cancelado la eliminación.";
+                return RedirectToAction(nameof(Inicio));
+            }
             return RedirectToAction(nameof(Inicio));
         }
 

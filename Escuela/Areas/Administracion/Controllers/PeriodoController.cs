@@ -25,6 +25,10 @@ namespace Escuela.Views
         // GET: Periodo
         public async Task<IActionResult> Inicio()
         {
+            if (TempData.ContainsKey("Error"))
+            {
+                ViewBag.error = TempData["Error"].ToString();
+            }
             return View(await _context.Periodo.AsNoTracking().ToListAsync());
         }
 
@@ -125,8 +129,16 @@ namespace Escuela.Views
         public async Task<IActionResult> EliminarConfirmado(int id)
         {
             var periodo = await _context.Periodo.FindAsync(id);
-            _context.Periodo.Remove(periodo);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Periodo.Remove(periodo);
+                await _context.SaveChangesAsync();
+            }
+            catch(DbUpdateException)
+            {
+                TempData["Error"] = "Imposible eliminar periodo en uso. Se ha cancelado la eliminación.";
+                return RedirectToAction(nameof(Inicio));
+            }
             return RedirectToAction(nameof(Inicio));
         }
 

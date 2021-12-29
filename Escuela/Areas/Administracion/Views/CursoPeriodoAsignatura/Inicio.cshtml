@@ -6,44 +6,50 @@
 <h1>@ViewData["Title"]</h1>
 
 <a class="btn btn-primary mb-3" asp-action="Agregar">Agregar</a>
+@if (ViewBag.error != null)
+{
+    <p class="text-danger">@ViewBag.error</p>
+}
 <hr />
 
 <div class="row">
     <div class="col-md-12">
         <table class="table table-striped">
             <thead>
-            <tr>
-                <th>Periodo/Subperiodo</th>
-                <th>Curso/Secci&oacute;n</th>
-                <th>Asignaturas</th>
-                <th>Acciones</th>
-            </tr>
+                <tr>
+                    <th>Periodo/Subperiodo</th>
+                    <th>Curso/Secci&oacute;n</th>
+                    <th>Asignaturas</th>
+                    <th>Acciones</th>
+                </tr>
             </thead>
             <tbody>
-            @foreach (var cursoPeriodo in Model.ToList())
-            {
-<tr>
-    <td>@(cursoPeriodo.Periodo.Nombre + " / " + cursoPeriodo.Periodo.Subperiodo)</td>
-    <td>@(cursoPeriodo.Curso.Nombre + " / " + cursoPeriodo.Curso.Seccion)</td>
-    <td>
-        @foreach (var asignaturacurso in cursoPeriodo.DetalleCursoperiodoAsignatura.OrderBy(s => s.Asignatura.Nombre))
-        {
-            if (@asignaturacurso != null)
-            {
-@asignaturacurso.Asignatura.Nombre <br />                    }
+                @foreach (var cursoPeriodo in Model.ToList())
+                {
+                    <tr>
+                        <td>@(cursoPeriodo.Periodo.Nombre + " / " + cursoPeriodo.Periodo.Subperiodo)</td>
+                        <td>@(cursoPeriodo.Curso.Nombre + " / " + cursoPeriodo.Curso.Seccion)</td>
+                        <td>
+                            @foreach (var asignaturacurso in cursoPeriodo.DetalleCursoperiodoAsignatura.OrderBy(s => s.Asignatura.Nombre))
+                            {
+                                if (@asignaturacurso != null)
+                                {
+                                    @asignaturacurso.Asignatura.Nombre <br />
+                                }
 
+                            }
+                        </td>
+                        <td>
+                            <a class="link-primary" asp-action="Editar" asp-route-id="@cursoPeriodo.IdDetalleCursoPeriodo">Editar</a><br>
+                            <a class="link-primary" asp-action="VerEstudiantes" asp-route-id="@cursoPeriodo.IdDetalleCursoPeriodo">Ver Estudiantes</a><br>
+                            <a class="link-primary" asp-action="VerDocentes" asp-route-id="@cursoPeriodo.IdDetalleCursoPeriodo">Ver Docentes</a><br>
+                            <a class="link-primary" asp-action="RevocarAsignaturas" asp-route-id="@cursoPeriodo.IdDetalleCursoPeriodo">Revocar Asignaturas</a><br>
+                            <a class="link-primary" asp-action="MoverEstudiantes" asp-route-id="@cursoPeriodo.IdDetalleCursoPeriodo">Mover Estudiantes</a><br>
+                            <a class="link-primary" asp-action="Eliminar" asp-route-id="@cursoPeriodo.IdDetalleCursoPeriodo">Eliminar</a>
+                        </td>
+                    </tr>
                 }
-    </td>
-    <td>
-        <a class="link-primary" asp-action="Editar" asp-route-id="@cursoPeriodo.IdDetalleCursoPeriodo">Editar</a><br>
-        <a class="link-primary" asp-action="VerEstudiantes" asp-route-id="@cursoPeriodo.IdDetalleCursoPeriodo">Ver Estudiantes</a><br>
-        <a class="link-primary" asp-action="VerDocentes" asp-route-id="@cursoPeriodo.IdDetalleCursoPeriodo">Ver Docentes</a><br>
-        <a class="link-primary" asp-action="RevocarAsignaturas" asp-route-id="@cursoPeriodo.IdDetalleCursoPeriodo">Revocar Asignaturas</a><br>
-        <a class="link-primary" asp-action="MoverEstudiantes" asp-route-id="@cursoPeriodo.IdDetalleCursoPeriodo">Mover Estudiantes</a><br>
-        <a class="link-primary" asp-action="Eliminar" asp-route-id="@cursoPeriodo.IdDetalleCursoPeriodo">Eliminar</a>
-    </td>
-</tr>}
-</tbody>
+            </tbody>
         </table>
-        </div>
+    </div>
 </div>
